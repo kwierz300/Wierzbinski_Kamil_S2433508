@@ -48,6 +48,8 @@ public class SituationDetailFragment extends Fragment {
     private TextView durationBadge;
     private LinearLayout sections;
     private String shownKey;
+    private TrafficViewModel viewModel;
+    private Situation shown;
 
     @Nullable
     @Override
@@ -68,11 +70,22 @@ public class SituationDetailFragment extends Fragment {
         durationBadge = view.findViewById(R.id.durationBadge);
         sections = view.findViewById(R.id.sections);
 
-        TrafficViewModel viewModel = new ViewModelProvider(requireActivity()).get(TrafficViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(TrafficViewModel.class);
+        view.findViewById(R.id.showOnMapButton).setOnClickListener(v -> {
+            Situation s = shown;
+            if (s == null) {
+                return;
+            }
+            if (!getResources().getBoolean(R.bool.two_pane)) {
+                viewModel.clearSelection();   // portrait: close the details so the map is visible
+            }
+            viewModel.showOnMap(s);
+        });
         viewModel.getSelectedSituation().observe(getViewLifecycleOwner(), this::show);
     }
 
     private void show(Situation s) {
+        shown = s;
         if (s == null) {
             shownKey = null;
             emptyHint.setVisibility(View.VISIBLE);

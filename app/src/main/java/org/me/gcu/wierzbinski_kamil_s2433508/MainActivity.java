@@ -35,9 +35,10 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.FeedState;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 import org.me.gcu.wierzbinski_kamil_s2433508.ui.DisplayFormat;
-import org.me.gcu.wierzbinski_kamil_s2433508.ui.PlaceholderFragment;
+import org.me.gcu.wierzbinski_kamil_s2433508.ui.SearchFragment;
 import org.me.gcu.wierzbinski_kamil_s2433508.ui.SituationDetailFragment;
 import org.me.gcu.wierzbinski_kamil_s2433508.ui.SituationListFragment;
+import org.me.gcu.wierzbinski_kamil_s2433508.ui.TrafficMapFragment;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.Screen;
 
@@ -218,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
     private static Fragment createFragment(Screen screen) {
         switch (screen) {
             case SEARCH:
-                return PlaceholderFragment.newInstance(R.string.placeholder_search);
+                return new SearchFragment();
             case MAP:
-                return PlaceholderFragment.newInstance(R.string.placeholder_map);
+                return new TrafficMapFragment();
             default:
                 return new SituationListFragment();
         }

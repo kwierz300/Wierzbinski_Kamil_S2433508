@@ -77,6 +77,14 @@ public final class DisplayFormat {
         return n + " " + word + (n == 1 ? "" : "s");
     }
 
+    /** "850 m" or "12.3 km". */
+    public static String distance(double km) {
+        if (km < 1) {
+            return Math.round(km * 1000) + " m";
+        }
+        return String.format(Locale.UK, "%.1f km", km);
+    }
+
     /** Latitude/longitude with 5 decimals (about 1 metre). */
     public static String coordinates(double lat, double lon) {
         return String.format(Locale.UK, "%.5f, %.5f", lat, lon);

@@ -36,6 +36,10 @@ android {
 
         buildConfigField("String", "TS_CLIENT_ID", javaString(localProperty("TS_CLIENT_ID")))
         buildConfigField("String", "TS_CLIENT_KEY", javaString(localProperty("TS_CLIENT_KEY")))
+
+        // Google Maps key goes into the manifest (meta-data com.google.android.geo.API_KEY)
+        manifestPlaceholders["MAPS_API_KEY"] = localProperty("MAPS_API_KEY")
+        buildConfigField("boolean", "HAS_MAPS_KEY", localProperty("MAPS_API_KEY").isNotEmpty().toString())
     }
 
     buildFeatures {
@@ -74,6 +78,7 @@ dependencies {
     implementation(libs.lifecycle.livedata)
     implementation(libs.fragment)
     implementation(libs.recyclerview)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

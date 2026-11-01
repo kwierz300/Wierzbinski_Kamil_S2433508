@@ -23,6 +23,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.MaterialColors;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.R;
+import org.me.gcu.wierzbinski_kamil_s2433508.model.SearchOrigin;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 
@@ -54,6 +55,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
 
     private final OnSituationClick listener;
     private String selectedKey;
+    private SearchOrigin distanceFrom;   // when set, each item shows its distance from this point
 
     public SituationAdapter(OnSituationClick listener) {
         super(DIFF);
@@ -68,6 +70,14 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         }
     }
 
+    /** Shows "12.3 km away" on each item (search by distance); null hides it. */
+    public void setDistanceFrom(SearchOrigin origin) {
+        if (origin != distanceFrom) {
+            distanceFrom = origin;
+            notifyItemRangeChanged(0, getItemCount());
+        }
+    }
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -77,7 +87,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        holder.bind(getItem(position), getItem(position).getKey().equals(selectedKey), listener);
+        holder.bind(getItem(position), getItem(position).getKey().equals(selectedKey), distanceFrom, listener);
     }
 
     static class Holder extends RecyclerView.ViewHolder {
@@ -100,11 +110,16 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             durationText = itemView.findViewById(R.id.durationText);
         }
 
-        void bind(Situation s, boolean selected, OnSituationClick listener) {
+        void bind(Situation s, boolean selected, SearchOrigin distanceFrom, OnSituationClick listener) {
             Context context = itemView.getContext();
             SituationStyle.applyIcon(icon, s);
             typeText.setText(SituationStyle.title(s));
             String road = SituationStyle.roadLine(s);
+            if (distanceFrom != null) {
+                String away = DisplayFormat.distance(s.distanceKmTo(distanceFrom.getLatitude(),
+                        distanceFrom.getLongitude())) + " away";
+                road = road.isEmpty() ? away : road + " · " + away;
+            }
             roadText.setText(road);
             roadText.setVisibility(road.isEmpty() ? View.GONE : View.VISIBLE);
             descriptionText.setText(s.getDescription());

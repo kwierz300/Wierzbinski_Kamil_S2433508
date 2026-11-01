@@ -28,9 +28,34 @@
     <!-- Details -->
     <string name="detail_empty">Select a situation from the list to see the details.</string>
 
-    <!-- Placeholders -->
-    <string name="placeholder_search">Search by road name and by distance – coming in the next stage.</string>
-    <string name="placeholder_map">Map – coming in the next stage.</string>
+    <string name="show_on_map">Show on map</string>
+
+    <!-- Search -->
+    <string name="search_by_road">By road</string>
+    <string name="search_by_distance">By distance</string>
+    <string name="road_hint">Road, e.g. M8 or A9</string>
+    <string name="search_button">Search</string>
+    <string name="use_my_location">My location</string>
+    <string name="distance_slider">Search distance in kilometres</string>
+    <string name="distance_label">Within %1$d km of:</string>
+    <string name="origin_label">From: %1$s</string>
+    <string name="origin_device">your location</string>
+    <string name="results_count">%1$d found</string>
+    <string name="results_road">%1$d on %2$s</string>
+    <string name="results_type_road">Type a road name and press Search</string>
+    <string name="results_none_road">Nothing found on %1$s</string>
+    <string name="results_distance">%1$d within %2$d km</string>
+    <string name="location_denied">Location not allowed – using the default point</string>
+    <string name="location_failed">%1$s – using the default point</string>
+    <string name="location_searching">Finding your location…</string>
+
+    <!-- Map -->
+    <string name="map_all">All</string>
+    <string name="map_incidents">Incidents</string>
+    <string name="map_roadworks">Roadworks</string>
+    <string name="map_results">Search results</string>
+    <string name="map_count">%1$d on the map</string>
+    <string name="map_no_key">The map needs a Google Maps key.\nAdd MAPS_API_KEY to local.properties and build the app again.</string>
 
     <!-- About -->
     <string name="about_title">About this app</string>

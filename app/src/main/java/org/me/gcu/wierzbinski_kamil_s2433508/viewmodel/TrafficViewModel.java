@@ -14,11 +14,20 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.data.TrafficRepository;
+import com.google.android.gms.maps.model.CameraPosition;
+
+import org.me.gcu.wierzbinski_kamil_s2433508.data.TextBreakdown;
+import org.me.gcu.wierzbinski_kamil_s2433508.model.SearchOrigin;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
+import java.util.TreeSet;
 
 /**
  * ViewModel shared by the activity and all fragments (the "ViewModel" part of MVVM).
@@ -31,6 +40,14 @@ public class TrafficViewModel extends AndroidViewModel {
     /** The main screens of the app (one per navigation item). */
     public enum Screen { LIST, SEARCH, MAP }
 
+    /** The two kinds of search. */
+    public enum SearchMode { ROAD, DISTANCE }
+
+    /** What the map shows. */
+    public enum MapFilter { ALL, INCIDENTS, ROADWORKS, SEARCH_RESULTS }
+
+    public static final int DEFAULT_DISTANCE_KM = 25;
+
     private final TrafficRepository repository;
 
     private final MutableLiveData<Screen> screen = new MutableLiveData<>(Screen.LIST);
@@ -39,6 +56,18 @@ public class TrafficViewModel extends AndroidViewModel {
     private final MutableLiveData<String> selectedKey = new MutableLiveData<>();
     private final MediatorLiveData<Situation> selectedSituation = new MediatorLiveData<>();
 
+    // Search state
+    private final MutableLiveData<SearchMode> searchMode = new MutableLiveData<>(SearchMode.ROAD);
+    private final MutableLiveData<String> roadQuery = new MutableLiveData<>("");
+    private final MutableLiveData<Integer> distanceKm = new MutableLiveData<>(DEFAULT_DISTANCE_KM);
+    private final MutableLiveData<SearchOrigin> origin = new MutableLiveData<>(SearchOrigin.DEFAULT);
+    private final MediatorLiveData<List<Situation>> searchResults = new MediatorLiveData<>();
+
+    // Map state
+    private final MutableLiveData<MapFilter> mapFilter = new MutableLiveData<>(MapFilter.ALL);
+    private final MutableLiveData<String> mapFocusKey = new MutableLiveData<>();
+    private CameraPosition savedCamera;   // camera position of the map, kept over rotation
+
     public TrafficViewModel(@NonNull Application application) {
         super(application);
         repository = TrafficRepository.getInstance(application);
@@ -46,6 +75,12 @@ public class TrafficViewModel extends AndroidViewModel {
         // The selected situation is worked out again when the data or the selection changes
         selectedSituation.addSource(repository.getData(), data -> updateSelectedSituation());
         selectedSituation.addSource(selectedKey, key -> updateSelectedSituation());
+        // Search results are worked out again when the data or any search setting changes
+        searchResults.addSource(repository.getData(), d -> updateSearchResults());
+        searchResults.addSource(searchMode, m -> updateSearchResults());
+        searchResults.addSource(roadQuery, q -> updateSearchResults());
+        searchResults.addSource(distanceKm, k -> updateSearchResults());
+        searchResults.addSource(origin, o -> updateSearchResults());
     }
 
     private void updateSelectedSituation() {
@@ -128,5 +163,175 @@ public class TrafficViewModel extends AndroidViewModel {
 
     public void clearSelection() {
         select(null);
+    }
+
+    // ------------------------------------------------------------------ search
+
+    public LiveData<SearchMode> getSearchMode() {
+        return searchMode;
+    }
+
+    public void setSearchMode(SearchMode mode) {
+        if (mode != searchMode.getValue()) {
+            searchMode.setValue(mode);
+        }
+    }
+
+    public LiveData<String> getRoadQuery() {
+        return roadQuery;
+    }
+
+    public void searchRoad(String road) {
+        roadQuery.setValue(road == null ? "" : road.trim());
+    }
+
+    public LiveData<Integer> getDistanceKm() {
+        return distanceKm;
+    }
+
+    public void setDistanceKm(int km) {
+        Integer current = distanceKm.getValue();
+        if (current == null || current != km) {
+            distanceKm.setValue(km);
+        }
+    }
+
+    public LiveData<SearchOrigin> getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(SearchOrigin newOrigin) {
+        origin.setValue(newOrigin == null ? SearchOrigin.DEFAULT : newOrigin);
+    }
+
+    /** Results of the current search (road or distance), never null. */
+    public LiveData<List<Situation>> getSearchResults() {
+        return searchResults;
+    }
+
+    private void updateSearchResults() {
+        TrafficData data = repository.getData().getValue();
+        List<Situation> result = new ArrayList<>();
+        if (data != null) {
+            if (searchMode.getValue() == SearchMode.DISTANCE) {
+                result = findNear(data.getAll(), origin.getValue(), distanceKm.getValue());
+            } else {
+                result = findOnRoad(data.getAll(), roadQuery.getValue());
+            }
+        }
+        searchResults.setValue(Collections.unmodifiableList(result));
+    }
+
+    /** All situations on the given road ("m8", "A74(M)" ...). Empty for an empty query. */
+    public static List<Situation> findOnRoad(List<Situation> all, String road) {
+        List<Situation> result = new ArrayList<>();
+        if (road == null || road.trim().isEmpty()) {
+            return result;
+        }
+        for (Situation s : all) {
+            if (s.isOnRoad(road)) {
+                result.add(s);
+            }
+        }
+        return result;
+    }
+
+    /** Situations within the distance of the origin, nearest first. */
+    public static List<Situation> findNear(List<Situation> all, SearchOrigin from, Integer km) {
+        List<Situation> result = new ArrayList<>();
+        if (from == null || km == null) {
+            return result;
+        }
+        for (Situation s : all) {
+            if (s.distanceKmTo(from.getLatitude(), from.getLongitude()) <= km) {
+                result.add(s);
+            }
+        }
+        Collections.sort(result, Comparator.comparingDouble(
+                s -> s.distanceKmTo(from.getLatitude(), from.getLongitude())));
+        return result;
+    }
+
+    /** Road names in the current data, for the suggestions list (A roads, then B, then M, by number). */
+    public List<String> getRoadNames() {
+        TrafficData data = repository.getData().getValue();
+        TreeSet<String> names = new TreeSet<>(TrafficViewModel::compareRoads);
+        if (data != null) {
+            for (Situation s : data.getAll()) {
+                if (s.getRoadName() != null) {
+                    names.add(s.getRoadName());
+                }
+            }
+        }
+        return new ArrayList<>(names);
+    }
+
+    private static int compareRoads(String a, String b) {
+        int byLetter = Character.compare(a.charAt(0), b.charAt(0));
+        if (byLetter != 0) {
+            return byLetter;
+        }
+        int byNumber = Integer.compare(roadNumber(a), roadNumber(b));
+        return byNumber != 0 ? byNumber : a.compareTo(b);
+    }
+
+    private static int roadNumber(String road) {
+        String digits = road.replaceAll("[^0-9]", "");
+        try {
+            return digits.isEmpty() ? 0 : Integer.parseInt(digits);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    /** Normalised form of a road name typed by the user (same rules as the data). */
+    public static String normaliseRoad(String road) {
+        return TextBreakdown.normaliseRoad(road);
+    }
+
+    // ------------------------------------------------------------------ map
+
+    public LiveData<MapFilter> getMapFilter() {
+        return mapFilter;
+    }
+
+    public void setMapFilter(MapFilter filter) {
+        if (filter != mapFilter.getValue()) {
+            savedCamera = null;   // new set of situations: fit the camera to them
+            mapFilter.setValue(filter);
+        }
+    }
+
+    /** Opens the map showing the current search results. */
+    public void showSearchResultsOnMap() {
+        savedCamera = null;
+        mapFilter.setValue(MapFilter.SEARCH_RESULTS);
+        setScreen(Screen.MAP);
+    }
+
+    /** Opens the map zoomed to one situation (from the details screen). */
+    public void showOnMap(Situation situation) {
+        if (situation == null) {
+            return;
+        }
+        mapFocusKey.setValue(situation.getKey());
+        setScreen(Screen.MAP);
+    }
+
+    public LiveData<String> getMapFocusKey() {
+        return mapFocusKey;
+    }
+
+    /** Called by the map once it has zoomed to the focused situation. */
+    public void clearMapFocus() {
+        mapFocusKey.setValue(null);
+    }
+
+    public CameraPosition getSavedCamera() {
+        return savedCamera;
+    }
+
+    public void setSavedCamera(CameraPosition camera) {
+        savedCamera = camera;
     }
 }
