@@ -1,0 +1,255 @@
+//
+// Name                 Kamil Wierzbinski
+// Student ID           S2433508
+// Programme of Study   BSc (Hons) Computing
+//
+package org.me.gcu.wierzbinski_kamil_s2433508.model;
+
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * One traffic situation (an unplanned event or a roadworks record).
+ * Built by the XML parser from one &lt;situationRecord&gt; element.
+ */
+public class Situation {
+
+    private final SituationCategory category;
+
+    // Raw values from the XML
+    private String situationId;          // id of the parent <situation>
+    private String recordId;             // id of the <situationRecord>
+    private String recordType;           // xsi:type, e.g. RoadOrCarriagewayOrLaneManagement
+    private String subType;              // e.g. roadClosed, queuingTraffic, roadworks
+    private String subTypeElement;       // name of the element that held subType
+    private String description = "";     // generalPublicComment
+    private OffsetDateTime creationTime;
+    private OffsetDateTime versionTime;
+    private String probability;          // probabilityOfOccurrence
+    private String sourceName;
+    private String sourceType;
+    private String complianceOption;
+    private Boolean urgent;              // urgentRoadworks
+    private final Validity validity = new Validity();
+    private final Impact impact = new Impact();
+    private final RoadLocation location = new RoadLocation();
+    private final Map<String, String> otherDetails = new LinkedHashMap<>();
+
+    // Values worked out from the text by TextBreakdown
+    private String roadName;             // display form, e.g. "A74(M)"
+    private String roadKey;              // normalised form for searching, e.g. "A74M"
+    private final Set<String> roadKeys = new LinkedHashSet<>(); // all roads in location + comment
+    private SituationKind kind;
+    private List<String> descriptionParts = new ArrayList<>();
+    private String worksSummary;         // e.g. "Temporary traffic lights"
+
+    public Situation(SituationCategory category) {
+        this.category = category;
+    }
+
+    /** Unique key in the app: record id plus category. */
+    public String getKey() {
+        return category.name() + ":" + recordId;
+    }
+
+    public SituationCategory getCategory() {
+        return category;
+    }
+
+    public String getSituationId() {
+        return situationId;
+    }
+
+    public void setSituationId(String situationId) {
+        this.situationId = situationId;
+    }
+
+    public String getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
+    }
+
+    public String getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(String recordType) {
+        this.recordType = recordType;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subTypeElement, String subType) {
+        this.subTypeElement = subTypeElement;
+        this.subType = subType;
+    }
+
+    public String getSubTypeElement() {
+        return subTypeElement;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    /** Adds comment text; a situation can have more than one comment. */
+    public void appendDescription(String text) {
+        if (text == null || text.isEmpty()) {
+            return;
+        }
+        description = description.isEmpty() ? text : description + "\n" + text;
+    }
+
+    public OffsetDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(OffsetDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public OffsetDateTime getVersionTime() {
+        return versionTime;
+    }
+
+    public void setVersionTime(OffsetDateTime versionTime) {
+        this.versionTime = versionTime;
+    }
+
+    public String getProbability() {
+        return probability;
+    }
+
+    public void setProbability(String probability) {
+        this.probability = probability;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public String getComplianceOption() {
+        return complianceOption;
+    }
+
+    public void setComplianceOption(String complianceOption) {
+        this.complianceOption = complianceOption;
+    }
+
+    public Boolean getUrgent() {
+        return urgent;
+    }
+
+    public void setUrgent(Boolean urgent) {
+        this.urgent = urgent;
+    }
+
+    public Validity getValidity() {
+        return validity;
+    }
+
+    public Impact getImpact() {
+        return impact;
+    }
+
+    public RoadLocation getLocation() {
+        return location;
+    }
+
+    public void putOtherDetail(String name, String value) {
+        otherDetails.put(name, value);
+    }
+
+    public Map<String, String> getOtherDetails() {
+        return Collections.unmodifiableMap(otherDetails);
+    }
+
+    public String getRoadName() {
+        return roadName;
+    }
+
+    public void setRoadName(String roadName) {
+        this.roadName = roadName;
+    }
+
+    public String getRoadKey() {
+        return roadKey;
+    }
+
+    public void setRoadKey(String roadKey) {
+        this.roadKey = roadKey;
+    }
+
+    /** Adds a normalised road name that this situation is about (null is ignored). */
+    public void addRoadKey(String key) {
+        if (key != null) {
+            roadKeys.add(key);
+        }
+    }
+
+    /** All normalised road names linked to this situation (location and comment). */
+    public Set<String> getRoadKeys() {
+        return Collections.unmodifiableSet(roadKeys);
+    }
+
+    /** True if this situation is on the given road; "a74m", "A74(M)" both match "A74(M)". */
+    public boolean isOnRoad(String road) {
+        if (road == null) {
+            return false;
+        }
+        String key = road.toUpperCase(java.util.Locale.UK).replaceAll("[^A-Z0-9]", "");
+        return !key.isEmpty() && roadKeys.contains(key);
+    }
+
+    public SituationKind getKind() {
+        return kind;
+    }
+
+    public void setKind(SituationKind kind) {
+        this.kind = kind;
+    }
+
+    public List<String> getDescriptionParts() {
+        return Collections.unmodifiableList(descriptionParts);
+    }
+
+    public void setDescriptionParts(List<String> descriptionParts) {
+        this.descriptionParts = new ArrayList<>(descriptionParts);
+    }
+
+    public String getWorksSummary() {
+        return worksSummary;
+    }
+
+    public void setWorksSummary(String worksSummary) {
+        this.worksSummary = worksSummary;
+    }
+
+    /** Shortest distance in km from the given coordinates to this situation. */
+    public double distanceKmTo(double lat, double lon) {
+        return location.distanceKmTo(lat, lon);
+    }
+}

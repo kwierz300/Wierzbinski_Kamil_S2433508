@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<soapenv:Body>
+<d2LogicalModel modelBaseVersion="2"
+                xmlns="http://datex2.eu/schema/2/2_0"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				xsi:schemaLocation="http://datex2.eu/schema/2/2_0 http://datex2.eu/schema/2/2_3/DATEXIISchema_2_2_3.xsd">
+ <exchange>
+  <supplierIdentification>
+   <country>gb</country>
+   <nationalIdentifier>TrafficScotland</nationalIdentifier>
+  </supplierIdentification>
+ </exchange>
+ <payloadPublication xsi:type="SituationPublication" lang="eng">
+  <publicationTime>2026-08-31T09:58:26+01:00</publicationTime>
+  <publicationCreator>
+   <country>gb</country>
+   <nationalIdentifier>TrafficScotland</nationalIdentifier>
+  </publicationCreator>
+ 
+  <situation id="I_20260810_248_S" version="1">
+   <headerInformation>
+    <confidentiality>noRestriction</confidentiality>
+    <informationStatus>real</informationStatus>
+   </headerInformation>
+   <situationRecord xsi:type="RoadOrCarriagewayOrLaneManagement" id="I_20260810_248" version="10">
+    <situationRecordCreationReference>I_20260810_248</situationRecordCreationReference>
+    <situationRecordCreationTime>2026-08-10T11:38:10+01:00</situationRecordCreationTime>
+    <situationRecordVersionTime>2026-08-24T18:25:33+01:00</situationRecordVersionTime>
+    <situationRecordFirstSupplierVersionTime>2026-08-24T18:25:33+01:00</situationRecordFirstSupplierVersionTime>
+    <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+    <source>
+     <sourceIdentification>TrafficScotland</sourceIdentification>
+     <sourceName>
+  	<values>
+  	 <value lang="en">TrafficScotland</value>
+  	</values>
+     </sourceName>
+     <sourceType>roadAuthorities</sourceType>
+    </source>
+    <validity>
+     <validityStatus>definedByValidityTimeSpec</validityStatus>
+     <validityTimeSpecification>
+      <overallStartTime>2026-08-10T11:37:42+01:00</overallStartTime>
+     </validityTimeSpecification>
+    </validity>
+    <impact>
+     <numberOfOperationalLanes>0</numberOfOperationalLanes>
+    </impact>
+    <generalPublicComment>
+     <comment>
+      <values>
+       <value lang="en">The A74M(S) junction 19 (Ecclefechan) off slip is closed to allow for essential roadworks.</value>
+      </values>
+     </comment>
+    </generalPublicComment>
+    <groupOfLocations xsi:type="Linear">
+      <tpegLinearLocation>
+       <tpegDirection>southBound</tpegDirection>
+       <tpegLinearLocationType>segment</tpegLinearLocationType>
+       <to xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.065432</latitude>
+         <longitude>-3.273135</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J19</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">A74(M)</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">A74(M) J19 Eaglesfield</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </to>
+       <from xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.103477</latitude>
+         <longitude>-3.349595</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J18</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">A74(M)</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">A74(M) J18 Ecclefechan</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </from>
+      </tpegLinearLocation>
+    </groupOfLocations>
+    <complianceOption>mandatory</complianceOption>
+    <roadOrCarriagewayOrLaneManagementType>roadClosed</roadOrCarriagewayOrLaneManagementType>
+   </situationRecord>
+  </situation>
+ 
+  <situation id="I_20260818_18_S" version="1">
+   <headerInformation>
+    <confidentiality>noRestriction</confidentiality>
+    <informationStatus>real</informationStatus>
+   </headerInformation>
+   <situationRecord xsi:type="RoadOrCarriagewayOrLaneManagement" id="I_20260818_18" version="6">
+    <situationRecordCreationReference>I_20260818_18</situationRecordCreationReference>
+    <situationRecordCreationTime>2026-08-18T03:32:27+01:00</situationRecordCreationTime>
+    <situationRecordVersionTime>2026-08-24T18:25:33+01:00</situationRecordVersionTime>
+    <situationRecordFirstSupplierVersionTime>2026-08-24T18:25:33+01:00</situationRecordFirstSupplierVersionTime>
+    <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+    <source>
+     <sourceIdentification>TrafficScotland</sourceIdentification>
+     <sourceName>
+  	<values>
+  	 <value lang="en">TrafficScotland</value>
+  	</values>
+     </sourceName>
+     <sourceType>roadAuthorities</sourceType>
+    </source>
+    <validity>
+     <validityStatus>definedByValidityTimeSpec</validityStatus>
+     <validityTimeSpecification>
+      <overallStartTime>2026-08-18T03:32:18+01:00</overallStartTime>
+     </validityTimeSpecification>
+    </validity>
+    <impact>
+     <numberOfOperationalLanes>0</numberOfOperationalLanes>
+    </impact>
+    <generalPublicComment>
+     <comment>
+      <values>
+       <value lang="en">Essential roadworks are currently taking place on the A90 southbound at Brechin. As a result, the on-slip and off-slip roads are closed, and a contraflow system is in place on the main carriageway.</value>
+      </values>
+     </comment>
+    </generalPublicComment>
+    <groupOfLocations xsi:type="Linear">
+      <tpegLinearLocation>
+       <tpegDirection>southBound</tpegDirection>
+       <tpegLinearLocationType>segment</tpegLinearLocationType>
+       <to xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>56.706478</latitude>
+         <longitude>-2.824773</longitude>
+        </pointCoordinates>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">A90</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">B957</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName2</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">A90 Tannadice</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </to>
+       <from xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>56.728873</latitude>
+         <longitude>-2.702021</longitude>
+        </pointCoordinates>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">A90</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">A933</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName2</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">A90 Brechin</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </from>
+      </tpegLinearLocation>
+    </groupOfLocations>
+    <complianceOption>mandatory</complianceOption>
+    <roadOrCarriagewayOrLaneManagementType>roadClosed</roadOrCarriagewayOrLaneManagementType>
+   </situationRecord>
+  </situation>
+ 
+  <situation id="I_20260831_129_S" version="1">
+   <headerInformation>
+    <confidentiality>noRestriction</confidentiality>
+    <informationStatus>real</informationStatus>
+   </headerInformation>
+   <situationRecord xsi:type="AbnormalTraffic" id="I_20260831_129" version="4">
+    <situationRecordCreationReference>I_20260831_129</situationRecordCreationReference>
+    <situationRecordCreationTime>2026-08-31T09:13:57+01:00</situationRecordCreationTime>
+    <situationRecordVersionTime>2026-08-31T09:57:31+01:00</situationRecordVersionTime>
+    <situationRecordFirstSupplierVersionTime>2026-08-31T09:57:31+01:00</situationRecordFirstSupplierVersionTime>
+    <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+    <source>
+     <sourceIdentification>TrafficScotland</sourceIdentification>
+     <sourceName>
+  	<values>
+  	 <value lang="en">TrafficScotland</value>
+  	</values>
+     </sourceName>
+     <sourceType>roadAuthorities</sourceType>
+    </source>
+    <validity>
+     <validityStatus>definedByValidityTimeSpec</validityStatus>
+     <validityTimeSpecification>
+      <overallStartTime>2026-08-31T09:11:14+01:00</overallStartTime>
+     </validityTimeSpecification>
+    </validity>
+    <impact>
+     <numberOfLanesRestricted>2</numberOfLanesRestricted>
+    </impact>
+    <generalPublicComment>
+     <comment>
+      <values>
+       <value lang="en">2 lanes restricted Eastbound</value>
+      </values>
+     </comment>
+    </generalPublicComment>
+    <groupOfLocations xsi:type="Linear">
+      <tpegLinearLocation>
+       <tpegDirection>eastBound</tpegDirection>
+       <tpegLinearLocationType>segment</tpegLinearLocationType>
+       <to xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.866017</latitude>
+         <longitude>-4.271415</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J18</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">M8</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">M8 J18 Charing Cross</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </to>
+       <from xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.863112</latitude>
+         <longitude>-4.270558</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J19</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">M8</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">M8 J19 Kingston Bridge (East)</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </from>
+      </tpegLinearLocation>
+    </groupOfLocations>
+    <abnormalTrafficType>queuingTraffic</abnormalTrafficType>
+   </situationRecord>
+  </situation>
+ 
+  <situation id="I_20260831_138_S" version="1">
+   <headerInformation>
+    <confidentiality>noRestriction</confidentiality>
+    <informationStatus>real</informationStatus>
+   </headerInformation>
+   <situationRecord xsi:type="RoadOrCarriagewayOrLaneManagement" id="I_20260831_138" version="3">
+    <situationRecordCreationReference>I_20260831_138</situationRecordCreationReference>
+    <situationRecordCreationTime>2026-08-31T09:40:36+01:00</situationRecordCreationTime>
+    <situationRecordVersionTime>2026-08-31T09:42:43+01:00</situationRecordVersionTime>
+    <situationRecordFirstSupplierVersionTime>2026-08-31T09:42:43+01:00</situationRecordFirstSupplierVersionTime>
+    <probabilityOfOccurrence>certain</probabilityOfOccurrence>
+    <source>
+     <sourceIdentification>TrafficScotland</sourceIdentification>
+     <sourceName>
+  	<values>
+  	 <value lang="en">TrafficScotland</value>
+  	</values>
+     </sourceName>
+     <sourceType>roadAuthorities</sourceType>
+    </source>
+    <validity>
+     <validityStatus>definedByValidityTimeSpec</validityStatus>
+     <validityTimeSpecification>
+      <overallStartTime>2026-08-31T09:40:32+01:00</overallStartTime>
+     </validityTimeSpecification>
+    </validity>
+    <impact>
+     <numberOfOperationalLanes>0</numberOfOperationalLanes>
+    </impact>
+    <generalPublicComment>
+     <comment>
+      <values>
+       <value lang="en">The M8 Northbound Junction 2a Off slip, is closed due to essential roadworks.</value>
+      </values>
+     </comment>
+    </generalPublicComment>
+    <groupOfLocations xsi:type="Linear">
+      <tpegLinearLocation>
+       <tpegDirection>northBound</tpegDirection>
+       <tpegLinearLocationType>segment</tpegLinearLocationType>
+       <to xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.890888</latitude>
+         <longitude>-4.076927</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J2a</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">M73</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">M73 J2a Gartcosh - Slip Off (North)</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </to>
+       <from xsi:type="TpegJunction">
+        <pointCoordinates>
+         <latitude>55.888401</latitude>
+         <longitude>-4.078361</longitude>
+        </pointCoordinates>
+        <name>
+         <descriptor>
+          <values>
+           <value lang="en">J2a</value>
+          </values> 
+         </descriptor>
+         <tpegJunctionPointDescriptorType>junctionName</tpegJunctionPointDescriptorType>
+        </name>
+        <ilc>
+         <descriptor>
+          <values>
+           <value lang="en">M73</value>
+          </values>
+         </descriptor>
+         <tpegIlcPointDescriptorType>tpegIlcName1</tpegIlcPointDescriptorType>
+        </ilc>
+        <otherName>
+         <descriptor>
+          <values>
+           <value lang="en">M73 J2a Gartcosh (South)</value>
+          </values>
+         </descriptor>
+         <tpegOtherPointDescriptorType>intersectionName</tpegOtherPointDescriptorType>
+        </otherName>
+       </from>
+      </tpegLinearLocation>
+    </groupOfLocations>
+    <complianceOption>mandatory</complianceOption>
+    <roadOrCarriagewayOrLaneManagementType>roadClosed</roadOrCarriagewayOrLaneManagementType>
+   </situationRecord>
+  </situation>
+ 
+ </payloadPublication>
+</d2LogicalModel>
+</soapenv:Body>
+</soapenv:Envelope>
