@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Font Awesome Free 7.3.1 "circle-exclamation" by Fonticons, Inc. - https://fontawesome.com
+     Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+     Changes: converted to an Android vector drawable, re-centred, colour set by the app. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="533"
+    android:viewportHeight="533"
+    android:tint="?attr/colorControlNormal">
+    <group android:translateX="10.50" android:translateY="10.50">
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M256 512a256 256 0 1 1 0-512 256 256 0 1 1 0 512zm0-192a32 32 0 1 0 0 64 32 32 0 1 0 0-64zm0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.6 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z" />
+    </group>
+</vector>

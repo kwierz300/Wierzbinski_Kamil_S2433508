@@ -2,7 +2,38 @@
     <string name="app_name">Wierzbinski_Kamil_S2433508</string>
     <string name="app_title">Scotland Traffic</string>
     <string name="acknowledgement">Contains Traffic Scotland data</string>
-    <string name="loading">Loading traffic data…</string>
-    <string name="offline_banner">No internet connection – showing the last saved data</string>
+
+    <!-- Toolbar and navigation -->
     <string name="action_refresh">Refresh</string>
+    <string name="action_about">About</string>
+    <string name="nav_list">List</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_map">Map</string>
+
+    <!-- Status banner -->
+    <string name="offline_banner">No internet connection – showing data saved at %1$s</string>
+    <string name="offline_no_data">No internet connection and no saved data yet</string>
+    <string name="problem_banner">%1$s – showing data saved at %2$s</string>
+    <string name="sample_banner">Example data (development mode)</string>
+
+    <!-- List -->
+    <string name="tab_incidents">Incidents (%1$d)</string>
+    <string name="tab_roadworks">Roadworks (%1$d)</string>
+    <string name="list_empty">No situations to show.</string>
+    <string name="list_loading">Loading traffic data…</string>
+    <string name="legend_short">Up to 7 days</string>
+    <string name="legend_medium">Up to 3 months</string>
+    <string name="legend_long">Longer</string>
+
+    <!-- Details -->
+    <string name="detail_empty">Select a situation from the list to see the details.</string>
+
+    <!-- Placeholders -->
+    <string name="placeholder_search">Search by road name and by distance – coming in the next stage.</string>
+    <string name="placeholder_map">Map – coming in the next stage.</string>
+
+    <!-- About -->
+    <string name="about_title">About this app</string>
+    <string name="about_text">Shows current incidents and roadworks on Scottish trunk roads and motorways.\n\nData: Contains Traffic Scotland data (DATEX II feeds, Transport Scotland).\n\nIcons: Font Awesome Free 7.3.1 by Fonticons, Inc. (fontawesome.com), licensed under CC BY 4.0 (creativecommons.org/licenses/by/4.0). The icons were converted to Android vector drawables and recoloured.\n\nLast check: %1$s\nAutomatic update every %2$d min.</string>
+    <string name="ok">OK</string>
 </resources>

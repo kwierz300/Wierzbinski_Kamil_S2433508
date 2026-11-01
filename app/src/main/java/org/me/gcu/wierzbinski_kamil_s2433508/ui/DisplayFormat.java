@@ -7,6 +7,7 @@ package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.model.FeedState;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -48,6 +49,37 @@ public final class DisplayFormat {
             return "-";
         }
         return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).format(TIME);
+    }
+
+    /** "3 days", "2 months 5 days", "1 year 4 months", "5 hours". Null-safe. */
+    public static String duration(Duration duration) {
+        if (duration == null || duration.isNegative()) {
+            return "-";
+        }
+        long days = duration.toDays();
+        if (days < 1) {
+            long hours = Math.max(1, duration.toHours());
+            return plural(hours, "hour");
+        }
+        long years = days / 365;
+        long months = (days % 365) / 30;
+        long restDays = (days % 365) % 30;
+        if (years > 0) {
+            return months > 0 ? plural(years, "year") + " " + plural(months, "month") : plural(years, "year");
+        }
+        if (months > 0) {
+            return restDays > 0 ? plural(months, "month") + " " + plural(restDays, "day") : plural(months, "month");
+        }
+        return plural(days, "day");
+    }
+
+    private static String plural(long n, String word) {
+        return n + " " + word + (n == 1 ? "" : "s");
+    }
+
+    /** Latitude/longitude with 5 decimals (about 1 metre). */
+    public static String coordinates(double lat, double lon) {
+        return String.format(Locale.UK, "%.5f, %.5f", lat, lon);
     }
 
     public static String source(FeedState.Source source) {

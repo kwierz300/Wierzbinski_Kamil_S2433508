@@ -2,4 +2,24 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- App brand (road sign blue) -->
+    <color name="brand_primary">#FF1D4E89</color>
+    <color name="brand_on_primary">#FFFFFFFF</color>
+    <color name="brand_primary_container">#FFD5E3FF</color>
+    <color name="brand_on_primary_container">#FF001B3C</color>
+    <color name="brand_primary_dark">#FFA8C8FF</color>
+    <color name="brand_on_primary_dark">#FF003061</color>
+    <color name="brand_primary_container_dark">#FF00468A</color>
+    <color name="brand_on_primary_container_dark">#FFD5E3FF</color>
+
+    <!-- Situation categories -->
+    <color name="category_incident">#FFC62828</color>
+    <color name="category_roadworks">#FFE67E00</color>
+
+    <!-- Colour coding of roadworks by duration -->
+    <color name="duration_short">#FF2E7D32</color>
+    <color name="duration_medium">#FFEF8F00</color>
+    <color name="duration_long">#FFC62828</color>
+    <color name="duration_unknown">#FF757575</color>
 </resources>

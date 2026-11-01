@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Font Awesome Free 7.3.1 "traffic-light" by Fonticons, Inc. - https://fontawesome.com
+     Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+     Changes: converted to an Android vector drawable, re-centred, colour set by the app. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="600"
+    android:viewportHeight="600"
+    android:tint="?attr/colorControlNormal">
+    <group android:translateX="140.00" android:translateY="44.00">
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M64-32C28.7-32 0-3.3 0 32L0 384c0 88.4 71.6 160 160 160s160-71.6 160-160l0-352c0-35.3-28.7-64-64-64L64-32zm96 392c30.9 0 56 25.1 56 56s-25.1 56-56 56-56-25.1-56-56 25.1-56 56-56zm56-104a56 56 0 1 1 -112 0 56 56 0 1 1 112 0zM160 152a56 56 0 1 1 0-112 56 56 0 1 1 0 112z" />
+    </group>
+</vector>

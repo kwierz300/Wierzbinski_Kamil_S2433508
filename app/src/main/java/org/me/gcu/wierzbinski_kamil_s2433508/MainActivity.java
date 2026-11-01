@@ -17,32 +17,51 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.model.FeedState;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 import org.me.gcu.wierzbinski_kamil_s2433508.ui.DisplayFormat;
+import org.me.gcu.wierzbinski_kamil_s2433508.ui.PlaceholderFragment;
+import org.me.gcu.wierzbinski_kamil_s2433508.ui.SituationDetailFragment;
+import org.me.gcu.wierzbinski_kamil_s2433508.ui.SituationListFragment;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
+import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.Screen;
 
 /**
- * The single Activity of the app (the "View" part of MVVM).
- * It only shows data from the ViewModel; it never downloads or parses anything itself.
- * Stage 2: shows a status screen to check downloading, auto-update and offline mode.
+ * The single Activity of the app (View layer of MVVM). It hosts the fragments,
+ * the toolbar and the navigation, and shows the status banner.
+ *
+ * Portrait: one pane - the list/search/map screen OR the details (bottom navigation).
+ * Landscape: navigation rail, the list/search/map screen and the details side by side.
+ * All screen state lives in the shared ViewModel, so rotating the phone keeps it.
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG_DETAIL = "detail";
+
     private TrafficViewModel viewModel;
-    private TextView statusText;
-    private TextView offlineBanner;
+    private boolean twoPane;
+    private View contentContainer;
+    private View detailContainer;
+    private TextView statusBanner;
     private LinearProgressIndicator progress;
+    private NavigationBarView navigation;
+    private OnBackPressedCallback backCallback;
+    private boolean selectingNavItem;   // true while the code (not the user) changes the navigation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +69,64 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars()
+                    | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
         });
 
+        twoPane = getResources().getBoolean(R.bool.two_pane);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        statusText = findViewById(R.id.statusText);
-        offlineBanner = findViewById(R.id.offlineBanner);
+        contentContainer = findViewById(R.id.content_container);
+        detailContainer = findViewById(R.id.detail_container);
+        statusBanner = findViewById(R.id.statusBanner);
         progress = findViewById(R.id.progress);
+        navigation = findViewById(R.id.navigation);
 
         viewModel = new ViewModelProvider(this).get(TrafficViewModel.class);
-        viewModel.getData().observe(this, this::showData);
+
+        // The details fragment always lives in its own container (shown or hidden as needed)
+        if (getSupportFragmentManager().findFragmentByTag(TAG_DETAIL) == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, new SituationDetailFragment(), TAG_DETAIL)
+                    .commit();
+        }
+
+        navigation.setOnItemSelectedListener(item -> {
+            if (selectingNavItem) {
+                return true;
+            }
+            viewModel.setScreen(screenFor(item.getItemId()));
+            if (!twoPane) {
+                viewModel.clearSelection();   // portrait: leave the details screen
+            }
+            return true;
+        });
+        navigation.setOnItemReselectedListener(item -> {
+            if (!twoPane) {
+                viewModel.clearSelection();
+            }
+        });
+
+        backCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                if (!twoPane && viewModel.getSelectedKey().getValue() != null) {
+                    viewModel.clearSelection();
+                } else {
+                    viewModel.setScreen(Screen.LIST);
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, backCallback);
+
+        viewModel.getScreen().observe(this, this::showScreen);
+        viewModel.getSelectedKey().observe(this, key -> updatePanes());
+        viewModel.getData().observe(this, data -> updateBanner());
+        viewModel.getOnline().observe(this, online -> updateBanner());
         viewModel.getLoading().observe(this, isLoading ->
                 progress.setVisibility(Boolean.TRUE.equals(isLoading) ? View.VISIBLE : View.GONE));
-        viewModel.getOnline().observe(this, isOnline ->
-                offlineBanner.setVisibility(Boolean.FALSE.equals(isOnline)
-                        && !viewModel.isUsingSampleData() ? View.VISIBLE : View.GONE));
     }
 
     @Override
@@ -82,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
+    // ------------------------------------------------------------------ menu (toolbar)
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -90,38 +151,125 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            viewModel.clearSelection();
+            return true;
+        } else if (id == R.id.action_refresh) {
             viewModel.refresh();
+            return true;
+        } else if (id == R.id.action_about) {
+            showAbout();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showData(TrafficData data) {
-        if (data == null) {
-            return;
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("Last check: ").append(DisplayFormat.time(data.getCheckedAtMillis()))
-                .append("\nAuto update every ").append(viewModel.getRefreshMinutes()).append(" min\n\n");
-        appendFeed(sb, "INCIDENTS", data.getIncidents());
-        appendFeed(sb, "ROADWORKS", data.getRoadworks());
-        statusText.setText(sb.toString());
+    private void showAbout() {
+        TrafficData data = viewModel.getData().getValue();
+        String lastCheck = data == null ? "-" : DisplayFormat.dateTime(data.getCheckedAtMillis());
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.about_title)
+                .setMessage(getString(R.string.about_text, lastCheck, viewModel.getRefreshMinutes()))
+                .setPositiveButton(R.string.ok, null)
+                .show();
     }
 
-    private static void appendFeed(StringBuilder sb, String title, FeedState feed) {
-        sb.append(title).append('\n')
-                .append("Source: ").append(DisplayFormat.source(feed.getSource())).append('\n')
-                .append("Situations: ").append(feed.getSituations().size()).append('\n')
-                .append("Published: ").append(DisplayFormat.dateTime(feed.getPublicationTime())).append('\n')
-                .append("Downloaded: ").append(DisplayFormat.dateTime(feed.getSavedAtMillis())).append('\n');
-        if (feed.hasError()) {
-            sb.append("Problem: ").append(feed.getErrorMessage()).append('\n');
+    // ------------------------------------------------------------------ screens and panes
+
+    private static Screen screenFor(int menuId) {
+        if (menuId == R.id.nav_search) {
+            return Screen.SEARCH;
+        } else if (menuId == R.id.nav_map) {
+            return Screen.MAP;
         }
-        int shown = Math.min(3, feed.getSituations().size());
-        for (int i = 0; i < shown; i++) {
-            sb.append(" • ").append(feed.getSituations().get(i).getDescription()).append('\n');
+        return Screen.LIST;
+    }
+
+    private static int menuIdFor(Screen screen) {
+        switch (screen) {
+            case SEARCH:
+                return R.id.nav_search;
+            case MAP:
+                return R.id.nav_map;
+            default:
+                return R.id.nav_list;
         }
-        sb.append('\n');
+    }
+
+    /** Puts the fragment for the chosen screen in the main container (if it is not there already). */
+    private void showScreen(Screen screen) {
+        if (navigation.getSelectedItemId() != menuIdFor(screen)) {
+            selectingNavItem = true;
+            navigation.setSelectedItemId(menuIdFor(screen));
+            selectingNavItem = false;
+        }
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment current = fm.findFragmentById(R.id.content_container);
+        if (current == null || !screen.name().equals(current.getTag())) {
+            fm.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.content_container, createFragment(screen), screen.name())
+                    .commit();
+        }
+        updatePanes();
+    }
+
+    private static Fragment createFragment(Screen screen) {
+        switch (screen) {
+            case SEARCH:
+                return PlaceholderFragment.newInstance(R.string.placeholder_search);
+            case MAP:
+                return PlaceholderFragment.newInstance(R.string.placeholder_map);
+            default:
+                return new SituationListFragment();
+        }
+    }
+
+    /** Portrait: details cover the screen when something is selected. Landscape: both always visible. */
+    private void updatePanes() {
+        boolean detailOpen = viewModel.getSelectedKey().getValue() != null;
+        if (twoPane) {
+            contentContainer.setVisibility(View.VISIBLE);
+            detailContainer.setVisibility(View.VISIBLE);
+        } else {
+            contentContainer.setVisibility(detailOpen ? View.GONE : View.VISIBLE);
+            detailContainer.setVisibility(detailOpen ? View.VISIBLE : View.GONE);
+        }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(!twoPane && detailOpen);
+        }
+        backCallback.setEnabled((!twoPane && detailOpen) || viewModel.getScreen().getValue() != Screen.LIST);
+    }
+
+    /** Red banner when there is no connection or the last download failed. */
+    private void updateBanner() {
+        TrafficData data = viewModel.getData().getValue();
+        boolean online = !Boolean.FALSE.equals(viewModel.getOnline().getValue());
+        String message = null;
+        if (viewModel.isUsingSampleData()) {
+            message = getString(R.string.sample_banner);
+        } else if (data == null) {
+            message = online ? null : getString(R.string.offline_no_data);
+        } else {
+            FeedState failed = data.getIncidents().hasError() ? data.getIncidents()
+                    : data.getRoadworks().hasError() ? data.getRoadworks() : null;
+            if (!online) {
+                long saved = savedTime(data);
+                message = saved > 0 ? getString(R.string.offline_banner, DisplayFormat.dateTime(saved))
+                        : getString(R.string.offline_no_data);
+            } else if (failed != null) {
+                message = failed.getSavedAtMillis() > 0
+                        ? getString(R.string.problem_banner, failed.getErrorMessage(),
+                                DisplayFormat.dateTime(failed.getSavedAtMillis()))
+                        : failed.getErrorMessage();
+            }
+        }
+        statusBanner.setText(message);
+        statusBanner.setVisibility(message == null ? View.GONE : View.VISIBLE);
+    }
+
+    private static long savedTime(TrafficData data) {
+        return Math.max(data.getIncidents().getSavedAtMillis(), data.getRoadworks().getSavedAtMillis());
     }
 }
