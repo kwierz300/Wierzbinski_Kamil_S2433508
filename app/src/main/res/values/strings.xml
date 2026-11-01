@@ -6,6 +6,8 @@
     <!-- Toolbar and navigation -->
     <string name="action_refresh">Refresh</string>
     <string name="action_about">About</string>
+    <string name="action_hide_details">Hide details (full width)</string>
+    <string name="action_show_details">Show details</string>
     <string name="nav_list">List</string>
     <string name="nav_search">Search</string>
     <string name="nav_map">Map</string>

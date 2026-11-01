@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean twoPane;
     private View contentContainer;
     private View detailContainer;
+    private View paneDivider;
     private TextView statusBanner;
     private LinearProgressIndicator progress;
     private NavigationBarView navigation;
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         contentContainer = findViewById(R.id.content_container);
         detailContainer = findViewById(R.id.detail_container);
+        paneDivider = findViewById(R.id.paneDivider);   // landscape layout only
         statusBanner = findViewById(R.id.statusBanner);
         progress = findViewById(R.id.progress);
         navigation = findViewById(R.id.navigation);
@@ -125,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel.getScreen().observe(this, this::showScreen);
         viewModel.getSelectedKey().observe(this, key -> updatePanes());
+        viewModel.getDetailsCollapsed().observe(this, collapsed -> {
+            updatePanes();
+            invalidateOptionsMenu();   // switch the toolbar icon
+        });
         viewModel.getData().observe(this, data -> updateBanner());
         viewModel.getOnline().observe(this, online -> updateBanner());
         viewModel.getLoading().observe(this, isLoading ->
@@ -152,9 +158,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Landscape only: button to hide/show the details pane
+        MenuItem toggle = menu.findItem(R.id.action_toggle_details);
+        if (toggle != null) {
+            boolean collapsed = Boolean.TRUE.equals(viewModel.getDetailsCollapsed().getValue());
+            toggle.setVisible(twoPane);
+            toggle.setIcon(collapsed ? R.drawable.ic_action_split : R.drawable.ic_action_full_width);
+            toggle.setTitle(collapsed ? R.string.action_show_details : R.string.action_hide_details);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
+        if (id == R.id.action_toggle_details) {
+            viewModel.setDetailsCollapsed(!Boolean.TRUE.equals(viewModel.getDetailsCollapsed().getValue()));
+            return true;
+        } else if (id == android.R.id.home) {
             viewModel.clearSelection();
             return true;
         } else if (id == R.id.action_refresh) {
@@ -232,8 +254,12 @@ public class MainActivity extends AppCompatActivity {
     private void updatePanes() {
         boolean detailOpen = viewModel.getSelectedKey().getValue() != null;
         if (twoPane) {
+            boolean collapsed = Boolean.TRUE.equals(viewModel.getDetailsCollapsed().getValue());
             contentContainer.setVisibility(View.VISIBLE);
-            detailContainer.setVisibility(View.VISIBLE);
+            detailContainer.setVisibility(collapsed ? View.GONE : View.VISIBLE);
+            if (paneDivider != null) {
+                paneDivider.setVisibility(collapsed ? View.GONE : View.VISIBLE);
+            }
             // Landscape: the map gets most of the width; list and search leave more room for details
             boolean mapShown = viewModel.getScreen().getValue() == Screen.MAP;
             setWeight(contentContainer, mapShown ? 3f : 2f);

@@ -60,6 +60,8 @@ public class TrafficViewModel extends AndroidViewModel {
             new MutableLiveData<>(SituationCategory.INCIDENT);
     private final MutableLiveData<String> selectedKey = new MutableLiveData<>();
     private final MediatorLiveData<Situation> selectedSituation = new MediatorLiveData<>();
+    // Landscape only: details pane hidden so the list/search/map uses the whole width
+    private final MutableLiveData<Boolean> detailsCollapsed = new MutableLiveData<>(false);
 
     // Roadworks list filters (null duration band = all lengths)
     private final MutableLiveData<Validity.DurationBand> durationFilter = new MutableLiveData<>();
@@ -163,7 +165,20 @@ public class TrafficViewModel extends AndroidViewModel {
         return selectedSituation;
     }
 
+    public LiveData<Boolean> getDetailsCollapsed() {
+        return detailsCollapsed;
+    }
+
+    public void setDetailsCollapsed(boolean collapsed) {
+        if (!Boolean.valueOf(collapsed).equals(detailsCollapsed.getValue())) {
+            detailsCollapsed.setValue(collapsed);
+        }
+    }
+
     public void select(Situation situation) {
+        if (situation != null) {
+            setDetailsCollapsed(false);   // a new choice: make sure its details can be seen
+        }
         String key = situation == null ? null : situation.getKey();
         if (!Objects.equals(key, selectedKey.getValue())) {
             selectedKey.setValue(key);

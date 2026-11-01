@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Font Awesome Free 7.3.1 "expand" by Fonticons, Inc. - https://fontawesome.com
+     Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+     Changes: converted to an Android vector drawable, re-centred, colour set by the app. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="466"
+    android:viewportHeight="466"
+    android:tint="?attr/colorControlNormal">
+    <group android:translateX="9.00" android:translateY="-23.00">
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M32 32C14.3 32 0 46.3 0 64l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-64 64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 32zM64 352c0-17.7-14.3-32-32-32S0 334.3 0 352l0 96c0 17.7 14.3 32 32 32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0 0-64zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 0 64c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-96 0zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 64-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c17.7 0 32-14.3 32-32l0-96z" />
+    </group>
+</vector>
