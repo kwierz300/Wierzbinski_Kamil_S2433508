@@ -57,9 +57,11 @@ public final class TextBreakdown {
     /** Road number from the location data; if missing, the first road number in the comment. */
     static String findRoadName(Situation s) {
         for (LocationPoint p : s.getLocation().getPoints()) {
-            String road = p.getRoadNumber();
-            if (road != null && !road.isEmpty()) {
-                return road.trim();
+            // The feed sometimes joins the road with a place name ("M8MONKLANDS"),
+            // so only a value that looks like a road number is used
+            String road = findRoadInText(p.getRoadNumber());
+            if (road != null) {
+                return road;
             }
         }
         return findRoadInText(s.getDescription());

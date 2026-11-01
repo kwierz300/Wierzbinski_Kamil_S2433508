@@ -21,9 +21,9 @@
     <string name="tab_roadworks">Roadworks (%1$d)</string>
     <string name="list_empty">No situations to show.</string>
     <string name="list_loading">Loading traffic data…</string>
-    <string name="legend_short">Up to 7 days</string>
-    <string name="legend_medium">Up to 3 months</string>
-    <string name="legend_long">Longer</string>
+    <string name="legend_short">Up to 1 month</string>
+    <string name="legend_medium">1–12 months</string>
+    <string name="legend_long">Over 12 months</string>
 
     <!-- Details -->
     <string name="detail_empty">Select a situation from the list to see the details.</string>

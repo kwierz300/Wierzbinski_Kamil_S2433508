@@ -14,10 +14,10 @@ import java.time.OffsetDateTime;
  */
 public class Validity {
 
-    /** Roadworks up to this many days are "short". */
-    public static final long SHORT_MAX_DAYS = 7;
-    /** Roadworks up to this many days are "medium"; longer ones are "long". */
-    public static final long MEDIUM_MAX_DAYS = 90;
+    /** Roadworks up to this many days (about 1 month) are "short". */
+    public static final long SHORT_MAX_DAYS = 31;
+    /** Roadworks up to this many days (12 months) are "medium"; longer ones are "long". */
+    public static final long MEDIUM_MAX_DAYS = 365;
 
     /** Duration band used for the colour coding of roadworks. */
     public enum DurationBand { SHORT, MEDIUM, LONG, UNKNOWN }

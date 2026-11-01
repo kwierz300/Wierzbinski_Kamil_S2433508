@@ -39,6 +39,7 @@ public class TextBreakdownTest {
         assertEquals("A74(M)", TextBreakdown.findRoadInText("The A74M(S) junction 19 off slip is closed"));
         assertEquals(2, TextBreakdown.findAllRoadsInText("M8 WB Woodside - A804 Phoenix Rd").size());
         assertNull(TextBreakdown.findRoadInText("No road here"));
+        assertNull(TextBreakdown.findRoadInText("M8MONKLANDS"));   // not a clean road number
     }
 
     @Test
@@ -75,11 +76,11 @@ public class TextBreakdownTest {
         v.setStartTime(start);
         assertEquals(Validity.DurationBand.UNKNOWN, v.getDurationBand());
         v.setEndTime(start.plusDays(3));
-        assertEquals(Validity.DurationBand.SHORT, v.getDurationBand());
-        v.setEndTime(start.plusDays(30));
-        assertEquals(Validity.DurationBand.MEDIUM, v.getDurationBand());
-        v.setEndTime(start.plusDays(365));
-        assertEquals(Validity.DurationBand.LONG, v.getDurationBand());
+        assertEquals(Validity.DurationBand.SHORT, v.getDurationBand());     // up to 1 month
+        v.setEndTime(start.plusDays(100));
+        assertEquals(Validity.DurationBand.MEDIUM, v.getDurationBand());    // 1-12 months
+        v.setEndTime(start.plusDays(400));
+        assertEquals(Validity.DurationBand.LONG, v.getDurationBand());      // over 12 months
     }
 
     @Test
@@ -96,6 +97,17 @@ public class TextBreakdownTest {
         // Glasgow to Edinburgh is about 67 km; distance from Edinburgh must use the "to" point
         assertEquals(67.0, from.distanceKmTo(55.9533, -3.1883), 2.0);
         assertEquals(0.0, s.distanceKmTo(55.9533, -3.1883), 0.01);
+    }
+
+    @Test
+    public void joinedRoadNameFallsBackToComment() {
+        Situation s = new Situation(SituationCategory.ROADWORKS);
+        LocationPoint p = new LocationPoint(LocationPoint.ROLE_FROM, null);
+        p.addDescriptor("linkName", "M8MONKLANDS");
+        s.getLocation().addPoint(p);
+        s.appendDescription("M8 WB JCT 15 On Slip Stirling Rd - Slip Closure");
+        TextBreakdown.enrich(s);
+        assertEquals("M8", s.getRoadName());
     }
 
     private static Situation roadworks(String comment) {
