@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         contentContainer = findViewById(R.id.content_container);
         detailContainer = findViewById(R.id.detail_container);
-        paneDivider = findViewById(R.id.paneDivider);   // landscape layout only
+        paneDivider = findViewById(R.id.paneDivider);
         statusBanner = findViewById(R.id.statusBanner);
         progress = findViewById(R.id.progress);
         navigation = findViewById(R.id.navigation);
@@ -257,16 +257,28 @@ public class MainActivity extends AppCompatActivity {
             boolean collapsed = Boolean.TRUE.equals(viewModel.getDetailsCollapsed().getValue());
             contentContainer.setVisibility(View.VISIBLE);
             detailContainer.setVisibility(collapsed ? View.GONE : View.VISIBLE);
-            if (paneDivider != null) {
-                paneDivider.setVisibility(collapsed ? View.GONE : View.VISIBLE);
-            }
+            paneDivider.setVisibility(collapsed ? View.GONE : View.VISIBLE);
             // Landscape: the map gets most of the width; list and search leave more room for details
             boolean mapShown = viewModel.getScreen().getValue() == Screen.MAP;
             setWeight(contentContainer, mapShown ? 3f : 2f);
             setWeight(detailContainer, mapShown ? 2f : 3f);
         } else {
-            contentContainer.setVisibility(detailOpen ? View.GONE : View.VISIBLE);
-            detailContainer.setVisibility(detailOpen ? View.VISIBLE : View.GONE);
+            boolean mapShown = viewModel.getScreen().getValue() == Screen.MAP;
+            if (detailOpen && mapShown) {
+                // Portrait map: map on top, details below (scrollable)
+                contentContainer.setVisibility(View.VISIBLE);
+                detailContainer.setVisibility(View.VISIBLE);
+                paneDivider.setVisibility(View.VISIBLE);
+                setWeight(contentContainer, 4f);
+                setWeight(detailContainer, 5f);
+            } else {
+                // Portrait list/search: details cover the screen
+                contentContainer.setVisibility(detailOpen ? View.GONE : View.VISIBLE);
+                detailContainer.setVisibility(detailOpen ? View.VISIBLE : View.GONE);
+                paneDivider.setVisibility(View.GONE);
+                setWeight(contentContainer, 1f);
+                setWeight(detailContainer, 1f);
+            }
         }
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(!twoPane && detailOpen);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- PORTRAIT layout: one pane at a time (list/search/map OR details), bottom navigation bar. -->
+<!-- PORTRAIT layout: bottom navigation bar; list/search OR details; on the map screen the
+     details appear below the map. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,23 +34,35 @@
         android:visibility="gone"
         tools:text="@string/offline_banner" />
 
-    <FrameLayout
+    <!-- Content (list/search/map) and details. Details either cover the content,
+         or (on the map screen) sit below the map so both can be seen. -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/content_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/paneDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorOutlineVariant"
+            android:visibility="gone" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/detail_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="?android:attr/colorBackground"
             android:visibility="gone" />
-    </FrameLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/acknowledgement"

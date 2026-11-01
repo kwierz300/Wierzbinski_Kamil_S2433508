@@ -77,9 +77,8 @@ public class SituationDetailFragment extends Fragment {
             if (s == null) {
                 return;
             }
-            if (!getResources().getBoolean(R.bool.two_pane)) {
-                viewModel.clearSelection();   // portrait: close the details so the map is visible
-            }
+            // The selection is kept: portrait shows the details below the map,
+            // landscape keeps them in the right pane
             viewModel.showOnMap(s);
         });
         viewModel.getSelectedSituation().observe(getViewLifecycleOwner(), this::show);
