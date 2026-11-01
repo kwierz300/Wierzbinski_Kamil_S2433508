@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -233,6 +234,10 @@ public class MainActivity extends AppCompatActivity {
         if (twoPane) {
             contentContainer.setVisibility(View.VISIBLE);
             detailContainer.setVisibility(View.VISIBLE);
+            // Landscape: the map gets most of the width; list and search leave more room for details
+            boolean mapShown = viewModel.getScreen().getValue() == Screen.MAP;
+            setWeight(contentContainer, mapShown ? 3f : 2f);
+            setWeight(detailContainer, mapShown ? 2f : 3f);
         } else {
             contentContainer.setVisibility(detailOpen ? View.GONE : View.VISIBLE);
             detailContainer.setVisibility(detailOpen ? View.VISIBLE : View.GONE);
@@ -241,6 +246,14 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(!twoPane && detailOpen);
         }
         backCallback.setEnabled((!twoPane && detailOpen) || viewModel.getScreen().getValue() != Screen.LIST);
+    }
+
+    private static void setWeight(View view, float weight) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+        if (params.weight != weight) {
+            params.weight = weight;
+            view.setLayoutParams(params);
+        }
     }
 
     /** Red banner when there is no connection or the last download failed. */
