@@ -19,26 +19,39 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.R;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.FeedState;
+import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
+import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.TimingFilter;
+
+import java.time.OffsetDateTime;
+import java.util.List;
 
 /**
  * Screen with the list of all current situations, in two tabs:
- * incidents (unplanned events) and roadworks. Tapping an item selects it,
- * and the details are shown by {@link SituationDetailFragment}.
+ * incidents (unplanned events) and roadworks. Roadworks can be filtered by length
+ * (the coloured dots are also the legend of the colour coding) and by time
+ * (active now / planned). A line shows when the data was updated and when the feed
+ * was published. Tapping an item selects it; {@link SituationDetailFragment} shows it.
  */
 public class SituationListFragment extends Fragment {
 
     private TrafficViewModel viewModel;
     private TabLayout tabs;
-    private View legend;
+    private View roadworksFilters;
+    private ChipGroup durationChips;
+    private ChipGroup timingChips;
+    private TextView updatedText;
     private TextView emptyText;
+    private RecyclerView recycler;
     private SituationAdapter adapter;
 
     @Nullable
@@ -54,12 +67,28 @@ public class SituationListFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(TrafficViewModel.class);
 
         tabs = view.findViewById(R.id.tabs);
-        legend = view.findViewById(R.id.legend);
+        roadworksFilters = view.findViewById(R.id.roadworksFilters);
+        durationChips = view.findViewById(R.id.durationChips);
+        timingChips = view.findViewById(R.id.timingChips);
+        updatedText = view.findViewById(R.id.updatedText);
         emptyText = view.findViewById(R.id.emptyText);
-        RecyclerView recycler = view.findViewById(R.id.recycler);
+        recycler = view.findViewById(R.id.recycler);
 
-        setUpLegend(view);
+        setUpTabs();
+        setUpFilters(view);
 
+        adapter = new SituationAdapter(viewModel::select);
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recycler.setAdapter(adapter);
+
+        viewModel.getData().observe(getViewLifecycleOwner(), data -> render());
+        viewModel.getListCategory().observe(getViewLifecycleOwner(), category -> render());
+        viewModel.getDurationFilter().observe(getViewLifecycleOwner(), band -> render());
+        viewModel.getTimingFilter().observe(getViewLifecycleOwner(), timing -> render());
+        viewModel.getSelectedKey().observe(getViewLifecycleOwner(), adapter::setSelectedKey);
+    }
+
+    private void setUpTabs() {
         tabs.addTab(tabs.newTab().setTag(SituationCategory.INCIDENT));
         tabs.addTab(tabs.newTab().setTag(SituationCategory.ROADWORKS));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -77,27 +106,61 @@ public class SituationListFragment extends Fragment {
                 recycler.smoothScrollToPosition(0);
             }
         });
-
-        adapter = new SituationAdapter(viewModel::select);
-        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recycler.setAdapter(adapter);
-
-        viewModel.getData().observe(getViewLifecycleOwner(), data -> render());
-        viewModel.getListCategory().observe(getViewLifecycleOwner(), category -> render());
-        viewModel.getSelectedKey().observe(getViewLifecycleOwner(), adapter::setSelectedKey);
     }
 
-    private void setUpLegend(View view) {
-        tint(view.findViewById(R.id.legendShort), Validity.DurationBand.SHORT);
-        tint(view.findViewById(R.id.legendMedium), Validity.DurationBand.MEDIUM);
-        tint(view.findViewById(R.id.legendLong), Validity.DurationBand.LONG);
+    private void setUpFilters(View view) {
+        // Coloured dots = legend of the colour coding by length
+        dot(view.findViewById(R.id.chipShort), Validity.DurationBand.SHORT);
+        dot(view.findViewById(R.id.chipMedium), Validity.DurationBand.MEDIUM);
+        dot(view.findViewById(R.id.chipLong), Validity.DurationBand.LONG);
+
+        // Show the current filter values (kept in the ViewModel, so they survive rotation)
+        durationChips.check(chipForBand(viewModel.getDurationFilter().getValue()));
+        TimingFilter timing = viewModel.getTimingFilter().getValue();
+        if (timing == TimingFilter.ACTIVE) {
+            timingChips.check(R.id.chipActive);
+        } else if (timing == TimingFilter.PLANNED) {
+            timingChips.check(R.id.chipPlanned);
+        }
+
+        durationChips.setOnCheckedStateChangeListener((group, ids) ->
+                viewModel.setDurationFilter(ids.isEmpty() ? null : bandForChip(ids.get(0))));
+        timingChips.setOnCheckedStateChangeListener((group, ids) -> {
+            if (ids.isEmpty()) {
+                viewModel.setTimingFilter(TimingFilter.ANY);
+            } else {
+                viewModel.setTimingFilter(ids.get(0) == R.id.chipActive ? TimingFilter.ACTIVE : TimingFilter.PLANNED);
+            }
+        });
     }
 
-    private void tint(View badge, Validity.DurationBand band) {
-        badge.setBackgroundTintList(ColorStateList.valueOf(SituationStyle.durationColour(requireContext(), band)));
+    private void dot(Chip chip, Validity.DurationBand band) {
+        chip.setChipIconTint(ColorStateList.valueOf(SituationStyle.durationColour(requireContext(), band)));
     }
 
-    /** Shows the list for the selected tab, with counts in the tab titles. */
+    private static int chipForBand(Validity.DurationBand band) {
+        if (band == Validity.DurationBand.SHORT) {
+            return R.id.chipShort;
+        } else if (band == Validity.DurationBand.MEDIUM) {
+            return R.id.chipMedium;
+        } else if (band == Validity.DurationBand.LONG) {
+            return R.id.chipLong;
+        }
+        return R.id.chipAnyLength;
+    }
+
+    private static Validity.DurationBand bandForChip(int chipId) {
+        if (chipId == R.id.chipShort) {
+            return Validity.DurationBand.SHORT;
+        } else if (chipId == R.id.chipMedium) {
+            return Validity.DurationBand.MEDIUM;
+        } else if (chipId == R.id.chipLong) {
+            return Validity.DurationBand.LONG;
+        }
+        return null;
+    }
+
+    /** Shows the list for the selected tab and filters, with counts and the update time. */
     private void render() {
         SituationCategory category = viewModel.getListCategory().getValue();
         if (category == null) {
@@ -107,21 +170,40 @@ public class SituationListFragment extends Fragment {
         if (tab != null && !tab.isSelected()) {
             tab.select();
         }
-        legend.setVisibility(category == SituationCategory.ROADWORKS ? View.VISIBLE : View.GONE);
+        boolean roadworks = category == SituationCategory.ROADWORKS;
+        roadworksFilters.setVisibility(roadworks ? View.VISIBLE : View.GONE);
 
         TrafficData data = viewModel.getData().getValue();
         if (data == null) {
             setTabCounts(0, 0);
             adapter.submitList(null);
+            updatedText.setVisibility(View.GONE);
             showEmpty(getString(R.string.list_loading));
             return;
         }
         setTabCounts(data.getIncidents().getSituations().size(), data.getRoadworks().getSituations().size());
 
         FeedState feed = data.getFeed(category);
-        adapter.submitList(feed.getSituations());
-        if (feed.getSituations().isEmpty()) {
-            showEmpty(feed.hasError() ? feed.getErrorMessage() : getString(R.string.list_empty));
+        List<Situation> all = feed.getSituations();
+        List<Situation> shown = all;
+        if (roadworks) {
+            shown = TrafficViewModel.filterRoadworks(all, viewModel.getDurationFilter().getValue(),
+                    viewModel.getTimingFilter().getValue(), OffsetDateTime.now());
+        }
+        adapter.submitList(shown);
+
+        // "Updated 19:45:12 · feed published 31 Aug 2026, 09:58 · 151 of 405 shown"
+        long updated = data.getCheckedAtMillis() > 0 ? data.getCheckedAtMillis() : feed.getSavedAtMillis();
+        String line = getString(R.string.updated_line, DisplayFormat.time(updated),
+                DisplayFormat.dateTime(feed.getPublicationTime()));
+        if (shown.size() != all.size()) {
+            line += " · " + getString(R.string.shown_count, shown.size(), all.size());
+        }
+        updatedText.setText(line);
+        updatedText.setVisibility(View.VISIBLE);
+
+        if (shown.isEmpty()) {
+            showEmpty(feed.hasError() && all.isEmpty() ? feed.getErrorMessage() : getString(R.string.list_empty));
         } else {
             emptyText.setVisibility(View.GONE);
         }

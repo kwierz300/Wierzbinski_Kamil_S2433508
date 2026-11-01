@@ -55,6 +55,14 @@
                 tools:text="A9 · Southbound" />
 
             <TextView
+                android:id="@+id/timingText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceLabelMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Active · ends in 12 days" />
+
+            <TextView
                 android:id="@+id/descriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

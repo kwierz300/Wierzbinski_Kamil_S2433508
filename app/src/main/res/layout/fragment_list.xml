@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- List of situations with tabs for incidents and roadworks. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,32 +12,87 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!-- Legend for the roadworks colour coding (roadworks tab only) -->
-    <LinearLayout
-        android:id="@+id/legend"
+    <!-- Roadworks filters (roadworks tab only). The coloured dots are also the legend
+         for the colour coding by length. -->
+    <HorizontalScrollView
+        android:id="@+id/roadworksFilters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="12dp"
-        android:paddingTop="8dp"
+        android:scrollbars="none"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/legendShort"
-            style="@style/LegendBadge"
-            android:text="@string/legend_short" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
 
-        <TextView
-            android:id="@+id/legendMedium"
-            style="@style/LegendBadge"
-            android:text="@string/legend_medium" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/durationChips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
 
-        <TextView
-            android:id="@+id/legendLong"
-            style="@style/LegendBadge"
-            android:text="@string/legend_long" />
-    </LinearLayout>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAnyLength"
+                    style="@style/FilterChip"
+                    android:text="@string/filter_all" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipShort"
+                    style="@style/FilterChip.Dot"
+                    android:text="@string/legend_short" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMedium"
+                    style="@style/FilterChip.Dot"
+                    android:text="@string/legend_medium" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLong"
+                    style="@style/FilterChip.Dot"
+                    android:text="@string/legend_long" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="?attr/colorOutlineVariant" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/timingChips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipActive"
+                    style="@style/FilterChip"
+                    android:text="@string/filter_active" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPlanned"
+                    style="@style/FilterChip"
+                    android:text="@string/filter_planned" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- When the data was last checked and when the feed was published -->
+    <TextView
+        android:id="@+id/updatedText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="6dp"
+        android:textAppearance="?attr/textAppearanceLabelMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        tools:text="Updated 19:45:12 · feed published 31 Aug 2026, 09:58 · 151 of 405 shown" />
 
     <TextView
         android:id="@+id/emptyText"

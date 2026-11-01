@@ -30,6 +30,7 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 /**
@@ -126,6 +127,7 @@ public class SituationDetailFragment extends Fragment {
     private void addWhenSection(Situation s) {
         Validity v = s.getValidity();
         addHeader("When");
+        addRow("Status", SituationStyle.timingText(s, OffsetDateTime.now()));
         addRow("Start", DisplayFormat.dateTime(v.getStartTime()));
         addRow("End", v.getEndTime() == null ? "Not known yet" : DisplayFormat.dateTime(v.getEndTime()));
         if (v.getDuration() != null) {

@@ -20,6 +20,9 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationKind;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
+
 /**
  * How a situation looks on screen: its icon, colours and short texts.
  * Used by the list, the details screen and (later) the map, so they always match.
@@ -116,6 +119,26 @@ public final class SituationStyle {
         view.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.white)));
         view.setBackgroundTintList(ColorStateList.valueOf(categoryColour(context, s.getCategory())));
         view.setContentDescription(s.getKind() == null ? null : s.getKind().getLabel());
+    }
+
+    /**
+     * Short status from the start and end times, for example
+     * "Planned · starts in 3 days", "Active · ends in 5 days", "Active since 10 Aug 2026, 11:37"
+     * or "Ended 31 Aug 2026, 18:00".
+     */
+    public static String timingText(Situation s, OffsetDateTime now) {
+        Validity v = s.getValidity();
+        switch (v.getTiming(now)) {
+            case PLANNED:
+                return "Planned · starts in " + DisplayFormat.duration(Duration.between(now, v.getStartTime()));
+            case ENDED:
+                return "Ended " + DisplayFormat.dateTime(v.getEndTime());
+            default:
+                if (v.getEndTime() != null) {
+                    return "Active · ends in " + DisplayFormat.duration(Duration.between(now, v.getEndTime()));
+                }
+                return v.getStartTime() == null ? "Active" : "Active since " + DisplayFormat.dateTime(v.getStartTime());
+        }
     }
 
     /** Title of a situation: its kind ("Road closed", "Roadworks - traffic lights"). */

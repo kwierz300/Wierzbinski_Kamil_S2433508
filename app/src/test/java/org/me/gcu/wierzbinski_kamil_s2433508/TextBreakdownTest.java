@@ -84,6 +84,19 @@ public class TextBreakdownTest {
     }
 
     @Test
+    public void timingShowsPlannedActiveEnded() {
+        Validity v = new Validity();
+        OffsetDateTime start = OffsetDateTime.parse("2026-11-10T08:00:00Z");
+        v.setStartTime(start);
+        v.setEndTime(start.plusDays(5));
+        assertEquals(Validity.Timing.PLANNED, v.getTiming(start.minusDays(1)));
+        assertEquals(Validity.Timing.ACTIVE, v.getTiming(start.plusDays(2)));
+        assertEquals(Validity.Timing.ENDED, v.getTiming(start.plusDays(6)));
+        v.setEndTime(null);   // incidents have no end time: still active
+        assertEquals(Validity.Timing.ACTIVE, v.getTiming(start.plusDays(100)));
+    }
+
+    @Test
     public void distanceUsesNearestPoint() {
         Situation s = roadworks("M8 test");
         LocationPoint from = new LocationPoint(LocationPoint.ROLE_FROM, null);

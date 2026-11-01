@@ -22,6 +22,9 @@ public class Validity {
     /** Duration band used for the colour coding of roadworks. */
     public enum DurationBand { SHORT, MEDIUM, LONG, UNKNOWN }
 
+    /** Whether the situation has started yet, is happening now, or is already over. */
+    public enum Timing { PLANNED, ACTIVE, ENDED }
+
     private String status;              // e.g. definedByValidityTimeSpec
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
@@ -71,6 +74,17 @@ public class Validity {
             return DurationBand.MEDIUM;
         }
         return DurationBand.LONG;
+    }
+
+    /** Planned (not started yet), active (now) or ended, at the given moment. */
+    public Timing getTiming(OffsetDateTime moment) {
+        if (startTime != null && moment.isBefore(startTime)) {
+            return Timing.PLANNED;
+        }
+        if (endTime != null && moment.isAfter(endTime)) {
+            return Timing.ENDED;
+        }
+        return Timing.ACTIVE;
     }
 
     /** True if the situation is valid at the given moment. */

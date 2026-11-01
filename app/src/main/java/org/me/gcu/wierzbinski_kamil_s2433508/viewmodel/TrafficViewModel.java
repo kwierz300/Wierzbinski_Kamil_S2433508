@@ -21,7 +21,9 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SearchOrigin;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
+import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,6 +48,9 @@ public class TrafficViewModel extends AndroidViewModel {
     /** What the map shows. */
     public enum MapFilter { ALL, INCIDENTS, ROADWORKS, SEARCH_RESULTS }
 
+    /** Filter of roadworks by time: all, only those happening now, or only planned ones. */
+    public enum TimingFilter { ANY, ACTIVE, PLANNED }
+
     public static final int DEFAULT_DISTANCE_KM = 25;
 
     private final TrafficRepository repository;
@@ -55,6 +60,10 @@ public class TrafficViewModel extends AndroidViewModel {
             new MutableLiveData<>(SituationCategory.INCIDENT);
     private final MutableLiveData<String> selectedKey = new MutableLiveData<>();
     private final MediatorLiveData<Situation> selectedSituation = new MediatorLiveData<>();
+
+    // Roadworks list filters (null duration band = all lengths)
+    private final MutableLiveData<Validity.DurationBand> durationFilter = new MutableLiveData<>();
+    private final MutableLiveData<TimingFilter> timingFilter = new MutableLiveData<>(TimingFilter.ANY);
 
     // Search state
     private final MutableLiveData<SearchMode> searchMode = new MutableLiveData<>(SearchMode.ROAD);
@@ -163,6 +172,49 @@ public class TrafficViewModel extends AndroidViewModel {
 
     public void clearSelection() {
         select(null);
+    }
+
+    // ------------------------------------------------------------------ roadworks filters
+
+    public LiveData<Validity.DurationBand> getDurationFilter() {
+        return durationFilter;
+    }
+
+    /** Shows only roadworks of one length band; null shows all. */
+    public void setDurationFilter(Validity.DurationBand band) {
+        if (band != durationFilter.getValue()) {
+            durationFilter.setValue(band);
+        }
+    }
+
+    public LiveData<TimingFilter> getTimingFilter() {
+        return timingFilter;
+    }
+
+    public void setTimingFilter(TimingFilter filter) {
+        if (filter != timingFilter.getValue()) {
+            timingFilter.setValue(filter);
+        }
+    }
+
+    /** Roadworks that match the length band (null = any) and the timing filter at the given moment. */
+    public static List<Situation> filterRoadworks(List<Situation> all, Validity.DurationBand band,
+                                                  TimingFilter timing, OffsetDateTime now) {
+        List<Situation> result = new ArrayList<>();
+        for (Situation s : all) {
+            Validity v = s.getValidity();
+            if (band != null && v.getDurationBand() != band) {
+                continue;
+            }
+            if (timing == TimingFilter.ACTIVE && v.getTiming(now) != Validity.Timing.ACTIVE) {
+                continue;
+            }
+            if (timing == TimingFilter.PLANNED && v.getTiming(now) != Validity.Timing.PLANNED) {
+                continue;
+            }
+            result.add(s);
+        }
+        return result;
     }
 
     // ------------------------------------------------------------------ search

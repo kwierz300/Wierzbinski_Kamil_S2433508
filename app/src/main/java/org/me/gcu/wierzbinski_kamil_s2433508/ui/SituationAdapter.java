@@ -27,6 +27,7 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SearchOrigin;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -96,6 +97,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         private final ImageView icon;
         private final TextView typeText;
         private final TextView roadText;
+        private final TextView timingText;
         private final TextView descriptionText;
         private final TextView durationText;
 
@@ -106,6 +108,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             icon = itemView.findViewById(R.id.icon);
             typeText = itemView.findViewById(R.id.typeText);
             roadText = itemView.findViewById(R.id.roadText);
+            timingText = itemView.findViewById(R.id.timingText);
             descriptionText = itemView.findViewById(R.id.descriptionText);
             durationText = itemView.findViewById(R.id.durationText);
         }
@@ -122,6 +125,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             }
             roadText.setText(road);
             roadText.setVisibility(road.isEmpty() ? View.GONE : View.VISIBLE);
+            timingText.setText(SituationStyle.timingText(s, OffsetDateTime.now()));
             descriptionText.setText(s.getDescription());
 
             if (s.getCategory() == SituationCategory.ROADWORKS) {
