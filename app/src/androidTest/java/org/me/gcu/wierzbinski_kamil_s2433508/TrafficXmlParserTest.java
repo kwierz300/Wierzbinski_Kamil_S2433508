@@ -67,6 +67,12 @@ public class TrafficXmlParserTest {
         assertEquals("The A74M(S) junction 19 (Ecclefechan) off slip is closed to allow for essential roadworks.",
                 first.getDescription());
         assertEquals("TrafficScotland", first.getSourceName());   // not mixed up with the comment
+        assertEquals("roadAuthorities", first.getSourceType());
+        assertEquals("real", first.getInformationStatus());          // from <headerInformation>
+        assertEquals("noRestriction", first.getConfidentiality());
+        assertEquals("10", first.getRecordVersion());                 // version attribute
+        assertEquals("I_20260810_248", first.getCreationReference());
+        assertEquals(OffsetDateTime.parse("2026-08-24T18:25:33+01:00"), first.getVersionTime());
         assertEquals("A74(M)", first.getRoadName());
         assertEquals("southBound", first.getLocation().getDirection());
         assertEquals(Integer.valueOf(0), first.getImpact().getOperationalLanes());

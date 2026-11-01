@@ -25,12 +25,18 @@ public class Situation {
     // Raw values from the XML
     private String situationId;          // id of the parent <situation>
     private String recordId;             // id of the <situationRecord>
+    private String recordVersion;        // version attribute of the <situationRecord>
     private String recordType;           // xsi:type, e.g. RoadOrCarriagewayOrLaneManagement
     private String subType;              // e.g. roadClosed, queuingTraffic, roadworks
     private String subTypeElement;       // name of the element that held subType
     private String description = "";     // generalPublicComment
     private OffsetDateTime creationTime;
     private OffsetDateTime versionTime;
+    private OffsetDateTime firstSupplierVersionTime;
+    private String creationReference;    // situationRecordCreationReference
+    private String confidentiality;      // headerInformation/confidentiality
+    private String informationStatus;    // headerInformation/informationStatus (real, test, ...)
+    private String sourceIdentification; // source/sourceIdentification
     private String probability;          // probabilityOfOccurrence
     private String sourceName;
     private String sourceType;
@@ -76,6 +82,54 @@ public class Situation {
 
     public void setRecordId(String recordId) {
         this.recordId = recordId;
+    }
+
+    public String getRecordVersion() {
+        return recordVersion;
+    }
+
+    public void setRecordVersion(String recordVersion) {
+        this.recordVersion = recordVersion;
+    }
+
+    public OffsetDateTime getFirstSupplierVersionTime() {
+        return firstSupplierVersionTime;
+    }
+
+    public void setFirstSupplierVersionTime(OffsetDateTime firstSupplierVersionTime) {
+        this.firstSupplierVersionTime = firstSupplierVersionTime;
+    }
+
+    public String getCreationReference() {
+        return creationReference;
+    }
+
+    public void setCreationReference(String creationReference) {
+        this.creationReference = creationReference;
+    }
+
+    public String getConfidentiality() {
+        return confidentiality;
+    }
+
+    public void setConfidentiality(String confidentiality) {
+        this.confidentiality = confidentiality;
+    }
+
+    public String getInformationStatus() {
+        return informationStatus;
+    }
+
+    public void setInformationStatus(String informationStatus) {
+        this.informationStatus = informationStatus;
+    }
+
+    public String getSourceIdentification() {
+        return sourceIdentification;
+    }
+
+    public void setSourceIdentification(String sourceIdentification) {
+        this.sourceIdentification = sourceIdentification;
     }
 
     public String getRecordType() {

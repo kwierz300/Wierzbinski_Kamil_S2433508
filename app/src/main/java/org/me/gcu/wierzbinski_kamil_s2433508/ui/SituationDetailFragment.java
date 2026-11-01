@@ -200,7 +200,11 @@ public class SituationDetailFragment extends Fragment {
         addRow("Created", DisplayFormat.dateTime(s.getCreationTime()));
         addRow("Last changed", DisplayFormat.dateTime(s.getVersionTime()));
         addRow("Source", s.getSourceName());
-        addRow("Reference", s.getRecordId());
+        addRow("Source type", TextBreakdown.humanise(s.getSourceType()));
+        addRow("Information status", TextBreakdown.humanise(s.getInformationStatus()));
+        addRow("Confidentiality", TextBreakdown.humanise(s.getConfidentiality()));
+        addRow("Reference", s.getRecordId()
+                + (s.getRecordVersion() == null ? "" : " (version " + s.getRecordVersion() + ")"));
     }
 
     private void addHeader(String text) {

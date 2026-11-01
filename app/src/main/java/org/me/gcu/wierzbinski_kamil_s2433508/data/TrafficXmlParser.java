@@ -43,6 +43,9 @@ public class TrafficXmlParser {
     private String pendingDescriptorValue;
     private String pendingDescriptorType;
     private OffsetDateTime publicationTime;
+    // <headerInformation> comes before <situationRecord>, so its values are kept here first
+    private String headerConfidentiality;
+    private String headerInformationStatus;
 
     /**
      * Parses one feed.
@@ -117,6 +120,8 @@ public class TrafficXmlParser {
         pendingDescriptorValue = null;
         pendingDescriptorType = null;
         publicationTime = null;
+        headerConfidentiality = null;
+        headerInformationStatus = null;
     }
 
     // ------------------------------------------------------------------ start tags
@@ -126,12 +131,17 @@ public class TrafficXmlParser {
         switch (name) {
             case "situation":
                 currentSituationId = xpp.getAttributeValue(null, "id");
+                headerConfidentiality = null;
+                headerInformationStatus = null;
                 break;
             case "situationRecord":
                 current = new Situation(category);
                 current.setSituationId(currentSituationId);
                 current.setRecordId(xpp.getAttributeValue(null, "id"));
                 current.setRecordType(getXsiType(xpp));
+                current.setRecordVersion(xpp.getAttributeValue(null, "version"));
+                current.setConfidentiality(headerConfidentiality);
+                current.setInformationStatus(headerInformationStatus);
                 currentPoint = null;
                 break;
             case "groupOfLocations":
@@ -179,6 +189,12 @@ public class TrafficXmlParser {
             // outside a situation record (headers, envelope, ...)
             if ("publicationTime".equals(name) && !value.isEmpty()) {
                 publicationTime = parseDate(value);
+            } else if (inside("headerInformation") && !value.isEmpty()) {
+                if ("confidentiality".equals(name)) {
+                    headerConfidentiality = value;
+                } else if ("informationStatus".equals(name)) {
+                    headerInformationStatus = value;
+                }
             }
             return;
         }
@@ -251,6 +267,8 @@ public class TrafficXmlParser {
         if (inside("source")) {
             if ("sourceType".equals(name)) {
                 current.setSourceType(value);
+            } else if ("sourceIdentification".equals(name)) {
+                current.setSourceIdentification(value);
             }
             return;
         }
@@ -273,8 +291,11 @@ public class TrafficXmlParser {
                     current.setUrgent(Boolean.parseBoolean(value));
                     break;
                 case "situationRecordCreationReference":
+                    current.setCreationReference(value);
+                    break;
                 case "situationRecordFirstSupplierVersionTime":
-                    break;   // not needed in the app
+                    current.setFirstSupplierVersionTime(parseDate(value));
+                    break;
                 default:
                     if (name.endsWith("Type") && current.getSubType() == null) {
                         // roadOrCarriagewayOrLaneManagementType, abnormalTrafficType,
