@@ -27,18 +27,20 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
  * Tests the PullParser on the example files supplied with the coursework.
  * Runs on the phone/emulator because XmlPullParser is part of Android.
+ * The example files are in src/debug/assets (packed in debug builds only).
  * The expected values were copied by hand from the example XML files.
  */
 @RunWith(AndroidJUnit4.class)
 public class TrafficXmlParserTest {
 
     private String readAsset(String name) throws Exception {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         try (InputStream in = context.getAssets().open(name)) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[8192];
@@ -52,9 +54,10 @@ public class TrafficXmlParserTest {
 
     @Test
     public void unplannedEventsAreParsed() throws Exception {
-        List<Situation> list = new TrafficXmlParser()
-                .parse(readAsset("unplannedContentExample.xml"), SituationCategory.INCIDENT);
+        TrafficXmlParser parser = new TrafficXmlParser();
+        List<Situation> list = parser.parse(readAsset("unplannedContentExample.xml"), SituationCategory.INCIDENT);
         assertEquals(4, list.size());
+        assertEquals(OffsetDateTime.parse("2026-08-31T09:58:26+01:00"), parser.getLastPublicationTime());
 
         Situation first = list.get(0);
         assertEquals("I_20260810_248", first.getRecordId());

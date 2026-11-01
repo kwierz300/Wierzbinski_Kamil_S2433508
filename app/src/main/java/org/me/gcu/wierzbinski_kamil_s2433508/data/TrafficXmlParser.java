@@ -42,6 +42,7 @@ public class TrafficXmlParser {
     private LocationPoint currentPoint;
     private String pendingDescriptorValue;
     private String pendingDescriptorType;
+    private OffsetDateTime publicationTime;
 
     /**
      * Parses one feed.
@@ -53,11 +54,11 @@ public class TrafficXmlParser {
     public synchronized List<Situation> parse(String xml, SituationCategory category)
             throws XmlPullParserException, IOException {
         List<Situation> result = new ArrayList<>();
+        resetState();
         String cleanXml = cleanUp(xml);
         if (cleanXml == null) {
             return result;
         }
-        resetState();
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -84,6 +85,14 @@ public class TrafficXmlParser {
         return result;
     }
 
+    /**
+     * The publicationTime of the feed read by the last call to {@link #parse},
+     * or null if the feed did not have one.
+     */
+    public synchronized OffsetDateTime getLastPublicationTime() {
+        return publicationTime;
+    }
+
     /** Removes anything before the first tag (as the starter code did) and handles empty input. */
     static String cleanUp(String xml) {
         if (xml == null) {
@@ -107,6 +116,7 @@ public class TrafficXmlParser {
         currentPoint = null;
         pendingDescriptorValue = null;
         pendingDescriptorType = null;
+        publicationTime = null;
     }
 
     // ------------------------------------------------------------------ start tags
@@ -166,7 +176,11 @@ public class TrafficXmlParser {
 
     private void handleEndTag(String name, String value, List<Situation> result) {
         if (current == null) {
-            return;   // outside a situation record (headers, envelope, ...)
+            // outside a situation record (headers, envelope, ...)
+            if ("publicationTime".equals(name) && !value.isEmpty()) {
+                publicationTime = parseDate(value);
+            }
+            return;
         }
         switch (name) {
             case "situationRecord":
