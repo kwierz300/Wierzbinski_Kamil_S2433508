@@ -31,10 +31,12 @@ public class FeedCache {
 
     private final File folder;
 
+    /** The files are kept in the app's private folder. */
     public FeedCache(Context context) {
         this.folder = context.getFilesDir();
     }
 
+    /** File used for one feed (feed_incident.xml or feed_roadworks.xml). */
     private File fileFor(SituationCategory category) {
         return new File(folder, "feed_" + category.name().toLowerCase(Locale.UK) + ".xml");
     }

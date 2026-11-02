@@ -29,6 +29,7 @@ import java.time.OffsetDateTime;
  */
 public final class SituationStyle {
 
+    /** Only static methods: no objects of this class are created. */
     private SituationStyle() {
     }
 
@@ -66,6 +67,7 @@ public final class SituationStyle {
         }
     }
 
+    /** Red for incidents, amber for roadworks. */
     @ColorInt
     public static int categoryColour(Context context, SituationCategory category) {
         return ContextCompat.getColor(context, category == SituationCategory.ROADWORKS
@@ -93,6 +95,7 @@ public final class SituationStyle {
         return ContextCompat.getColor(context, res);
     }
 
+    /** "Short", "Medium", "Long" or "Unknown length". */
     public static String durationLabel(Validity.DurationBand band) {
         switch (band) {
             case SHORT:

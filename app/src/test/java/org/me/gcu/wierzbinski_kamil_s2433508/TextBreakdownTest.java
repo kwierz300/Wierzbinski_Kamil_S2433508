@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
  */
 public class TextBreakdownTest {
 
+    /** "A74(M)", "a74 m" and " m8 " are written the same way for search. */
     @Test
     public void roadNamesAreNormalisedForSearch() {
         assertEquals("A74M", TextBreakdown.normaliseRoad("A74(M)"));
@@ -33,6 +34,7 @@ public class TextBreakdownTest {
         assertNull(TextBreakdown.normaliseRoad("()"));
     }
 
+    /** Road numbers are found in free text. */
     @Test
     public void roadIsFoundInComment() {
         assertEquals("M8", TextBreakdown.findRoadInText("M8 WB Woodside - A804 Phoenix Rd - Closure"));
@@ -42,6 +44,7 @@ public class TextBreakdownTest {
         assertNull(TextBreakdown.findRoadInText("M8MONKLANDS"));   // not a clean road number
     }
 
+    /** Short forms like TTL and SB become full words. */
     @Test
     public void abbreviationsAreExpanded() {
         assertEquals("A9 Lothmore southbound - Temporary traffic lights",
@@ -51,6 +54,7 @@ public class TextBreakdownTest {
         assertEquals("Road closed", TextBreakdown.humanise("roadClosed"));
     }
 
+    /** The words in a comment give the right kind of roadworks. */
     @Test
     public void roadworksAreClassifiedFromComment() {
         assertEquals(SituationKind.ROADWORKS_TRAFFIC_LIGHTS, roadworks("A9 Golspie SB - TTL").getKind());
@@ -60,6 +64,7 @@ public class TextBreakdownTest {
         assertEquals(SituationKind.ROADWORKS, roadworks("A830 Arisaig - Vergeworks").getKind());
     }
 
+    /** A roadworks comment is split into parts at " - ". */
     @Test
     public void roadworksCommentIsSplitIntoParts() {
         Situation s = roadworks("A1 - SB - Old Craighall to Lamberton - Mobile Lane closure");
@@ -69,6 +74,7 @@ public class TextBreakdownTest {
         assertFalse(s.isOnRoad("A90"));
     }
 
+    /** Lengths of 3, 100 and 400 days give short, medium and long. */
     @Test
     public void durationBandsMatchColourCoding() {
         Validity v = new Validity();
@@ -83,6 +89,7 @@ public class TextBreakdownTest {
         assertEquals(Validity.DurationBand.LONG, v.getDurationBand());      // over 12 months
     }
 
+    /** Before, during and after the dates give planned, active and ended. */
     @Test
     public void timingShowsPlannedActiveEnded() {
         Validity v = new Validity();
@@ -96,6 +103,7 @@ public class TextBreakdownTest {
         assertEquals(Validity.Timing.ACTIVE, v.getTiming(start.plusDays(100)));
     }
 
+    /** The distance is measured to the nearest point of a from-to location. */
     @Test
     public void distanceUsesNearestPoint() {
         Situation s = roadworks("M8 test");
@@ -112,6 +120,7 @@ public class TextBreakdownTest {
         assertEquals(0.0, s.distanceKmTo(55.9533, -3.1883), 0.01);
     }
 
+    /** A joined name like M8MONKLANDS is not used; the road comes from the comment. */
     @Test
     public void joinedRoadNameFallsBackToComment() {
         Situation s = new Situation(SituationCategory.ROADWORKS);
@@ -123,6 +132,7 @@ public class TextBreakdownTest {
         assertEquals("M8", s.getRoadName());
     }
 
+    /** Helper: a roadworks situation with the given comment. */
     private static Situation roadworks(String comment) {
         Situation s = new Situation(SituationCategory.ROADWORKS);
         s.appendDescription(comment);

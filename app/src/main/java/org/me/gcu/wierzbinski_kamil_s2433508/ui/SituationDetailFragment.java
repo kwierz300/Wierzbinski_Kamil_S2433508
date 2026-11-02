@@ -52,6 +52,7 @@ public class SituationDetailFragment extends Fragment {
     private TrafficViewModel viewModel;
     private Situation shown;
 
+    /** Creates the screen from fragment_detail.xml. */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,6 +60,7 @@ public class SituationDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
+    /** Finds the views, sets up "Show on map" and observes the selected situation. */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -84,6 +86,7 @@ public class SituationDetailFragment extends Fragment {
         viewModel.getSelectedSituation().observe(getViewLifecycleOwner(), this::show);
     }
 
+    /** Shows a situation, or the hint when nothing is selected. */
     private void show(Situation s) {
         shown = s;
         if (s == null) {
@@ -123,6 +126,7 @@ public class SituationDetailFragment extends Fragment {
         addMoreSection(s);
     }
 
+    /** Section "When": status, start, end and length. */
     private void addWhenSection(Situation s) {
         Validity v = s.getValidity();
         addHeader("When");
@@ -134,6 +138,7 @@ public class SituationDetailFragment extends Fragment {
         }
     }
 
+    /** Section "Where": road, direction and the from/to points. */
     private void addWhereSection(Situation s) {
         RoadLocation location = s.getLocation();
         addHeader("Where");
@@ -160,6 +165,7 @@ public class SituationDetailFragment extends Fragment {
         }
     }
 
+    /** Section "Impact": works, lanes and delays. */
     private void addImpactSection(Situation s) {
         Impact impact = s.getImpact();
         boolean hasWorks = s.getWorksSummary() != null;
@@ -187,6 +193,7 @@ public class SituationDetailFragment extends Fragment {
         }
     }
 
+    /** Section "More information": types, source, status and reference. */
     private void addMoreSection(Situation s) {
         addHeader("More information");
         addRow("Type", TextBreakdown.humanise(s.getRecordType()));
@@ -209,6 +216,7 @@ public class SituationDetailFragment extends Fragment {
                 + (s.getRecordVersion() == null ? "" : " (version " + s.getRecordVersion() + ")"));
     }
 
+    /** Adds a section heading. */
     private void addHeader(String text) {
         TextView header = new TextView(requireContext());
         header.setText(text);

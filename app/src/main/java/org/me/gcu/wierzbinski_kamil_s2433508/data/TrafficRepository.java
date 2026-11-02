@@ -60,6 +60,7 @@ public class TrafficRepository {
     private final MutableLiveData<TrafficData> data = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
 
+    /** Creates the helpers. Private, because the app uses one repository only (singleton). */
     private TrafficRepository(Context context) {
         appContext = context.getApplicationContext();
         config = AppConfig.fromBuild();
@@ -67,6 +68,7 @@ public class TrafficRepository {
         networkMonitor = new NetworkMonitor(appContext);
     }
 
+    /** Returns the single repository and creates it the first time. */
     public static TrafficRepository getInstance(Context context) {
         if (instance == null) {
             synchronized (TrafficRepository.class) {
@@ -80,18 +82,22 @@ public class TrafficRepository {
 
     // ------------------------------------------------------------------ public API
 
+    /** Latest data of both feeds. */
     public LiveData<TrafficData> getData() {
         return data;
     }
 
+    /** True while an update is running. */
     public LiveData<Boolean> getLoading() {
         return loading;
     }
 
+    /** Internet connection state. */
     public LiveData<Boolean> getOnline() {
         return networkMonitor.getOnline();
     }
 
+    /** App settings (keys, example data, update interval). */
     public AppConfig getConfig() {
         return config;
     }
@@ -157,6 +163,7 @@ public class TrafficRepository {
 
     // ------------------------------------------------------------------ background work
 
+    /** Called when the connection comes back: update straight away. */
     private void onReconnected() {
         Log.d(TAG, "Connection is back - updating");
         update();
@@ -237,6 +244,7 @@ public class TrafficRepository {
         }
     }
 
+    /** Reads an example file from the debug assets into a String. */
     private String readAsset(String name) throws IOException {
         AssetManager assets = appContext.getAssets();
         try (InputStream in = assets.open(name)) {

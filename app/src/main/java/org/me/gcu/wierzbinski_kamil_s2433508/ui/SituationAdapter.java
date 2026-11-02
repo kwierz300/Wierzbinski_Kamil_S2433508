@@ -43,11 +43,13 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
     }
 
     private static final DiffUtil.ItemCallback<Situation> DIFF = new DiffUtil.ItemCallback<Situation>() {
+        /** Same situation (same key). */
         @Override
         public boolean areItemsTheSame(@NonNull Situation a, @NonNull Situation b) {
             return a.getKey().equals(b.getKey());
         }
 
+        /** Nothing visible has changed. */
         @Override
         public boolean areContentsTheSame(@NonNull Situation a, @NonNull Situation b) {
             return Objects.equals(a.getDescription(), b.getDescription())
@@ -59,6 +61,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
     private String selectedKey;
     private SearchOrigin distanceFrom;   // when set, each item shows its distance from this point
 
+    /** Creates the adapter; the listener is called when a card is tapped. */
     public SituationAdapter(OnSituationClick listener) {
         super(DIFF);
         this.listener = listener;
@@ -80,6 +83,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         }
     }
 
+    /** Creates one card from item_situation.xml. */
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -87,6 +91,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         return new Holder(view);
     }
 
+    /** Fills a card with one situation. */
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.bind(getItem(position), getItem(position).getKey().equals(selectedKey), distanceFrom, listener);
@@ -103,6 +108,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         private final TextView durationText;
         private final TextView delayText;
 
+        /** Finds the views of one card. */
         Holder(@NonNull View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.card);
@@ -116,6 +122,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             delayText = itemView.findViewById(R.id.delayText);
         }
 
+        /** Shows one situation in the card: icon, texts, colours and selection. */
         void bind(Situation s, boolean selected, SearchOrigin distanceFrom, OnSituationClick listener) {
             Context context = itemView.getContext();
             SituationStyle.applyIcon(icon, s);

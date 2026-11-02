@@ -20,6 +20,7 @@ public final class SearchOrigin {
     private final String label;
     private final boolean fromDevice;
 
+    /** Creates a search point. */
     public SearchOrigin(double latitude, double longitude, String label, boolean fromDevice) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -27,14 +28,17 @@ public final class SearchOrigin {
         this.fromDevice = fromDevice;
     }
 
+    /** Latitude of the point. */
     public double getLatitude() {
         return latitude;
     }
 
+    /** Longitude of the point. */
     public double getLongitude() {
         return longitude;
     }
 
+    /** Text shown to the user, e.g. "your location". */
     public String getLabel() {
         return label;
     }

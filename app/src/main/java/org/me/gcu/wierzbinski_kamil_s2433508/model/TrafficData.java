@@ -19,20 +19,24 @@ public final class TrafficData {
     private final FeedState roadworks;
     private final long checkedAtMillis;
 
+    /** Creates the snapshot of both feeds. */
     public TrafficData(FeedState incidents, FeedState roadworks, long checkedAtMillis) {
         this.incidents = incidents;
         this.roadworks = roadworks;
         this.checkedAtMillis = checkedAtMillis;
     }
 
+    /** State of the incidents feed. */
     public FeedState getIncidents() {
         return incidents;
     }
 
+    /** State of the roadworks feed. */
     public FeedState getRoadworks() {
         return roadworks;
     }
 
+    /** State of one feed by category. */
     public FeedState getFeed(SituationCategory category) {
         return category == SituationCategory.INCIDENT ? incidents : roadworks;
     }

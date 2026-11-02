@@ -21,48 +21,59 @@ public class RoadLocation {
     private String direction;         // e.g. "southBound"
     private final List<LocationPoint> points = new ArrayList<>();
 
+    /** xsi:type of groupOfLocations, e.g. Linear. */
     public String getLocationType() {
         return locationType;
     }
 
+    /** Sets the value returned by getLocationType(). */
     public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
 
+    /** Type of linear location, e.g. segment. */
     public String getLinearType() {
         return linearType;
     }
 
+    /** Sets the value returned by getLinearType(). */
     public void setLinearType(String linearType) {
         this.linearType = linearType;
     }
 
+    /** Direction from the feed, e.g. southBound. */
     public String getDirection() {
         return direction;
     }
 
+    /** Sets the value returned by getDirection(). */
     public void setDirection(String direction) {
         this.direction = direction;
     }
 
+    /** Adds a point (null is ignored). */
     public void addPoint(LocationPoint point) {
         if (point != null) {
             points.add(point);
         }
     }
 
+    /** All points (read-only). */
     public List<LocationPoint> getPoints() {
         return Collections.unmodifiableList(points);
     }
 
+    /** The "from" point, or null. */
     public LocationPoint getFrom() {
         return findByRole(LocationPoint.ROLE_FROM);
     }
 
+    /** The "to" point, or null. */
     public LocationPoint getTo() {
         return findByRole(LocationPoint.ROLE_TO);
     }
 
+    /** First point with the given role, or null. */
     private LocationPoint findByRole(String role) {
         for (LocationPoint p : points) {
             if (role.equals(p.getRole())) {

@@ -24,6 +24,7 @@ public class FeedDownloader {
     private static final int CONNECT_TIMEOUT_MS = 15_000;
     private static final int READ_TIMEOUT_MS = 30_000;
 
+    /** Downloads one feed with the client ID and key. Returns the XML text or throws a FeedException. */
     public String download(String address, String clientId, String clientKey) throws FeedException {
         if (address == null || address.isEmpty()) {
             throw new FeedException(FeedException.Reason.NOT_CONFIGURED, "no feed address");

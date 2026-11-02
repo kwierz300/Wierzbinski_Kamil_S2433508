@@ -31,6 +31,7 @@ public final class TextBreakdown {
     private static final Pattern ROAD_PATTERN =
             Pattern.compile("\\b([ABM]\\d{1,4})(\\(M\\)|M)?(?![\\w])", Pattern.CASE_INSENSITIVE);
 
+    /** Only static methods: no objects of this class are created. */
     private TextBreakdown() {
     }
 
@@ -168,6 +169,7 @@ public final class TextBreakdown {
         return capitalise(spaced);
     }
 
+    /** Makes the first letter upper case. */
     private static String capitalise(String text) {
         if (text.isEmpty()) {
             return text;

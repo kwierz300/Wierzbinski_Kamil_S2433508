@@ -24,6 +24,7 @@ public final class DisplayFormat {
     private static final DateTimeFormatter TIME =
             DateTimeFormatter.ofPattern("HH:mm:ss", Locale.UK);
 
+    /** Only static methods: no objects of this class are created. */
     private DisplayFormat() {
     }
 
@@ -73,6 +74,7 @@ public final class DisplayFormat {
         return plural(days, "day");
     }
 
+    /** "1 day" or "3 days". */
     private static String plural(long n, String word) {
         return n + " " + word + (n == 1 ? "" : "s");
     }
@@ -90,6 +92,7 @@ public final class DisplayFormat {
         return String.format(Locale.UK, "%.5f, %.5f", lat, lon);
     }
 
+    /** Readable name of where the data came from. */
     public static String source(FeedState.Source source) {
         switch (source) {
             case LIVE:

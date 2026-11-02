@@ -64,6 +64,7 @@ public class SearchFragment extends Fragment {
     private MaterialButton showOnMapButton;
     private SituationAdapter adapter;
 
+    /** Asks the user for the location permission; if refused, the default point is used. */
     private final ActivityResultLauncher<String> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 if (granted) {
@@ -74,6 +75,7 @@ public class SearchFragment extends Fragment {
                 }
             });
 
+    /** Creates the screen from fragment_search.xml. */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -81,6 +83,7 @@ public class SearchFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
+    /** Connects the views to the ViewModel: mode buttons, road field, slider, location button and results. */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -143,6 +146,7 @@ public class SearchFragment extends Fragment {
         viewModel.getSelectedKey().observe(getViewLifecycleOwner(), adapter::setSelectedKey);
     }
 
+    /** Shows the road controls or the distance controls. */
     private void showMode(SearchMode mode) {
         boolean distance = mode == SearchMode.DISTANCE;
         int buttonId = distance ? R.id.modeDistance : R.id.modeRoad;
@@ -156,18 +160,21 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /** Fills the road suggestions from the current data. */
     private void updateSuggestions() {
         List<String> roads = viewModel.getRoadNames();
         roadInput.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_list_item_1, roads));
     }
 
+    /** Starts the road search with the typed road. */
     private void runRoadSearch() {
         viewModel.searchRoad(roadInput.getText() == null ? "" : roadInput.getText().toString());
         roadInput.dismissDropDown();
         hideKeyboard();
     }
 
+    /** Shows the distance and the starting point. */
     private void updateDistanceTexts() {
         Integer km = viewModel.getDistanceKm().getValue();
         SearchOrigin origin = viewModel.getOrigin().getValue();
@@ -179,6 +186,7 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /** Shows the results list and the count text. */
     private void showResults(List<Situation> list) {
         SearchMode mode = viewModel.getSearchMode().getValue();
         adapter.setDistanceFrom(mode == SearchMode.DISTANCE ? viewModel.getOrigin().getValue() : null);
@@ -202,6 +210,7 @@ public class SearchFragment extends Fragment {
 
     // ------------------------------------------------------------------ location
 
+    /** Asks for the location permission if needed, then finds the location. */
     private void askForLocation() {
         if (deviceLocation.hasPermission()) {
             findMyLocation();
@@ -210,9 +219,11 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /** Gets the phone's location and uses it as the search point. */
     private void findMyLocation() {
         originText.setText(R.string.location_searching);
         deviceLocation.request(new DeviceLocation.Callback() {
+            /** Location found: use it as the search point. */
             @Override
             public void onLocation(Location location) {
                 if (!isAdded()) {
@@ -222,6 +233,7 @@ public class SearchFragment extends Fragment {
                         getString(R.string.origin_device), true));
             }
 
+            /** No location: use the default point and tell the user why. */
             @Override
             public void onNoLocation(String reason) {
                 if (!isAdded()) {
@@ -233,10 +245,12 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    /** Shows a short message. */
     private void toast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    /** Hides the on-screen keyboard. */
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null && getView() != null) {

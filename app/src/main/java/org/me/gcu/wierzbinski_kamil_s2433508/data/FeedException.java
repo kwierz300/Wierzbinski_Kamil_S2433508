@@ -19,10 +19,12 @@ public class FeedException extends Exception {
 
         private final String userMessage;
 
+        /** Each reason has a short message for the user. */
         Reason(String userMessage) {
             this.userMessage = userMessage;
         }
 
+        /** Message shown to the user for this reason. */
         public String getUserMessage() {
             return userMessage;
         }
@@ -30,11 +32,13 @@ public class FeedException extends Exception {
 
     private final Reason reason;
 
+    /** Creates the exception with a reason and a technical detail for the log. */
     public FeedException(Reason reason, String detail) {
         super(reason.name() + ": " + detail);
         this.reason = reason;
     }
 
+    /** Why the feed could not be loaded. */
     public Reason getReason() {
         return reason;
     }

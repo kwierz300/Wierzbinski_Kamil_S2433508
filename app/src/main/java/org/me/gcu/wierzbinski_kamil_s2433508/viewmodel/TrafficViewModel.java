@@ -79,6 +79,7 @@ public class TrafficViewModel extends AndroidViewModel {
     private final MutableLiveData<String> mapFocusKey = new MutableLiveData<>();
     private CameraPosition savedCamera;   // camera position of the map, kept over rotation
 
+    /** Starts the repository and keeps the selected situation and the search results up to date. */
     public TrafficViewModel(@NonNull Application application) {
         super(application);
         repository = TrafficRepository.getInstance(application);
@@ -94,6 +95,7 @@ public class TrafficViewModel extends AndroidViewModel {
         searchResults.addSource(origin, o -> updateSearchResults());
     }
 
+    /** Finds the selected situation in the current data. */
     private void updateSelectedSituation() {
         TrafficData data = repository.getData().getValue();
         String key = selectedKey.getValue();
@@ -105,14 +107,17 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ data
 
+    /** Latest data of both feeds. */
     public LiveData<TrafficData> getData() {
         return repository.getData();
     }
 
+    /** True while downloading. */
     public LiveData<Boolean> getLoading() {
         return repository.getLoading();
     }
 
+    /** Internet connection state. */
     public LiveData<Boolean> getOnline() {
         return repository.getOnline();
     }
@@ -127,54 +132,65 @@ public class TrafficViewModel extends AndroidViewModel {
         repository.setAutoUpdate(enabled);
     }
 
+    /** Minutes between automatic updates. */
     public int getRefreshMinutes() {
         return repository.getConfig().getRefreshMinutes();
     }
 
+    /** True in the debug development mode with the example XML files. */
     public boolean isUsingSampleData() {
         return repository.getConfig().useSampleData();
     }
 
     // ------------------------------------------------------------------ screen state
 
+    /** Current main screen. */
     public LiveData<Screen> getScreen() {
         return screen;
     }
 
+    /** Sets the value returned by getScreen(). */
     public void setScreen(Screen newScreen) {
         if (newScreen != screen.getValue()) {
             screen.setValue(newScreen);
         }
     }
 
+    /** Tab shown in the list. */
     public LiveData<SituationCategory> getListCategory() {
         return listCategory;
     }
 
+    /** Sets the value returned by getListCategory(). */
     public void setListCategory(SituationCategory category) {
         if (category != listCategory.getValue()) {
             listCategory.setValue(category);
         }
     }
 
+    /** Key of the selected situation, or null. */
     public LiveData<String> getSelectedKey() {
         return selectedKey;
     }
 
+    /** The selected situation, or null. */
     public LiveData<Situation> getSelectedSituation() {
         return selectedSituation;
     }
 
+    /** Landscape only: true in full screen mode. */
     public LiveData<Boolean> getDetailsCollapsed() {
         return detailsCollapsed;
     }
 
+    /** Sets the value returned by getDetailsCollapsed(). */
     public void setDetailsCollapsed(boolean collapsed) {
         if (!Boolean.valueOf(collapsed).equals(detailsCollapsed.getValue())) {
             detailsCollapsed.setValue(collapsed);
         }
     }
 
+    /** Selects a situation (null clears the selection). Also leaves full screen mode. */
     public void select(Situation situation) {
         if (situation != null) {
             setDetailsCollapsed(false);   // a new choice: make sure its details can be seen
@@ -185,12 +201,14 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
+    /** Nothing selected. */
     public void clearSelection() {
         select(null);
     }
 
     // ------------------------------------------------------------------ roadworks filters
 
+    /** Length band shown in the roadworks list (null = all). */
     public LiveData<Validity.DurationBand> getDurationFilter() {
         return durationFilter;
     }
@@ -202,10 +220,12 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
+    /** Time filter of the roadworks list. */
     public LiveData<TimingFilter> getTimingFilter() {
         return timingFilter;
     }
 
+    /** Sets the value returned by getTimingFilter(). */
     public void setTimingFilter(TimingFilter filter) {
         if (filter != timingFilter.getValue()) {
             timingFilter.setValue(filter);
@@ -234,28 +254,34 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ search
 
+    /** Road search or distance search. */
     public LiveData<SearchMode> getSearchMode() {
         return searchMode;
     }
 
+    /** Sets the value returned by getSearchMode(). */
     public void setSearchMode(SearchMode mode) {
         if (mode != searchMode.getValue()) {
             searchMode.setValue(mode);
         }
     }
 
+    /** Road typed in the last road search. */
     public LiveData<String> getRoadQuery() {
         return roadQuery;
     }
 
+    /** Runs a road search. */
     public void searchRoad(String road) {
         roadQuery.setValue(road == null ? "" : road.trim());
     }
 
+    /** Search distance in kilometres. */
     public LiveData<Integer> getDistanceKm() {
         return distanceKm;
     }
 
+    /** Changes the search distance. */
     public void setDistanceKm(int km) {
         Integer current = distanceKm.getValue();
         if (current == null || current != km) {
@@ -263,10 +289,12 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
+    /** Starting point of the distance search. */
     public LiveData<SearchOrigin> getOrigin() {
         return origin;
     }
 
+    /** Changes the starting point (null = default point). */
     public void setOrigin(SearchOrigin newOrigin) {
         origin.setValue(newOrigin == null ? SearchOrigin.DEFAULT : newOrigin);
     }
@@ -276,6 +304,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return searchResults;
     }
 
+    /** Works out the results of the current search. */
     private void updateSearchResults() {
         TrafficData data = repository.getData().getValue();
         List<Situation> result = new ArrayList<>();
@@ -333,6 +362,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return new ArrayList<>(names);
     }
 
+    /** Orders roads by letter and then by number (A1, A9, A90 ...). */
     private static int compareRoads(String a, String b) {
         int byLetter = Character.compare(a.charAt(0), b.charAt(0));
         if (byLetter != 0) {
@@ -342,6 +372,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return byNumber != 0 ? byNumber : a.compareTo(b);
     }
 
+    /** Number part of a road name. */
     private static int roadNumber(String road) {
         String digits = road.replaceAll("[^0-9]", "");
         try {
@@ -358,10 +389,12 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ map
 
+    /** What the map shows. */
     public LiveData<MapFilter> getMapFilter() {
         return mapFilter;
     }
 
+    /** Changes what the map shows; the camera will fit the new set. */
     public void setMapFilter(MapFilter filter) {
         if (filter != mapFilter.getValue()) {
             savedCamera = null;   // new set of situations: fit the camera to them
@@ -385,6 +418,7 @@ public class TrafficViewModel extends AndroidViewModel {
         setScreen(Screen.MAP);
     }
 
+    /** Situation the map should zoom to, or null. */
     public LiveData<String> getMapFocusKey() {
         return mapFocusKey;
     }
@@ -394,10 +428,12 @@ public class TrafficViewModel extends AndroidViewModel {
         mapFocusKey.setValue(null);
     }
 
+    /** Last camera position of the map. */
     public CameraPosition getSavedCamera() {
         return savedCamera;
     }
 
+    /** Sets the value returned by getSavedCamera(). */
     public void setSavedCamera(CameraPosition camera) {
         savedCamera = camera;
     }

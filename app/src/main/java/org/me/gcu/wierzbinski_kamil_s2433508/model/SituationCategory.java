@@ -14,10 +14,12 @@ public enum SituationCategory {
 
     private final String label;
 
+    /** Each category has a label for the screen. */
     SituationCategory(String label) {
         this.label = label;
     }
 
+    /** Name shown on screen, e.g. "Roadworks". */
     public String getLabel() {
         return label;
     }

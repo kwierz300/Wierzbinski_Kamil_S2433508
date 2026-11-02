@@ -39,6 +39,7 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class TrafficXmlParserTest {
 
+    /** Reads an example XML file from the app's debug assets into a String. */
     private String readAsset(String name) throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         try (InputStream in = context.getAssets().open(name)) {
@@ -52,6 +53,7 @@ public class TrafficXmlParserTest {
         }
     }
 
+    /** The 4 incidents in the example file are read with the right values (checked by hand against the XML). */
     @Test
     public void unplannedEventsAreParsed() throws Exception {
         TrafficXmlParser parser = new TrafficXmlParser();
@@ -89,6 +91,7 @@ public class TrafficXmlParserTest {
         assertEquals(Integer.valueOf(2), queue.getImpact().getLanesRestricted());
     }
 
+    /** All 405 roadworks are read; every record has a description and a from-to location. */
     @Test
     public void roadworksAreParsed() throws Exception {
         List<Situation> list = new TrafficXmlParser()
@@ -109,6 +112,7 @@ public class TrafficXmlParserTest {
         }
     }
 
+    /** Empty, non-XML or cut-off input gives an empty list or a handled exception, never a crash. */
     @Test
     public void emptyOrBrokenInputDoesNotCrash() throws Exception {
         TrafficXmlParser parser = new TrafficXmlParser();
@@ -122,6 +126,7 @@ public class TrafficXmlParserTest {
         }
     }
 
+    /** Elements the app does not know are skipped and the rest of the record is still read. */
     @Test
     public void unknownElementsAreIgnored() throws Exception {
         String xml = "<?xml version=\"1.0\"?><d2LogicalModel xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"

@@ -73,6 +73,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
     private final Map<String, Marker> markersByKey = new HashMap<>();
     private List<Situation> shown = new ArrayList<>();
 
+    /** Creates the screen from fragment_map.xml. */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -80,6 +81,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
+    /** Sets up the filter chips and asks for the Google map. */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -104,6 +106,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /** Map ready: set up taps and the camera, then draw whenever the data or the filters change. */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -136,6 +139,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         viewModel.getMapFocusKey().observe(getViewLifecycleOwner(), this::focusOn);
     }
 
+    /** Saves the camera so the map looks the same after rotation. */
     @Override
     public void onDestroyView() {
         if (map != null) {
@@ -148,6 +152,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
 
     // ------------------------------------------------------------------ filter
 
+    /** Map filter for a chip. */
     private static MapFilter filterFor(int chipId) {
         if (chipId == R.id.chipIncidents) {
             return MapFilter.INCIDENTS;
@@ -159,6 +164,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         return MapFilter.ALL;
     }
 
+    /** Checks the chip of the current filter. */
     private void checkChipFor(MapFilter filter) {
         int id;
         switch (filter) {
@@ -180,6 +186,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /** Situations shown for a filter. */
     private List<Situation> situationsFor(MapFilter filter) {
         TrafficData data = viewModel.getData().getValue();
         if (data == null) {
@@ -267,6 +274,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /** Moves the camera so all shown situations can be seen. */
     private void fitTo(LatLngBounds bounds) {
         View view = getView();
         int padding = Math.round(getResources().getDisplayMetrics().density * 48);
@@ -303,6 +311,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         viewModel.clearMapFocus();
     }
 
+    /** Selects the situation of a tapped marker or line. */
     private void selectByKey(Object key) {
         TrafficData data = viewModel.getData().getValue();
         if (data != null && key instanceof String) {

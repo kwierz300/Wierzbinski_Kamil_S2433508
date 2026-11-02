@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback backCallback;
     private boolean selectingNavItem;   // true while the code (not the user) changes the navigation
 
+    /** Sets up the layout, toolbar, navigation, Back button and the LiveData observers. */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         backCallback = new OnBackPressedCallback(false) {
+            /** Back closes the details (portrait) or returns to the list screen. */
             @Override
             public void handleOnBackPressed() {
                 if (!twoPane && viewModel.getSelectedKey().getValue() != null) {
@@ -143,12 +145,14 @@ public class MainActivity extends AppCompatActivity {
                 progress.setVisibility(Boolean.TRUE.equals(isLoading) ? View.VISIBLE : View.GONE));
     }
 
+    /** Starts the automatic updates while the app is visible. */
     @Override
     protected void onStart() {
         super.onStart();
         viewModel.setAutoUpdate(true);    // regular updates only while the app is visible
     }
 
+    /** Stops the automatic updates when the app goes to the background. */
     @Override
     protected void onStop() {
         viewModel.setAutoUpdate(false);
@@ -157,12 +161,14 @@ public class MainActivity extends AppCompatActivity {
 
     // ------------------------------------------------------------------ menu (toolbar)
 
+    /** Adds the toolbar buttons (full screen, refresh, about). */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
+    /** Shows the full screen button only in landscape, with the right icon and title. */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // Landscape only: button to hide/show the details pane
@@ -176,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    /** Handles taps on the toolbar buttons and on the Up arrow. */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -195,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** Shows the About dialog: data source, icon licence and the time of the last update. */
     private void showAbout() {
         TrafficData data = viewModel.getData().getValue();
         String lastCheck = data == null ? "-" : DisplayFormat.dateTime(data.getCheckedAtMillis());
@@ -207,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
     // ------------------------------------------------------------------ screens and panes
 
+    /** Screen that belongs to a navigation item. */
     private static Screen screenFor(int menuId) {
         if (menuId == R.id.nav_search) {
             return Screen.SEARCH;
@@ -216,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         return Screen.LIST;
     }
 
+    /** Navigation item that belongs to a screen. */
     private static int menuIdFor(Screen screen) {
         switch (screen) {
             case SEARCH:
@@ -245,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         updatePanes();
     }
 
+    /** Creates the fragment for a screen. */
     private static Fragment createFragment(Screen screen) {
         switch (screen) {
             case SEARCH:
@@ -297,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
         backCallback.setEnabled((!twoPane && detailOpen) || viewModel.getScreen().getValue() != Screen.LIST);
     }
 
+    /** Changes the layout weight of a pane (its share of the screen). */
     private static void setWeight(View view, float weight) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
         if (params.weight != weight) {
@@ -332,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
         statusBanner.setVisibility(message == null ? View.GONE : View.VISIBLE);
     }
 
+    /** Newest download time of the two feeds. */
     private static long savedTime(TrafficData data) {
         return Math.max(data.getIncidents().getSavedAtMillis(), data.getRoadworks().getSavedAtMillis());
     }

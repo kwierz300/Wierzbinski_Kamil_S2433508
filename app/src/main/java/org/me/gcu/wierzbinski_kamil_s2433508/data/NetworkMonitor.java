@@ -32,17 +32,20 @@ public class NetworkMonitor {
     private volatile boolean lastOnline;
 
     private final ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+        /** Called by Android when the network changes. */
         @Override
         public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities caps) {
             update(caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
         }
 
+        /** Called by Android when the network is lost. */
         @Override
         public void onLost(@NonNull Network network) {
             update(false);
         }
     };
 
+    /** Reads the connection state when the app starts. */
     public NetworkMonitor(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         lastOnline = isOnlineNow();
@@ -58,6 +61,7 @@ public class NetworkMonitor {
         }
     }
 
+    /** LiveData: true when there is an internet connection. */
     public LiveData<Boolean> getOnline() {
         return online;
     }
@@ -75,6 +79,7 @@ public class NetworkMonitor {
         return caps != null && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
     }
 
+    /** Publishes the new state and calls the listener when the connection comes back. */
     private void update(boolean nowOnline) {
         boolean wasOnline = lastOnline;
         lastOnline = nowOnline;

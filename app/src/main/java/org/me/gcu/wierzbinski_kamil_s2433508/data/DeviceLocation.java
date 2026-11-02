@@ -37,16 +37,19 @@ public class DeviceLocation {
     private final LocationManager manager;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
+    /** Uses the standard Android LocationManager. */
     public DeviceLocation(Context context) {
         this.context = context.getApplicationContext();
         this.manager = (LocationManager) this.context.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    /** True if the user has allowed approximate location. */
     public boolean hasPermission() {
         return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    /** Gets the location (last known one, or waits for a new one) and passes it to the callback. */
     public void request(Callback callback) {
         if (!hasPermission()) {
             callback.onNoLocation("Location permission not given");
@@ -78,9 +81,11 @@ public class DeviceLocation {
         }
     }
 
+    /** Asks for one new location and gives up after 10 seconds. */
     private void waitForOneLocation(Callback callback) throws SecurityException {
         final boolean[] finished = {false};
         LocationListener listener = new LocationListener() {
+            /** First new location: stop listening and return it. */
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 if (!finished[0]) {
@@ -96,10 +101,12 @@ public class DeviceLocation {
             public void onStatusChanged(String provider, int status, android.os.Bundle extras) {
             }
 
+            /** Not needed by the app. */
             @Override
             public void onProviderEnabled(@NonNull String provider) {
             }
 
+            /** Not needed by the app. */
             @Override
             public void onProviderDisabled(@NonNull String provider) {
             }

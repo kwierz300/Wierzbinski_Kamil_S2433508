@@ -111,6 +111,7 @@ public class TrafficXmlParser {
         return xml.substring(start);
     }
 
+    /** Clears everything left from the previous parse. */
     private void resetState() {
         path.clear();
         text.setLength(0);
@@ -126,6 +127,7 @@ public class TrafficXmlParser {
 
     // ------------------------------------------------------------------ start tags
 
+    /** Reacts to an opening tag: starts a new record or point and reads attributes (id, version, xsi:type). */
     private void handleStartTag(XmlPullParser xpp, SituationCategory category) {
         String name = xpp.getName();
         switch (name) {
@@ -184,6 +186,7 @@ public class TrafficXmlParser {
 
     // ------------------------------------------------------------------ end tags
 
+    /** Reacts to a closing tag: finishes records and points, or stores the text value. */
     private void handleEndTag(String name, String value, List<Situation> result) {
         if (current == null) {
             // outside a situation record (headers, envelope, ...)
@@ -309,6 +312,7 @@ public class TrafficXmlParser {
         }
     }
 
+    /** Stores values from groupOfLocations: direction, coordinates and point names. */
     private void handleLocationValue(String name, String value) {
         if ("tpegDirection".equals(name)) {
             current.getLocation().setDirection(value);
@@ -344,6 +348,7 @@ public class TrafficXmlParser {
         }
     }
 
+    /** Stores values from impact; values the app does not know are kept as "other values". */
     private void handleImpactValue(String name, String value) {
         Impact impact = current.getImpact();
         switch (name) {
@@ -367,6 +372,7 @@ public class TrafficXmlParser {
 
     // ------------------------------------------------------------------ helpers
 
+    /** True if the current element is inside an element with this name. */
     private boolean inside(String elementName) {
         // the last item of the path is the current element itself
         for (int i = 0; i < path.size() - 1; i++) {
@@ -377,10 +383,12 @@ public class TrafficXmlParser {
         return false;
     }
 
+    /** Name of the parent of the current element. */
     private String parentName() {
         return path.size() >= 2 ? path.get(path.size() - 2) : null;
     }
 
+    /** ISO date-time text to OffsetDateTime, or null if it cannot be read. */
     static OffsetDateTime parseDate(String value) {
         try {
             return OffsetDateTime.parse(value);
@@ -389,6 +397,7 @@ public class TrafficXmlParser {
         }
     }
 
+    /** Text to Integer, or null if it is not a number. */
     private static Integer parseInteger(String value) {
         try {
             return Integer.valueOf(value.trim());
@@ -397,6 +406,7 @@ public class TrafficXmlParser {
         }
     }
 
+    /** Text to double, or NaN if it is not a number. */
     private static double parseDouble(String value) {
         try {
             return Double.parseDouble(value.trim());

@@ -54,6 +54,7 @@ public class SituationListFragment extends Fragment {
     private RecyclerView recycler;
     private SituationAdapter adapter;
 
+    /** Creates the screen from fragment_list.xml. */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,6 +62,7 @@ public class SituationListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
+    /** Sets up the tabs, filters and list, and observes the data and the filters. */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,19 +90,23 @@ public class SituationListFragment extends Fragment {
         viewModel.getSelectedKey().observe(getViewLifecycleOwner(), adapter::setSelectedKey);
     }
 
+    /** Adds the Incidents and Roadworks tabs. */
     private void setUpTabs() {
         tabs.addTab(tabs.newTab().setTag(SituationCategory.INCIDENT));
         tabs.addTab(tabs.newTab().setTag(SituationCategory.ROADWORKS));
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            /** Tab chosen: show that category. */
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewModel.setListCategory((SituationCategory) tab.getTag());
             }
 
+            /** Nothing to do. */
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
 
+            /** Same tab tapped again: scroll to the top. */
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 recycler.smoothScrollToPosition(0);
@@ -108,6 +114,7 @@ public class SituationListFragment extends Fragment {
         });
     }
 
+    /** Colours the legend dots and connects the filter chips to the ViewModel. */
     private void setUpFilters(View view) {
         // Coloured dots = legend of the colour coding by length
         dot(view.findViewById(R.id.chipShort), Validity.DurationBand.SHORT);
@@ -134,10 +141,12 @@ public class SituationListFragment extends Fragment {
         });
     }
 
+    /** Gives a chip the colour of its length band. */
     private void dot(Chip chip, Validity.DurationBand band) {
         chip.setChipIconTint(ColorStateList.valueOf(SituationStyle.durationColour(requireContext(), band)));
     }
 
+    /** Chip for a length band. */
     private static int chipForBand(Validity.DurationBand band) {
         if (band == Validity.DurationBand.SHORT) {
             return R.id.chipShort;
@@ -149,6 +158,7 @@ public class SituationListFragment extends Fragment {
         return R.id.chipAnyLength;
     }
 
+    /** Length band for a chip (null = all lengths). */
     private static Validity.DurationBand bandForChip(int chipId) {
         if (chipId == R.id.chipShort) {
             return Validity.DurationBand.SHORT;
@@ -209,6 +219,7 @@ public class SituationListFragment extends Fragment {
         }
     }
 
+    /** Tab titles with the number of situations. */
     private void setTabCounts(int incidents, int roadworks) {
         TabLayout.Tab first = tabs.getTabAt(0);
         TabLayout.Tab second = tabs.getTabAt(1);
@@ -220,6 +231,7 @@ public class SituationListFragment extends Fragment {
         }
     }
 
+    /** Shows a message instead of the list. */
     private void showEmpty(String message) {
         emptyText.setText(message);
         emptyText.setVisibility(View.VISIBLE);

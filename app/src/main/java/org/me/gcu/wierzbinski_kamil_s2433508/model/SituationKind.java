@@ -28,10 +28,12 @@ public enum SituationKind {
 
     private final String label;
 
+    /** Each kind has a label for the screen. */
     SituationKind(String label) {
         this.label = label;
     }
 
+    /** Name shown on screen, e.g. "Road closed". */
     public String getLabel() {
         return label;
     }

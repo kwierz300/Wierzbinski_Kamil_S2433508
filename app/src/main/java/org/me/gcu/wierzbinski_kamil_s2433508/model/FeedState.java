@@ -33,6 +33,7 @@ public final class FeedState {
     private final long savedAtMillis;
     private final String errorMessage;
 
+    /** Creates an unchangeable state of one feed. */
     public FeedState(SituationCategory category, Source source, List<Situation> situations,
                      OffsetDateTime publicationTime, long savedAtMillis, String errorMessage) {
         this.category = category;
@@ -45,18 +46,22 @@ public final class FeedState {
         this.errorMessage = errorMessage;
     }
 
+    /** State with no data, only an error message. */
     public static FeedState empty(SituationCategory category, String errorMessage) {
         return new FeedState(category, Source.NONE, null, null, 0, errorMessage);
     }
 
+    /** Incidents or roadworks. */
     public SituationCategory getCategory() {
         return category;
     }
 
+    /** Live, saved, example or no data. */
     public Source getSource() {
         return source;
     }
 
+    /** Situations of this feed (read-only list). */
     public List<Situation> getSituations() {
         return situations;
     }
@@ -76,6 +81,7 @@ public final class FeedState {
         return errorMessage;
     }
 
+    /** True when the last download of this feed failed. */
     public boolean hasError() {
         return errorMessage != null;
     }

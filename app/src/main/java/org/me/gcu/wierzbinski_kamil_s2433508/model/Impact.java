@@ -22,46 +22,57 @@ public class Impact {
     private Integer delaySeconds;       // delayTimeValue (not always present)
     private final Map<String, String> otherValues = new LinkedHashMap<>();
 
+    /** Number of lanes still open (numberOfOperationalLanes), or null if not given. */
     public Integer getOperationalLanes() {
         return operationalLanes;
     }
 
+    /** Sets the value returned by getOperationalLanes(). */
     public void setOperationalLanes(Integer operationalLanes) {
         this.operationalLanes = operationalLanes;
     }
 
+    /** Number of restricted lanes (numberOfLanesRestricted), or null if not given. */
     public Integer getLanesRestricted() {
         return lanesRestricted;
     }
 
+    /** Sets the value returned by getLanesRestricted(). */
     public void setLanesRestricted(Integer lanesRestricted) {
         this.lanesRestricted = lanesRestricted;
     }
 
+    /** Delay level from the feed (delays, longDelays, ...), or null. */
     public String getDelaysType() {
         return delaysType;
     }
 
+    /** Sets the value returned by getDelaysType(). */
     public void setDelaysType(String delaysType) {
         this.delaysType = delaysType;
     }
 
+    /** Expected delay in seconds (delayTimeValue), or null. */
     public Integer getDelaySeconds() {
         return delaySeconds;
     }
 
+    /** Sets the value returned by getDelaySeconds(). */
     public void setDelaySeconds(Integer delaySeconds) {
         this.delaySeconds = delaySeconds;
     }
 
+    /** Keeps an impact value the app does not know. */
     public void putOtherValue(String name, String value) {
         otherValues.put(name, value);
     }
 
+    /** Impact values the app does not know (read-only). */
     public Map<String, String> getOtherValues() {
         return Collections.unmodifiableMap(otherValues);
     }
 
+    /** True when the feed gave no impact values at all. */
     public boolean isEmpty() {
         return operationalLanes == null && lanesRestricted == null && delaysType == null
                 && delaySeconds == null && otherValues.isEmpty();

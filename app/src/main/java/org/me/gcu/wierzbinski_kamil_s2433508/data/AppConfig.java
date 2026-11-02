@@ -29,6 +29,7 @@ public final class AppConfig {
     private final boolean useSampleData;
     private final int refreshMinutes;
 
+    /** Creates the settings. Empty keys are allowed (the app then shows a message instead of data). */
     public AppConfig(String clientId, String clientKey, boolean useSampleData, int refreshMinutes) {
         this.clientId = clientId == null ? "" : clientId.trim();
         this.clientKey = clientKey == null ? "" : clientKey.trim();
@@ -42,14 +43,17 @@ public final class AppConfig {
                 BuildConfig.USE_SAMPLE_DATA, BuildConfig.REFRESH_MINUTES);
     }
 
+    /** Traffic Scotland client ID. */
     public String getClientId() {
         return clientId;
     }
 
+    /** Traffic Scotland client key. */
     public String getClientKey() {
         return clientKey;
     }
 
+    /** True when both the client ID and the key are set. */
     public boolean hasCredentials() {
         return !clientId.isEmpty() && !clientKey.isEmpty();
     }
@@ -64,10 +68,12 @@ public final class AppConfig {
         return refreshMinutes;
     }
 
+    /** Feed address for incidents or roadworks. */
     public String urlFor(SituationCategory category) {
         return category == SituationCategory.INCIDENT ? UNPLANNED_EVENTS_URL : ROADWORKS_URL;
     }
 
+    /** Example XML file name for incidents or roadworks. */
     public String sampleFileFor(SituationCategory category) {
         return category == SituationCategory.INCIDENT ? SAMPLE_UNPLANNED_FILE : SAMPLE_ROADWORKS_FILE;
     }

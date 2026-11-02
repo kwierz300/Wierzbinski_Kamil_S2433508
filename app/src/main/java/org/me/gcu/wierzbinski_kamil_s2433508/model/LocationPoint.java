@@ -29,35 +29,43 @@ public class LocationPoint {
     // descriptor type (e.g. tpegIlcName1, junctionName, linkName) -> value
     private final Map<String, String> descriptors = new LinkedHashMap<>();
 
+    /** Creates a point. The role is "from", "to" or "point". */
     public LocationPoint(String role, String pointType) {
         this.role = role;
         this.pointType = pointType;
     }
 
+    /** "from", "to" or "point". */
     public String getRole() {
         return role;
     }
 
+    /** xsi:type of the point, e.g. TpegJunction. */
     public String getPointType() {
         return pointType;
     }
 
+    /** Latitude, or NaN if not given. */
     public double getLatitude() {
         return latitude;
     }
 
+    /** Sets the value returned by getLatitude(). */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /** Longitude, or NaN if not given. */
     public double getLongitude() {
         return longitude;
     }
 
+    /** Sets the value returned by getLongitude(). */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    /** True when both latitude and longitude are known. */
     public boolean hasCoordinates() {
         return !Double.isNaN(latitude) && !Double.isNaN(longitude);
     }
@@ -72,10 +80,12 @@ public class LocationPoint {
         }
     }
 
+    /** One name of the point by its type (e.g. junctionName), or null. */
     public String getDescriptor(String type) {
         return descriptors.get(type);
     }
 
+    /** All names of the point (read-only). */
     public Map<String, String> getDescriptors() {
         return Collections.unmodifiableMap(descriptors);
     }

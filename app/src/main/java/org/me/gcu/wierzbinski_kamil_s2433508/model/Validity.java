@@ -29,26 +29,32 @@ public class Validity {
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
 
+    /** validityStatus, e.g. definedByValidityTimeSpec. */
     public String getStatus() {
         return status;
     }
 
+    /** Sets the value returned by getStatus(). */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /** overallStartTime, or null. */
     public OffsetDateTime getStartTime() {
         return startTime;
     }
 
+    /** Sets the value returned by getStartTime(). */
     public void setStartTime(OffsetDateTime startTime) {
         this.startTime = startTime;
     }
 
+    /** overallEndTime, or null (incidents usually have no end time). */
     public OffsetDateTime getEndTime() {
         return endTime;
     }
 
+    /** Sets the value returned by getEndTime(). */
     public void setEndTime(OffsetDateTime endTime) {
         this.endTime = endTime;
     }
@@ -61,6 +67,7 @@ public class Validity {
         return Duration.between(startTime, endTime);
     }
 
+    /** Short (up to 1 month), medium (up to 12 months), long, or unknown. Used for the colour coding. */
     public DurationBand getDurationBand() {
         Duration d = getDuration();
         if (d == null || d.isNegative()) {
