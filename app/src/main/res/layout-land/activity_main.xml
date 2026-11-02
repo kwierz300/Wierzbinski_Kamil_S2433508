@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- LANDSCAPE layout: navigation rail on the left, list/search/map in the middle,
-     details always visible on the right. Different arrangement from portrait. -->
+     details on the right (can be hidden). Different arrangement from portrait.
+     To save height: the data credit is the toolbar subtitle and the status banner is one thin line. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,6 +15,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:subtitle="@string/acknowledgement"
+        app:subtitleTextAppearance="?attr/textAppearanceLabelSmall"
         app:title="@string/app_title" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -28,9 +31,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorErrorContainer"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="6dp"
+        android:paddingVertical="2dp"
         android:textColor="?attr/colorOnErrorContainer"
+        android:textSize="12sp"
         android:visibility="gone"
         tools:text="@string/offline_banner" />
 
@@ -65,13 +71,4 @@
             android:layout_weight="3" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/acknowledgement"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="2dp"
-        android:text="@string/acknowledgement"
-        android:textSize="11sp" />
 </LinearLayout>
