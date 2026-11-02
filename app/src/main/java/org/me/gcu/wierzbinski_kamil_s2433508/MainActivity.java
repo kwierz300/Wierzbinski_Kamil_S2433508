@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private View contentContainer;
     private View detailContainer;
     private View paneDivider;
+    private MaterialToolbar toolbar;
+    private View exitFullScreen;   // landscape layout only
     private TextView statusBanner;
     private LinearProgressIndicator progress;
     private NavigationBarView navigation;
@@ -79,11 +81,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         twoPane = getResources().getBoolean(R.bool.two_pane);
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         contentContainer = findViewById(R.id.content_container);
         detailContainer = findViewById(R.id.detail_container);
         paneDivider = findViewById(R.id.paneDivider);
+        exitFullScreen = findViewById(R.id.exitFullScreen);
+        if (exitFullScreen != null) {
+            exitFullScreen.setOnClickListener(v -> viewModel.setDetailsCollapsed(false));
+        }
         statusBanner = findViewById(R.id.statusBanner);
         progress = findViewById(R.id.progress);
         navigation = findViewById(R.id.navigation);
@@ -258,6 +264,11 @@ public class MainActivity extends AppCompatActivity {
             contentContainer.setVisibility(View.VISIBLE);
             detailContainer.setVisibility(collapsed ? View.GONE : View.VISIBLE);
             paneDivider.setVisibility(collapsed ? View.GONE : View.VISIBLE);
+            // Full screen: the toolbar is hidden too; a small floating button brings everything back
+            toolbar.setVisibility(collapsed ? View.GONE : View.VISIBLE);
+            if (exitFullScreen != null) {
+                exitFullScreen.setVisibility(collapsed ? View.VISIBLE : View.GONE);
+            }
             // Landscape: the map gets most of the width; list and search leave more room for details
             boolean mapShown = viewModel.getScreen().getValue() == Screen.MAP;
             setWeight(contentContainer, mapShown ? 3f : 2f);

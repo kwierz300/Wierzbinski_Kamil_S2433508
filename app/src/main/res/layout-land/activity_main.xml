@@ -2,73 +2,91 @@
 <!-- LANDSCAPE layout: navigation rail on the left, list/search/map in the middle,
      details on the right (can be hidden). Different arrangement from portrait.
      To save height: the data credit is the toolbar subtitle and the status banner is one thin line. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:subtitle="@string/acknowledgement"
-        app:subtitleTextAppearance="?attr/textAppearanceLabelSmall"
-        app:title="@string/app_title" />
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/statusBanner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorErrorContainer"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="2dp"
-        android:textColor="?attr/colorOnErrorContainer"
-        android:textSize="12sp"
-        android:visibility="gone"
-        tools:text="@string/offline_banner" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.navigationrail.NavigationRailView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:menu="@menu/bottom_nav" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/content_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:subtitle="@string/acknowledgement"
+            app:subtitleTextAppearance="?attr/textAppearanceLabelSmall"
+            app:title="@string/app_title" />
 
-        <View
-            android:id="@+id/paneDivider"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="?attr/colorOutlineVariant" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/detail_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3" />
+        <TextView
+            android:id="@+id/statusBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorErrorContainer"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="2dp"
+            android:textColor="?attr/colorOnErrorContainer"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="@string/offline_banner" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.google.android.material.navigationrail.NavigationRailView
+                android:id="@+id/navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:menu="@menu/bottom_nav" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/content_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <View
+                android:id="@+id/paneDivider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?attr/colorOutlineVariant" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/detail_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+    <!-- Full screen mode: toolbar and details are hidden; this button brings them back -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/exitFullScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/action_show_details"
+        android:visibility="gone"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_action_split" />
+</FrameLayout>
