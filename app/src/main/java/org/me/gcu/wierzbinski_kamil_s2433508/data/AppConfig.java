@@ -17,8 +17,9 @@ public final class AppConfig {
 
     public static final String UNPLANNED_EVENTS_URL =
             "https://datex2.trafficscotland.org/rest/2.3/publications/UnplannedEvents/Content.xml";
-    // TODO: paste the Roadworks feed address from the Traffic Scotland DATEX II portal
-    public static final String ROADWORKS_URL = "";
+    /** "Current Roadworks" publication (the brief uses only Unplanned Events and Current Roadworks). */
+    public static final String ROADWORKS_URL =
+            "https://datex2.trafficscotland.org/rest/2.3/publications/CurrentRoadworks/Content.xml";
 
     public static final String SAMPLE_UNPLANNED_FILE = "unplannedContentExample.xml";
     public static final String SAMPLE_ROADWORKS_FILE = "roadworksContentExample.xml";
