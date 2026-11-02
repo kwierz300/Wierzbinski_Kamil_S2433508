@@ -177,7 +177,8 @@ public class SituationDetailFragment extends Fragment {
         if (impact.getLanesRestricted() != null) {
             addRow("Lanes restricted", String.valueOf(impact.getLanesRestricted()));
         }
-        addRow("Delays", TextBreakdown.humanise(impact.getDelaysType()));
+        addColouredRow("Delays", TextBreakdown.humanise(impact.getDelaysType()),
+                SituationStyle.delayColour(requireContext(), impact.getDelaysType()));
         if (impact.getDelaySeconds() != null) {
             addRow("Expected delay", (impact.getDelaySeconds() / 60) + " min");
         }
@@ -216,6 +217,18 @@ public class SituationDetailFragment extends Fragment {
         int bottom = Math.round(getResources().getDisplayMetrics().density * 4);
         header.setPadding(0, top, 0, bottom);
         sections.addView(header);
+    }
+
+    /** Like {@link #addRow} but the value is shown in the given colour (colour-coded delays). */
+    private void addColouredRow(String label, String value, int colour) {
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+        addRow(label, value);
+        View row = sections.getChildAt(sections.getChildCount() - 1);
+        TextView valueView = row.findViewById(R.id.value);
+        valueView.setTextColor(colour);
+        valueView.setTypeface(valueView.getTypeface(), android.graphics.Typeface.BOLD);
     }
 
     /** Adds "label: value"; does nothing when the value is missing. */

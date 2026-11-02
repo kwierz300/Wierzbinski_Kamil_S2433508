@@ -72,19 +72,40 @@
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 tools:text="A9 Lothmore SB - TTL" />
 
-            <TextView
-                android:id="@+id/durationText"
+            <!-- Colour-coded length of the roadworks and colour-coded delays -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:background="@drawable/bg_badge"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="2dp"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                tools:text="Long · 1 year 2 months"
-                tools:visibility="visible" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/durationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:text="Long · 1 year 2 months"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/delayText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_badge"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    tools:text="Long delays"
+                    tools:visibility="visible" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

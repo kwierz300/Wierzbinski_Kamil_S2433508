@@ -22,4 +22,10 @@
     <color name="duration_medium">#FFEF8F00</color>
     <color name="duration_long">#FFC62828</color>
     <color name="duration_unknown">#FF757575</color>
+
+    <!-- Colour coding of delays (delaysType in the feed) -->
+    <color name="delay_none">#FF2E7D32</color>
+    <color name="delay_some">#FFEF8F00</color>
+    <color name="delay_long">#FFC62828</color>
+    <color name="delay_very_long">#FF7B1F1F</color>
 </resources>

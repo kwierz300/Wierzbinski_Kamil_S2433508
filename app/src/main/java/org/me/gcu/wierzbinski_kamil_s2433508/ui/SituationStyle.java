@@ -106,6 +106,28 @@ public final class SituationStyle {
         }
     }
 
+    /**
+     * Colour for the delays reported in the feed (impact/delays/delaysType):
+     * negligible = green, delays = amber, longDelays = red, veryLongDelays = dark red.
+     */
+    @ColorInt
+    public static int delayColour(Context context, String delaysType) {
+        String type = delaysType == null ? "" : delaysType;
+        int res;
+        if (type.equals("veryLongDelays")) {
+            res = R.color.delay_very_long;
+        } else if (type.equals("longDelays")) {
+            res = R.color.delay_long;
+        } else if (type.equals("negligible")) {
+            res = R.color.delay_none;
+        } else if (type.isEmpty()) {
+            res = R.color.duration_unknown;
+        } else {
+            res = R.color.delay_some;   // delays, delaysOfUncertainDuration, ...
+        }
+        return ContextCompat.getColor(context, res);
+    }
+
     /** "Long · 1 year 2 months" for the list badge. */
     public static String durationBadge(Situation s) {
         Validity v = s.getValidity();

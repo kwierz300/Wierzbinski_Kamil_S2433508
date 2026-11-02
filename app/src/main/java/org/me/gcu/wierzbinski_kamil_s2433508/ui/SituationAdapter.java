@@ -23,6 +23,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.MaterialColors;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.R;
+import org.me.gcu.wierzbinski_kamil_s2433508.data.TextBreakdown;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SearchOrigin;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
@@ -100,6 +101,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         private final TextView timingText;
         private final TextView descriptionText;
         private final TextView durationText;
+        private final TextView delayText;
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -111,6 +113,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             timingText = itemView.findViewById(R.id.timingText);
             descriptionText = itemView.findViewById(R.id.descriptionText);
             durationText = itemView.findViewById(R.id.durationText);
+            delayText = itemView.findViewById(R.id.delayText);
         }
 
         void bind(Situation s, boolean selected, SearchOrigin distanceFrom, OnSituationClick listener) {
@@ -137,6 +140,16 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
             } else {
                 durationStrip.setBackgroundColor(SituationStyle.categoryColour(context, s.getCategory()));
                 durationText.setVisibility(View.GONE);
+            }
+
+            // Colour-coded delays (only when the feed gives a delaysType)
+            String delays = s.getImpact().getDelaysType();
+            if (delays != null) {
+                delayText.setVisibility(View.VISIBLE);
+                delayText.setText(TextBreakdown.humanise(delays));
+                delayText.setBackgroundTintList(ColorStateList.valueOf(SituationStyle.delayColour(context, delays)));
+            } else {
+                delayText.setVisibility(View.GONE);
             }
 
             int strokeColour = selected
