@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.chip.ChipGroup;
 
@@ -54,7 +55,7 @@ import java.util.Map;
 
 /**
  * Google map with the situations: one marker per situation (icon of its kind on a
- * circle in the category colour) and, for "from-to" situations, a line along the road
+ * circle in the category colour) and, for the selected "from-to" situation, a line between its ends
  * (roadworks lines use the duration colour). The chips choose what is shown:
  * all, incidents, roadworks, or the results of the last search. Tapping a marker
  * opens the details of that situation.
@@ -72,6 +73,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
     private final Map<String, BitmapDescriptor> iconCache = new HashMap<>();
     private final Map<String, Marker> markersByKey = new HashMap<>();
     private List<Situation> shown = new ArrayList<>();
+    private Polyline selectedLine;
 
     /** Creates the screen from fragment_map.xml. */
     @Nullable
@@ -117,7 +119,6 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             selectByKey(key);
             return false;   // false: also show the info window and centre the marker
         });
-        map.setOnPolylineClickListener(line -> selectByKey(line.getTag()));
         // Remember where the user has moved the map (kept over updates and rotation)
         map.setOnCameraIdleListener(() -> {
             if (map != null) {
@@ -137,6 +138,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         viewModel.getMapFocusKey().observe(getViewLifecycleOwner(), this::focusOn);
+        viewModel.getSelectedKey().observe(getViewLifecycleOwner(), k -> drawSelectedLine());
     }
 
     /** Saves the camera so the map looks the same after rotation. */
@@ -220,6 +222,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         shown = situationsFor(filter == null ? MapFilter.ALL : filter);
         map.clear();
         markersByKey.clear();
+        selectedLine = null;
 
         LatLngBounds.Builder bounds = new LatLngBounds.Builder();
         int points = 0;
@@ -242,23 +245,8 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             }
             bounds.include(position);
             points++;
-
-            if (location.isLine()) {
-                LocationPoint from = location.getFrom();
-                LocationPoint to = location.getTo();
-                int colour = s.getCategory() == SituationCategory.ROADWORKS
-                        ? SituationStyle.durationColour(requireContext(), s.getValidity().getDurationBand())
-                        : SituationStyle.categoryColour(requireContext(), s.getCategory());
-                map.addPolyline(new PolylineOptions()
-                        .add(new LatLng(from.getLatitude(), from.getLongitude()),
-                                new LatLng(to.getLatitude(), to.getLongitude()))
-                        .width(10f)
-                        .color(colour)
-                        .clickable(true))
-                        .setTag(s.getKey());
-                bounds.include(new LatLng(to.getLatitude(), to.getLongitude()));
-            }
         }
+        drawSelectedLine();
         mapInfo.setText(getString(R.string.map_count, points));
 
         if (viewModel.getMapFocusKey().getValue() != null) {
@@ -272,6 +260,37 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         } else {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(SCOTLAND, SCOTLAND_ZOOM));
         }
+    }
+
+    /**
+     * Draws the "from - to" stretch of the selected situation as a line (roadworks in the
+     * colour of their length). Only the selected one is drawn: the feed gives just the two
+     * end points, so many straight lines across the whole map would be hard to read.
+     */
+    private void drawSelectedLine() {
+        if (map == null) {
+            return;
+        }
+        if (selectedLine != null) {
+            selectedLine.remove();
+            selectedLine = null;
+        }
+        String key = viewModel.getSelectedKey().getValue();
+        TrafficData data = viewModel.getData().getValue();
+        Situation s = key == null || data == null ? null : data.findByKey(key);
+        if (s == null || !markersByKey.containsKey(key) || !s.getLocation().isLine()) {
+            return;
+        }
+        LocationPoint from = s.getLocation().getFrom();
+        LocationPoint to = s.getLocation().getTo();
+        int colour = s.getCategory() == SituationCategory.ROADWORKS
+                ? SituationStyle.durationColour(requireContext(), s.getValidity().getDurationBand())
+                : SituationStyle.categoryColour(requireContext(), s.getCategory());
+        selectedLine = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(from.getLatitude(), from.getLongitude()),
+                        new LatLng(to.getLatitude(), to.getLongitude()))
+                .width(12f)
+                .color(colour));
     }
 
     /** Moves the camera so all shown situations can be seen. */
@@ -311,7 +330,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         viewModel.clearMapFocus();
     }
 
-    /** Selects the situation of a tapped marker or line. */
+    /** Selects the situation of a tapped marker. */
     private void selectByKey(Object key) {
         TrafficData data = viewModel.getData().getValue();
         if (data != null && key instanceof String) {

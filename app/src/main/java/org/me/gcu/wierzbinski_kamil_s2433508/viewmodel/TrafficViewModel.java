@@ -48,8 +48,8 @@ public class TrafficViewModel extends AndroidViewModel {
     /** What the map shows. */
     public enum MapFilter { ALL, INCIDENTS, ROADWORKS, SEARCH_RESULTS }
 
-    /** Filter of roadworks by time: all, only those happening now, or only planned ones. */
-    public enum TimingFilter { ANY, ACTIVE, PLANNED }
+    /** Filter of roadworks by time: all, or only those happening now. */
+    public enum TimingFilter { ANY, ACTIVE }
 
     public static final int DEFAULT_DISTANCE_KM = 25;
 
@@ -242,9 +242,6 @@ public class TrafficViewModel extends AndroidViewModel {
                 continue;
             }
             if (timing == TimingFilter.ACTIVE && v.getTiming(now) != Validity.Timing.ACTIVE) {
-                continue;
-            }
-            if (timing == TimingFilter.PLANNED && v.getTiming(now) != Validity.Timing.PLANNED) {
                 continue;
             }
             result.add(s);

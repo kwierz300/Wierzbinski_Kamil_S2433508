@@ -39,7 +39,7 @@ import java.util.List;
  * Screen with the list of all current situations, in two tabs:
  * incidents (unplanned events) and roadworks. Roadworks can be filtered by length
  * (the coloured dots are also the legend of the colour coding) and by time
- * (active now / planned). A line shows when the data was updated and when the feed
+ * (active now only). A line shows when the data was updated and when the feed
  * was published. Tapping an item selects it; {@link SituationDetailFragment} shows it.
  */
 public class SituationListFragment extends Fragment {
@@ -126,19 +126,12 @@ public class SituationListFragment extends Fragment {
         TimingFilter timing = viewModel.getTimingFilter().getValue();
         if (timing == TimingFilter.ACTIVE) {
             timingChips.check(R.id.chipActive);
-        } else if (timing == TimingFilter.PLANNED) {
-            timingChips.check(R.id.chipPlanned);
         }
 
         durationChips.setOnCheckedStateChangeListener((group, ids) ->
                 viewModel.setDurationFilter(ids.isEmpty() ? null : bandForChip(ids.get(0))));
-        timingChips.setOnCheckedStateChangeListener((group, ids) -> {
-            if (ids.isEmpty()) {
-                viewModel.setTimingFilter(TimingFilter.ANY);
-            } else {
-                viewModel.setTimingFilter(ids.get(0) == R.id.chipActive ? TimingFilter.ACTIVE : TimingFilter.PLANNED);
-            }
-        });
+        timingChips.setOnCheckedStateChangeListener((group, ids) ->
+                viewModel.setTimingFilter(ids.isEmpty() ? TimingFilter.ANY : TimingFilter.ACTIVE));
     }
 
     /** Gives a chip the colour of its length band. */

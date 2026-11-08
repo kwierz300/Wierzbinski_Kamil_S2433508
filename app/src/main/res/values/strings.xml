@@ -28,7 +28,6 @@
     <string name="legend_long">Over 12 months</string>
     <string name="filter_all">All lengths</string>
     <string name="filter_active">Active now</string>
-    <string name="filter_planned">Planned</string>
     <string name="updated_line">Updated %1$s · feed published %2$s</string>
     <string name="shown_count">%1$d of %2$d shown</string>
 

@@ -74,11 +74,6 @@
                     android:id="@+id/chipActive"
                     style="@style/FilterChip"
                     android:text="@string/filter_active" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chipPlanned"
-                    style="@style/FilterChip"
-                    android:text="@string/filter_planned" />
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>
     </HorizontalScrollView>
