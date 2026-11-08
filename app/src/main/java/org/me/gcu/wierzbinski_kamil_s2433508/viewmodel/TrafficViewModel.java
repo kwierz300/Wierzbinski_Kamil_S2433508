@@ -23,7 +23,6 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,9 +47,6 @@ public class TrafficViewModel extends AndroidViewModel {
     /** What the map shows. */
     public enum MapFilter { ALL, INCIDENTS, ROADWORKS, SEARCH_RESULTS }
 
-    /** Filter of roadworks by time: all, or only those happening now. */
-    public enum TimingFilter { ANY, ACTIVE }
-
     public static final int DEFAULT_DISTANCE_KM = 25;
 
     private final TrafficRepository repository;
@@ -65,7 +61,6 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // Roadworks list filters (null duration band = all lengths)
     private final MutableLiveData<Validity.DurationBand> durationFilter = new MutableLiveData<>();
-    private final MutableLiveData<TimingFilter> timingFilter = new MutableLiveData<>(TimingFilter.ANY);
 
     // Search state
     private final MutableLiveData<SearchMode> searchMode = new MutableLiveData<>(SearchMode.ROAD);
@@ -220,31 +215,13 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
-    /** Time filter of the roadworks list. */
-    public LiveData<TimingFilter> getTimingFilter() {
-        return timingFilter;
-    }
-
-    /** Sets the value returned by getTimingFilter(). */
-    public void setTimingFilter(TimingFilter filter) {
-        if (filter != timingFilter.getValue()) {
-            timingFilter.setValue(filter);
-        }
-    }
-
-    /** Roadworks that match the length band (null = any) and the timing filter at the given moment. */
-    public static List<Situation> filterRoadworks(List<Situation> all, Validity.DurationBand band,
-                                                  TimingFilter timing, OffsetDateTime now) {
+    /** Roadworks of the given length band (null = all lengths). */
+    public static List<Situation> filterRoadworks(List<Situation> all, Validity.DurationBand band) {
         List<Situation> result = new ArrayList<>();
         for (Situation s : all) {
-            Validity v = s.getValidity();
-            if (band != null && v.getDurationBand() != band) {
-                continue;
+            if (band == null || s.getValidity().getDurationBand() == band) {
+                result.add(s);
             }
-            if (timing == TimingFilter.ACTIVE && v.getTiming(now) != Validity.Timing.ACTIVE) {
-                continue;
-            }
-            result.add(s);
         }
         return result;
     }

@@ -30,16 +30,13 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.TrafficData;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
-import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.TimingFilter;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
  * Screen with the list of all current situations, in two tabs:
  * incidents (unplanned events) and roadworks. Roadworks can be filtered by length
- * (the coloured dots are also the legend of the colour coding) and by time
- * (active now only). A line shows when the data was updated and when the feed
+ * (the coloured dots are also the legend of the colour coding). A line shows when the data was updated and when the feed
  * was published. Tapping an item selects it; {@link SituationDetailFragment} shows it.
  */
 public class SituationListFragment extends Fragment {
@@ -48,7 +45,6 @@ public class SituationListFragment extends Fragment {
     private TabLayout tabs;
     private View roadworksFilters;
     private ChipGroup durationChips;
-    private ChipGroup timingChips;
     private TextView updatedText;
     private TextView emptyText;
     private RecyclerView recycler;
@@ -71,7 +67,6 @@ public class SituationListFragment extends Fragment {
         tabs = view.findViewById(R.id.tabs);
         roadworksFilters = view.findViewById(R.id.roadworksFilters);
         durationChips = view.findViewById(R.id.durationChips);
-        timingChips = view.findViewById(R.id.timingChips);
         updatedText = view.findViewById(R.id.updatedText);
         emptyText = view.findViewById(R.id.emptyText);
         recycler = view.findViewById(R.id.recycler);
@@ -86,7 +81,6 @@ public class SituationListFragment extends Fragment {
         viewModel.getData().observe(getViewLifecycleOwner(), data -> render());
         viewModel.getListCategory().observe(getViewLifecycleOwner(), category -> render());
         viewModel.getDurationFilter().observe(getViewLifecycleOwner(), band -> render());
-        viewModel.getTimingFilter().observe(getViewLifecycleOwner(), timing -> render());
         viewModel.getSelectedKey().observe(getViewLifecycleOwner(), adapter::setSelectedKey);
     }
 
@@ -121,17 +115,11 @@ public class SituationListFragment extends Fragment {
         dot(view.findViewById(R.id.chipMedium), Validity.DurationBand.MEDIUM);
         dot(view.findViewById(R.id.chipLong), Validity.DurationBand.LONG);
 
-        // Show the current filter values (kept in the ViewModel, so they survive rotation)
+        // Show the current filter value (kept in the ViewModel, so they survive rotation)
         durationChips.check(chipForBand(viewModel.getDurationFilter().getValue()));
-        TimingFilter timing = viewModel.getTimingFilter().getValue();
-        if (timing == TimingFilter.ACTIVE) {
-            timingChips.check(R.id.chipActive);
-        }
 
         durationChips.setOnCheckedStateChangeListener((group, ids) ->
                 viewModel.setDurationFilter(ids.isEmpty() ? null : bandForChip(ids.get(0))));
-        timingChips.setOnCheckedStateChangeListener((group, ids) ->
-                viewModel.setTimingFilter(ids.isEmpty() ? TimingFilter.ANY : TimingFilter.ACTIVE));
     }
 
     /** Gives a chip the colour of its length band. */
@@ -190,8 +178,7 @@ public class SituationListFragment extends Fragment {
         List<Situation> all = feed.getSituations();
         List<Situation> shown = all;
         if (roadworks) {
-            shown = TrafficViewModel.filterRoadworks(all, viewModel.getDurationFilter().getValue(),
-                    viewModel.getTimingFilter().getValue(), OffsetDateTime.now());
+            shown = TrafficViewModel.filterRoadworks(all, viewModel.getDurationFilter().getValue());
         }
         adapter.submitList(shown);
 
