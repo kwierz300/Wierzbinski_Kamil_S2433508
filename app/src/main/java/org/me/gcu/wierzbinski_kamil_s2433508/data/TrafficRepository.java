@@ -197,8 +197,9 @@ public class TrafficRepository {
                     config.getClientId(), config.getClientKey());
             TrafficXmlParser parser = new TrafficXmlParser();
             List<Situation> list = parser.parse(xml, category);
-            if (list.isEmpty() && !xml.contains("situation")) {
-                // Not a DATEX II document (for example an error page): keep the old data
+            if (list.isEmpty() && !xml.contains("payloadPublication")) {
+                // Not a DATEX II document (for example an error page): keep the old data.
+                // A real feed with no situations at the moment is fine and is shown as empty.
                 throw new FeedException(FeedException.Reason.BAD_DATA, "no situations in response");
             }
             cache.save(category, xml);
