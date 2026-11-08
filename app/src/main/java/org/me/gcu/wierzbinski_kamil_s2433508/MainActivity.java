@@ -202,13 +202,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Shows the About dialog: data source, icon licence and the time of the last update. */
+    /** Shows the About dialog: version, author, data source, icon licence and the time of the last update. */
     private void showAbout() {
         TrafficData data = viewModel.getData().getValue();
         String lastCheck = data == null ? "-" : DisplayFormat.dateTime(data.getCheckedAtMillis());
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.about_title)
-                .setMessage(getString(R.string.about_text, lastCheck, viewModel.getRefreshMinutes()))
+                .setMessage(getString(R.string.about_text, lastCheck, viewModel.getRefreshMinutes(),
+                        BuildConfig.VERSION_NAME))
                 .setPositiveButton(R.string.ok, null)
                 .show();
     }

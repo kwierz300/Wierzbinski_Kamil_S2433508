@@ -64,6 +64,6 @@
 
     <!-- About -->
     <string name="about_title">About this app</string>
-    <string name="about_text">Shows current incidents and roadworks on Scottish trunk roads and motorways.\n\nData: Contains Traffic Scotland data (DATEX II feeds, Transport Scotland).\n\nIcons: Font Awesome Free 7.3.1 by Fonticons, Inc. (fontawesome.com), licensed under CC BY 4.0 (creativecommons.org/licenses/by/4.0). The icons were converted to Android vector drawables and recoloured.\n\nLast check: %1$s\nAutomatic update every %2$d min.</string>
+    <string name="about_text">Shows current incidents and roadworks on Scottish trunk roads and motorways.\n\nVersion %3$s (2026)\nMade by Kamil Wierzbinski (S2433508), BSc (Hons) Computing, Glasgow Caledonian University, for Mobile Platform Development.\n\nData: Contains Traffic Scotland data (DATEX II feeds, Transport Scotland).\n\nIcons: Font Awesome Free 7.3.1 by Fonticons, Inc. (fontawesome.com), licensed under CC BY 4.0 (creativecommons.org/licenses/by/4.0). The icons were converted to Android vector drawables and recoloured.\n\nLast check: %1$s\nAutomatic update every %2$d min.</string>
     <string name="ok">OK</string>
 </resources>
