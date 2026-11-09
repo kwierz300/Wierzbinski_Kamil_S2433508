@@ -53,6 +53,11 @@ public class DeviceLocation {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    /** True if location is switched on in the phone's settings. */
+    public boolean isLocationOn() {
+        return manager != null && LocationManagerCompat.isLocationEnabled(manager);
+    }
+
     /** Gets the location (last known one, or waits for a new one) and passes it to the callback. */
     public void request(Callback callback) {
         if (!hasPermission()) {

@@ -7,8 +7,10 @@ package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
@@ -219,8 +222,15 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    /** Gets the phone's location and uses it as the search point. */
+    /**
+     * Gets the phone's location and uses it as the search point. If location is switched
+     * off in the phone, asks the user to turn it on (the app cannot do it itself).
+     */
     private void findMyLocation() {
+        if (!deviceLocation.isLocationOn()) {
+            askToTurnOnLocation();
+            return;
+        }
         originText.setText(R.string.location_searching);
         deviceLocation.request(new DeviceLocation.Callback() {
             /** Location found: use it as the search point. */
@@ -243,6 +253,18 @@ public class SearchFragment extends Fragment {
                 toast(getString(R.string.location_failed, reason));
             }
         });
+    }
+
+    /** Dialog: open the phone's location settings, or keep using the default point. */
+    private void askToTurnOnLocation() {
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.location_off_title)
+                .setMessage(R.string.location_off_text)
+                .setPositiveButton(R.string.location_open_settings, (d, w) ->
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton(R.string.location_use_default, (d, w) ->
+                        viewModel.setOrigin(SearchOrigin.DEFAULT))
+                .show();
     }
 
     /** Shows a short message. */

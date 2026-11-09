@@ -51,6 +51,10 @@
     <string name="results_none_road">Nothing found on %1$s</string>
     <string name="results_distance">%1$d within %2$d km</string>
     <string name="location_denied">Location not allowed – using the default point</string>
+    <string name="location_off_title">Location is off</string>
+    <string name="location_off_text">Turn on location in your phone settings to search near you, then tap My location again. Otherwise the default point (Glasgow) is used.</string>
+    <string name="location_open_settings">Open settings</string>
+    <string name="location_use_default">Use Glasgow</string>
     <string name="location_failed">%1$s – using the default point</string>
     <string name="location_searching">Finding your location…</string>
 
