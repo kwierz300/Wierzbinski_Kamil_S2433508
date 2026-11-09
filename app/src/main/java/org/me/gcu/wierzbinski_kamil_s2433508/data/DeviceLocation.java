@@ -11,16 +11,20 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.location.LocationManagerCompat;
+
+import java.util.List;
 
 /**
  * Gets the phone's approximate ("coarse") location with the standard Android
  * LocationManager (no extra libraries). Uses the last known location if there is
- * one, otherwise waits for one new location for up to 10 seconds.
+ * one, otherwise waits for one new location for up to 15 seconds.
  */
 public class DeviceLocation {
 
@@ -31,7 +35,7 @@ public class DeviceLocation {
         void onNoLocation(String reason);
     }
 
-    private static final long TIMEOUT_MS = 10_000;
+    private static final long TIMEOUT_MS = 15_000;
 
     private final Context context;
     private final LocationManager manager;
@@ -60,6 +64,10 @@ public class DeviceLocation {
             return;
         }
         try {
+            if (!LocationManagerCompat.isLocationEnabled(manager)) {
+                callback.onNoLocation("Location is turned off on the phone");
+                return;
+            }
             Location best = null;
             for (String provider : manager.getProviders(true)) {
                 Location last = manager.getLastKnownLocation(provider);
@@ -71,18 +79,38 @@ public class DeviceLocation {
                 callback.onLocation(best);
                 return;
             }
-            if (!manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            String provider = chooseProvider();
+            if (provider == null) {
                 callback.onNoLocation("Location is turned off on the phone");
                 return;
             }
-            waitForOneLocation(callback);
+            waitForOneLocation(provider, callback);
         } catch (SecurityException e) {
             callback.onNoLocation("Location permission not given");
         }
     }
 
-    /** Asks for one new location and gives up after 10 seconds. */
-    private void waitForOneLocation(Callback callback) throws SecurityException {
+    /**
+     * Picks a working location source. Phones differ: many newer ones (Android 12+) use
+     * the "fused" source, others "network"; "gps" is the last choice (on Android 12+
+     * it also works with approximate location and gives a rounded position).
+     */
+    private String chooseProvider() {
+        List<String> enabled = manager.getProviders(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && enabled.contains(LocationManager.FUSED_PROVIDER)) {
+            return LocationManager.FUSED_PROVIDER;
+        }
+        if (enabled.contains(LocationManager.NETWORK_PROVIDER)) {
+            return LocationManager.NETWORK_PROVIDER;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && enabled.contains(LocationManager.GPS_PROVIDER)) {
+            return LocationManager.GPS_PROVIDER;
+        }
+        return null;
+    }
+
+    /** Asks the given source for one new location and gives up after 15 seconds. */
+    private void waitForOneLocation(String provider, Callback callback) throws SecurityException {
         final boolean[] finished = {false};
         LocationListener listener = new LocationListener() {
             /** First new location: stop listening and return it. */
@@ -111,7 +139,7 @@ public class DeviceLocation {
             public void onProviderDisabled(@NonNull String provider) {
             }
         };
-        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener, Looper.getMainLooper());
+        manager.requestLocationUpdates(provider, 0, 0, listener, Looper.getMainLooper());
         handler.postDelayed(() -> {
             if (!finished[0]) {
                 finished[0] = true;
