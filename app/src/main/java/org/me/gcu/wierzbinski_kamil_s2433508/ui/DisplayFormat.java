@@ -52,6 +52,9 @@ public final class DisplayFormat {
         return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).format(TIME);
     }
 
+    /** Average length of a month in days (365.25 / 12). */
+    private static final double DAYS_PER_MONTH = 30.4375;
+
     /** "3 days", "2 months 5 days", "1 year 4 months", "5 hours". Null-safe. */
     public static String duration(Duration duration) {
         if (duration == null || duration.isNegative()) {
@@ -62,12 +65,16 @@ public final class DisplayFormat {
             long hours = Math.max(1, duration.toHours());
             return plural(hours, "hour");
         }
-        long years = days / 365;
-        long months = (days % 365) / 30;
-        long restDays = (days % 365) % 30;
-        if (years > 0) {
+        if (days >= 365) {
+            // Whole months; a few days short of a month counts as the full month,
+            // so 1094 days is "3 years", not "2 years 12 months"
+            long totalMonths = (long) (days / DAYS_PER_MONTH + 0.1);
+            long years = totalMonths / 12;
+            long months = totalMonths % 12;
             return months > 0 ? plural(years, "year") + " " + plural(months, "month") : plural(years, "year");
         }
+        long months = (long) (days / DAYS_PER_MONTH);
+        long restDays = days - Math.round(months * DAYS_PER_MONTH);
         if (months > 0) {
             return restDays > 0 ? plural(months, "month") + " " + plural(restDays, "day") : plural(months, "month");
         }
