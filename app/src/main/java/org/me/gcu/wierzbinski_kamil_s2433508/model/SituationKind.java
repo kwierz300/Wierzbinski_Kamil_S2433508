@@ -16,7 +16,7 @@ public enum SituationKind {
     LANE_RESTRICTION("Lane restriction"),
     QUEUING_TRAFFIC("Queuing traffic"),
     ACCIDENT("Accident"),
-    VEHICLE_OBSTRUCTION("Vehicle obstruction"),
+    OBSTRUCTION("Obstruction"),
     WEATHER("Weather conditions"),
     OTHER_INCIDENT("Incident"),
     // Roadworks

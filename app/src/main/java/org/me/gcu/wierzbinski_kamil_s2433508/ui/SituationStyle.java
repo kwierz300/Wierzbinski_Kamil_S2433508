@@ -48,7 +48,7 @@ public final class SituationStyle {
                 return R.drawable.ic_kind_queuing_traffic;
             case ACCIDENT:
                 return R.drawable.ic_kind_accident;
-            case VEHICLE_OBSTRUCTION:
+            case OBSTRUCTION:
                 return R.drawable.ic_kind_vehicle_obstruction;
             case WEATHER:
                 return R.drawable.ic_kind_weather;

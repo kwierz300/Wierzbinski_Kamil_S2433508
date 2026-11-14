@@ -215,7 +215,7 @@ public final class TextBreakdown {
         }
         if (type.endsWith("Obstruction") || text.contains("broken down") || text.contains("breakdown")
                 || text.contains("vehicle fire") || text.contains("obstruction")) {
-            return SituationKind.VEHICLE_OBSTRUCTION;
+            return SituationKind.OBSTRUCTION;
         }
         if (type.equals("PoorEnvironmentConditions") || type.equals("WeatherRelatedRoadConditions")
                 || text.contains("flood") || text.contains("snow") || text.contains(" ice")
