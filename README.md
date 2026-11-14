@@ -17,7 +17,7 @@ DATEX II feeds and is read with the **XmlPullParser**.
   <img src="docs/screenshots/landscape_map.jpg" width="400" alt="Landscape: map and details">
 </p>
 
-*Screenshots were taken with the example data (development mode).*
+*Screenshots taken on a phone with live Traffic Scotland data (14 November 2026).*
 
 ## Features
 

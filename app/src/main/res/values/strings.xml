@@ -45,7 +45,6 @@
     <string name="distance_label">Within %1$d km of:</string>
     <string name="origin_label">From: %1$s</string>
     <string name="origin_device">your location</string>
-    <string name="results_count">%1$d found</string>
     <string name="results_road">%1$d on %2$s</string>
     <string name="results_type_road">Type a road name and press Search</string>
     <string name="results_none_road">Nothing found on %1$s</string>
