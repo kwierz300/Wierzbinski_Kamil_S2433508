@@ -28,7 +28,6 @@ public enum SituationKind {
 
     private final String label;
 
-    /** Each kind has a label for the screen. */
     SituationKind(String label) {
         this.label = label;
     }

@@ -34,7 +34,6 @@ public class Validity {
         return status;
     }
 
-    /** Sets the value returned by getStatus(). */
     public void setStatus(String status) {
         this.status = status;
     }
@@ -44,7 +43,6 @@ public class Validity {
         return startTime;
     }
 
-    /** Sets the value returned by getStartTime(). */
     public void setStartTime(OffsetDateTime startTime) {
         this.startTime = startTime;
     }
@@ -54,7 +52,6 @@ public class Validity {
         return endTime;
     }
 
-    /** Sets the value returned by getEndTime(). */
     public void setEndTime(OffsetDateTime endTime) {
         this.endTime = endTime;
     }

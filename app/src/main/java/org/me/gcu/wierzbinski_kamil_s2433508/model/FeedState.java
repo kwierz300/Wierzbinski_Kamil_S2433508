@@ -51,12 +51,10 @@ public final class FeedState {
         return new FeedState(category, Source.NONE, null, null, 0, errorMessage);
     }
 
-    /** Incidents or roadworks. */
     public SituationCategory getCategory() {
         return category;
     }
 
-    /** Live, saved, example or no data. */
     public Source getSource() {
         return source;
     }

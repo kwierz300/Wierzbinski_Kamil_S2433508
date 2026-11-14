@@ -26,12 +26,10 @@ public final class TrafficData {
         this.checkedAtMillis = checkedAtMillis;
     }
 
-    /** State of the incidents feed. */
     public FeedState getIncidents() {
         return incidents;
     }
 
-    /** State of the roadworks feed. */
     public FeedState getRoadworks() {
         return roadworks;
     }

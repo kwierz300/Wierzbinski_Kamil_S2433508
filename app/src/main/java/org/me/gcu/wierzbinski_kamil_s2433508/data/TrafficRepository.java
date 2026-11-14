@@ -82,7 +82,6 @@ public class TrafficRepository {
 
     // ------------------------------------------------------------------ public API
 
-    /** Latest data of both feeds. */
     public LiveData<TrafficData> getData() {
         return data;
     }

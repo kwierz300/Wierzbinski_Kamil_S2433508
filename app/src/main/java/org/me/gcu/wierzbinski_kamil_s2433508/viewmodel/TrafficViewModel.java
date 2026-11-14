@@ -102,7 +102,6 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ data
 
-    /** Latest data of both feeds. */
     public LiveData<TrafficData> getData() {
         return repository.getData();
     }
@@ -112,7 +111,6 @@ public class TrafficViewModel extends AndroidViewModel {
         return repository.getLoading();
     }
 
-    /** Internet connection state. */
     public LiveData<Boolean> getOnline() {
         return repository.getOnline();
     }
@@ -139,7 +137,6 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ screen state
 
-    /** Current main screen. */
     public LiveData<Screen> getScreen() {
         return screen;
     }
@@ -151,7 +148,6 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
-    /** Tab shown in the list. */
     public LiveData<SituationCategory> getListCategory() {
         return listCategory;
     }
@@ -228,7 +224,6 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ search
 
-    /** Road search or distance search. */
     public LiveData<SearchMode> getSearchMode() {
         return searchMode;
     }
@@ -240,7 +235,6 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
-    /** Road typed in the last road search. */
     public LiveData<String> getRoadQuery() {
         return roadQuery;
     }
@@ -263,7 +257,6 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
-    /** Starting point of the distance search. */
     public LiveData<SearchOrigin> getOrigin() {
         return origin;
     }
@@ -363,7 +356,6 @@ public class TrafficViewModel extends AndroidViewModel {
 
     // ------------------------------------------------------------------ map
 
-    /** What the map shows. */
     public LiveData<MapFilter> getMapFilter() {
         return mapFilter;
     }
@@ -402,12 +394,10 @@ public class TrafficViewModel extends AndroidViewModel {
         mapFocusKey.setValue(null);
     }
 
-    /** Last camera position of the map. */
     public CameraPosition getSavedCamera() {
         return savedCamera;
     }
 
-    /** Sets the value returned by getSavedCamera(). */
     public void setSavedCamera(CameraPosition camera) {
         savedCamera = camera;
     }

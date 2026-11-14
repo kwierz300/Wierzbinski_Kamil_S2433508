@@ -14,7 +14,6 @@ public enum SituationCategory {
 
     private final String label;
 
-    /** Each category has a label for the screen. */
     SituationCategory(String label) {
         this.label = label;
     }

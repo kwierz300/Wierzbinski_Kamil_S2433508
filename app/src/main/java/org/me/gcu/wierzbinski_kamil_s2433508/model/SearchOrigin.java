@@ -28,12 +28,10 @@ public final class SearchOrigin {
         this.fromDevice = fromDevice;
     }
 
-    /** Latitude of the point. */
     public double getLatitude() {
         return latitude;
     }
 
-    /** Longitude of the point. */
     public double getLongitude() {
         return longitude;
     }

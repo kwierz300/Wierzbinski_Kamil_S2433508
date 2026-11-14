@@ -26,7 +26,6 @@ public class RoadLocation {
         return locationType;
     }
 
-    /** Sets the value returned by getLocationType(). */
     public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
@@ -36,7 +35,6 @@ public class RoadLocation {
         return linearType;
     }
 
-    /** Sets the value returned by getLinearType(). */
     public void setLinearType(String linearType) {
         this.linearType = linearType;
     }
@@ -46,7 +44,6 @@ public class RoadLocation {
         return direction;
     }
 
-    /** Sets the value returned by getDirection(). */
     public void setDirection(String direction) {
         this.direction = direction;
     }

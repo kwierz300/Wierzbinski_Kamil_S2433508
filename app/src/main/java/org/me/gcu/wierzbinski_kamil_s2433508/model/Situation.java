@@ -65,17 +65,14 @@ public class Situation {
         return category.name() + ":" + recordId;
     }
 
-    /** Incident or roadworks. */
     public SituationCategory getCategory() {
         return category;
     }
 
-    /** id of the parent situation element. */
     public String getSituationId() {
         return situationId;
     }
 
-    /** Sets the value returned by getSituationId(). */
     public void setSituationId(String situationId) {
         this.situationId = situationId;
     }
@@ -85,7 +82,6 @@ public class Situation {
         return recordId;
     }
 
-    /** Sets the value returned by getRecordId(). */
     public void setRecordId(String recordId) {
         this.recordId = recordId;
     }
@@ -95,7 +91,6 @@ public class Situation {
         return recordVersion;
     }
 
-    /** Sets the value returned by getRecordVersion(). */
     public void setRecordVersion(String recordVersion) {
         this.recordVersion = recordVersion;
     }
@@ -105,7 +100,6 @@ public class Situation {
         return firstSupplierVersionTime;
     }
 
-    /** Sets the value returned by getFirstSupplierVersionTime(). */
     public void setFirstSupplierVersionTime(OffsetDateTime firstSupplierVersionTime) {
         this.firstSupplierVersionTime = firstSupplierVersionTime;
     }
@@ -115,7 +109,6 @@ public class Situation {
         return creationReference;
     }
 
-    /** Sets the value returned by getCreationReference(). */
     public void setCreationReference(String creationReference) {
         this.creationReference = creationReference;
     }
@@ -125,7 +118,6 @@ public class Situation {
         return confidentiality;
     }
 
-    /** Sets the value returned by getConfidentiality(). */
     public void setConfidentiality(String confidentiality) {
         this.confidentiality = confidentiality;
     }
@@ -135,7 +127,6 @@ public class Situation {
         return informationStatus;
     }
 
-    /** Sets the value returned by getInformationStatus(). */
     public void setInformationStatus(String informationStatus) {
         this.informationStatus = informationStatus;
     }
@@ -145,7 +136,6 @@ public class Situation {
         return sourceIdentification;
     }
 
-    /** Sets the value returned by getSourceIdentification(). */
     public void setSourceIdentification(String sourceIdentification) {
         this.sourceIdentification = sourceIdentification;
     }
@@ -155,7 +145,6 @@ public class Situation {
         return recordType;
     }
 
-    /** Sets the value returned by getRecordType(). */
     public void setRecordType(String recordType) {
         this.recordType = recordType;
     }
@@ -171,7 +160,6 @@ public class Situation {
         this.subType = subType;
     }
 
-    /** Name of the element that held the sub-type. */
     public String getSubTypeElement() {
         return subTypeElement;
     }
@@ -194,7 +182,6 @@ public class Situation {
         return creationTime;
     }
 
-    /** Sets the value returned by getCreationTime(). */
     public void setCreationTime(OffsetDateTime creationTime) {
         this.creationTime = creationTime;
     }
@@ -204,7 +191,6 @@ public class Situation {
         return versionTime;
     }
 
-    /** Sets the value returned by getVersionTime(). */
     public void setVersionTime(OffsetDateTime versionTime) {
         this.versionTime = versionTime;
     }
@@ -214,7 +200,6 @@ public class Situation {
         return probability;
     }
 
-    /** Sets the value returned by getProbability(). */
     public void setProbability(String probability) {
         this.probability = probability;
     }
@@ -224,7 +209,6 @@ public class Situation {
         return sourceName;
     }
 
-    /** Sets the value returned by getSourceName(). */
     public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
     }
@@ -234,7 +218,6 @@ public class Situation {
         return sourceType;
     }
 
-    /** Sets the value returned by getSourceType(). */
     public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
     }
@@ -244,7 +227,6 @@ public class Situation {
         return complianceOption;
     }
 
-    /** Sets the value returned by getComplianceOption(). */
     public void setComplianceOption(String complianceOption) {
         this.complianceOption = complianceOption;
     }
@@ -254,22 +236,18 @@ public class Situation {
         return urgent;
     }
 
-    /** Sets the value returned by getUrgent(). */
     public void setUrgent(Boolean urgent) {
         this.urgent = urgent;
     }
 
-    /** When the situation is valid. */
     public Validity getValidity() {
         return validity;
     }
 
-    /** Effect on traffic. */
     public Impact getImpact() {
         return impact;
     }
 
-    /** Where the situation is. */
     public RoadLocation getLocation() {
         return location;
     }
@@ -289,7 +267,6 @@ public class Situation {
         return roadName;
     }
 
-    /** Sets the value returned by getRoadName(). */
     public void setRoadName(String roadName) {
         this.roadName = roadName;
     }
@@ -299,7 +276,6 @@ public class Situation {
         return roadKey;
     }
 
-    /** Sets the value returned by getRoadKey(). */
     public void setRoadKey(String roadKey) {
         this.roadKey = roadKey;
     }
@@ -330,7 +306,6 @@ public class Situation {
         return kind;
     }
 
-    /** Sets the value returned by getKind(). */
     public void setKind(SituationKind kind) {
         this.kind = kind;
     }
@@ -340,7 +315,6 @@ public class Situation {
         return Collections.unmodifiableList(descriptionParts);
     }
 
-    /** Sets the value returned by getDescriptionParts(). */
     public void setDescriptionParts(List<String> descriptionParts) {
         this.descriptionParts = new ArrayList<>(descriptionParts);
     }
@@ -350,7 +324,6 @@ public class Situation {
         return worksSummary;
     }
 
-    /** Sets the value returned by getWorksSummary(). */
     public void setWorksSummary(String worksSummary) {
         this.worksSummary = worksSummary;
     }

@@ -50,7 +50,6 @@ public class LocationPoint {
         return latitude;
     }
 
-    /** Sets the value returned by getLatitude(). */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -60,7 +59,6 @@ public class LocationPoint {
         return longitude;
     }
 
-    /** Sets the value returned by getLongitude(). */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }

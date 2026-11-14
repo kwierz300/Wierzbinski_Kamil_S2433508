@@ -43,12 +43,10 @@ public final class AppConfig {
                 BuildConfig.USE_SAMPLE_DATA, BuildConfig.REFRESH_MINUTES);
     }
 
-    /** Traffic Scotland client ID. */
     public String getClientId() {
         return clientId;
     }
 
-    /** Traffic Scotland client key. */
     public String getClientKey() {
         return clientKey;
     }

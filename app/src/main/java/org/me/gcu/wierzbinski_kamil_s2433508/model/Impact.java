@@ -27,7 +27,6 @@ public class Impact {
         return operationalLanes;
     }
 
-    /** Sets the value returned by getOperationalLanes(). */
     public void setOperationalLanes(Integer operationalLanes) {
         this.operationalLanes = operationalLanes;
     }
@@ -37,7 +36,6 @@ public class Impact {
         return lanesRestricted;
     }
 
-    /** Sets the value returned by getLanesRestricted(). */
     public void setLanesRestricted(Integer lanesRestricted) {
         this.lanesRestricted = lanesRestricted;
     }
@@ -47,7 +45,6 @@ public class Impact {
         return delaysType;
     }
 
-    /** Sets the value returned by getDelaysType(). */
     public void setDelaysType(String delaysType) {
         this.delaysType = delaysType;
     }
@@ -57,7 +54,6 @@ public class Impact {
         return delaySeconds;
     }
 
-    /** Sets the value returned by getDelaySeconds(). */
     public void setDelaySeconds(Integer delaySeconds) {
         this.delaySeconds = delaySeconds;
     }
