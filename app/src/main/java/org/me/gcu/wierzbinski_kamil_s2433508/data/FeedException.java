@@ -15,6 +15,7 @@ public class FeedException extends Exception {
         ACCESS_DENIED("Access denied - check the client ID and key"),
         SERVER_ERROR("Traffic Scotland server error"),
         BAD_DATA("The data could not be read"),
+        NOT_TRAFFIC_DATA("The server did not send traffic data - check the client ID and key"),
         NOT_CONFIGURED("Feed address or keys not set up");
 
         private final String userMessage;
