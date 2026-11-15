@@ -40,7 +40,6 @@ import com.google.android.material.chip.ChipGroup;
 import org.me.gcu.wierzbinski_kamil_s2433508.BuildConfig;
 import org.me.gcu.wierzbinski_kamil_s2433508.R;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.LocationPoint;
-import org.me.gcu.wierzbinski_kamil_s2433508.model.RoadLocation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Situation;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationKind;
@@ -50,8 +49,10 @@ import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.MapFilte
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Google map with the situations: one marker per situation (icon of its kind on a
@@ -71,7 +72,12 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
     private ChipGroup filterChips;
     private TextView mapInfo;
     private final Map<String, BitmapDescriptor> iconCache = new HashMap<>();
+    /** One marker for every situation in the data; the filter only shows or hides them. */
     private final Map<String, Marker> markersByKey = new HashMap<>();
+    /** Keys of the situations in the current filter (the visible markers). */
+    private final Set<String> visibleKeys = new HashSet<>();
+    /** The data the markers were made from, to know when they must be made again. */
+    private TrafficData markerData;
     private List<Situation> shown = new ArrayList<>();
     private Polyline selectedLine;
 
@@ -149,6 +155,8 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
         map = null;
         markersByKey.clear();
+        visibleKeys.clear();
+        markerData = null;
         super.onDestroyView();
     }
 
@@ -220,31 +228,30 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
         MapFilter filter = viewModel.getMapFilter().getValue();
         shown = situationsFor(filter == null ? MapFilter.ALL : filter);
-        map.clear();
-        markersByKey.clear();
-        selectedLine = null;
+        TrafficData data = viewModel.getData().getValue();
+        if (data != markerData) {
+            createMarkers(data);   // new data: make the markers again
+        }
+        visibleKeys.clear();
+        for (Situation s : shown) {
+            visibleKeys.add(s.getKey());
+        }
 
+        // Show only the markers of the current filter. Markers are hidden, not removed and
+        // added again, because removing many markers at once can leave some on the screen.
         LatLngBounds.Builder bounds = new LatLngBounds.Builder();
         int points = 0;
-        for (Situation s : shown) {
-            RoadLocation location = s.getLocation();
-            LocationPoint main = location.getMainPoint();
-            if (main == null) {
-                continue;
+        for (Map.Entry<String, Marker> entry : markersByKey.entrySet()) {
+            Marker marker = entry.getValue();
+            boolean visible = visibleKeys.contains(entry.getKey());
+            if (!visible) {
+                marker.hideInfoWindow();
             }
-            LatLng position = new LatLng(main.getLatitude(), main.getLongitude());
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(position)
-                    .title(SituationStyle.title(s))
-                    .snippet(s.getDescription())
-                    .icon(iconFor(s))
-                    .anchor(0.5f, 0.5f));
-            if (marker != null) {
-                marker.setTag(s.getKey());
-                markersByKey.put(s.getKey(), marker);
+            marker.setVisible(visible);
+            if (visible) {
+                bounds.include(marker.getPosition());
+                points++;
             }
-            bounds.include(position);
-            points++;
         }
         drawSelectedLine();
         mapInfo.setText(getString(R.string.map_count, points));
@@ -259,6 +266,38 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             fitTo(bounds.build());
         } else {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(SCOTLAND, SCOTLAND_ZOOM));
+        }
+    }
+
+    /** Removes the old markers and makes one hidden marker for every situation in the data. */
+    private void createMarkers(TrafficData data) {
+        for (Marker old : markersByKey.values()) {
+            old.setVisible(false);
+            old.remove();
+        }
+        markersByKey.clear();
+        map.clear();
+        selectedLine = null;
+        markerData = data;
+        if (data == null) {
+            return;
+        }
+        for (Situation s : data.getAll()) {
+            LocationPoint main = s.getLocation().getMainPoint();
+            if (main == null) {
+                continue;
+            }
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(new LatLng(main.getLatitude(), main.getLongitude()))
+                    .title(SituationStyle.title(s))
+                    .snippet(s.getDescription())
+                    .icon(iconFor(s))
+                    .anchor(0.5f, 0.5f)
+                    .visible(false));
+            if (marker != null) {
+                marker.setTag(s.getKey());
+                markersByKey.put(s.getKey(), marker);
+            }
         }
     }
 
@@ -278,7 +317,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         String key = viewModel.getSelectedKey().getValue();
         TrafficData data = viewModel.getData().getValue();
         Situation s = key == null || data == null ? null : data.findByKey(key);
-        if (s == null || !markersByKey.containsKey(key) || !s.getLocation().isLine()) {
+        if (s == null || !visibleKeys.contains(key) || !markersByKey.containsKey(key) || !s.getLocation().isLine()) {
             return;
         }
         LocationPoint from = s.getLocation().getFrom();
@@ -317,7 +356,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         Marker marker = markersByKey.get(key);
-        if (marker == null) {
+        if (marker == null || !marker.isVisible()) {
             // Not in the current filter: show everything so it can be found
             viewModel.setMapFilter(MapFilter.ALL);
             redraw(false);
