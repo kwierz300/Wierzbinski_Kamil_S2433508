@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.Manifest;
@@ -47,10 +46,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Search screen with two options:
- * - by road name (with suggestions of all roads in the current data),
- * - by distance from the phone's approximate location (or a default point),
- * with a slider for the distance. Results can be shown together on the map.
+ Search screen with two options:
+ - by road name (with suggestions of all roads in the current data),
+ - by distance from the phone's approximate location (or a default point),
+ with a slider for the distance. Results can be shown together on the map.
  */
 public class SearchFragment extends Fragment {
 
@@ -116,7 +115,7 @@ public class SearchFragment extends Fragment {
         });
 
         // Search by road
-        roadInput.setText(viewModel.getRoadQuery().getValue(), false);   // false: do not open suggestions
+        roadInput.setText(viewModel.getRoadQuery().getValue(), false);
         roadInput.setOnItemClickListener((parent, v, position, id) -> runRoadSearch());
         roadInput.setOnEditorActionListener((v, actionId, event) -> {
             boolean enter = event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
@@ -211,7 +210,7 @@ public class SearchFragment extends Fragment {
         showOnMapButton.setEnabled(count > 0);
     }
 
-    // ------------------------------------------------------------------ location
+    //  location
 
     /** Asks for the location permission if needed, then finds the location. */
     private void askForLocation() {
@@ -223,8 +222,8 @@ public class SearchFragment extends Fragment {
     }
 
     /**
-     * Gets the phone's location and uses it as the search point. If location is switched
-     * off in the phone, asks the user to turn it on (the app cannot do it itself).
+     Gets the phone's location and uses it as the search point. If location is switched
+     off in the phone, asks the user to turn it on (the app cannot do it itself).
      */
     private void findMyLocation() {
         if (!deviceLocation.isLocationOn()) {

@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.content.Context;
@@ -32,8 +31,8 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * Shows situations in a RecyclerView: icon, type, road, the generalPublicComment
- * and, for roadworks, a colour-coded duration. The selected item is highlighted.
+ Shows situations in a RecyclerView: icon, type, road, the generalPublicComment
+ and, for roadworks, a colour-coded duration. The selected item is highlighted.
  */
 public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Holder> {
 
@@ -67,7 +66,7 @@ public class SituationAdapter extends ListAdapter<Situation, SituationAdapter.Ho
         this.listener = listener;
     }
 
-    /** Highlights the selected situation (useful in landscape, where details are shown next to the list). */
+    /** Highlights the selected situation. */
     public void setSelectedKey(String key) {
         if (!Objects.equals(key, selectedKey)) {
             selectedKey = key;

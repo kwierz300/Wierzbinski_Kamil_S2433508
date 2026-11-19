@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.util.Collections;
@@ -10,16 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The effect of a situation on traffic ("impact" in the feed).
- * Fields that are not known by the app are kept in {@link #getOtherValues()},
- * so new data in the feed is still shown and never causes a crash.
+ The effect of a situation on traffic ("impact" in the feed).
+ Fields that are not known by the app are kept in {@link #getOtherValues()},
+ so new data in the feed is still shown and never causes a crash.
  */
 public class Impact {
 
     private Integer operationalLanes;   // numberOfOperationalLanes
     private Integer lanesRestricted;    // numberOfLanesRestricted
     private String delaysType;          // delays, longDelays, veryLongDelays, ...
-    private Integer delaySeconds;       // delayTimeValue (not always present)
+    private Integer delaySeconds;       // delayTimeValue
     private final Map<String, String> otherValues = new LinkedHashMap<>();
 
     /** Number of lanes still open (numberOfOperationalLanes), or null if not given. */

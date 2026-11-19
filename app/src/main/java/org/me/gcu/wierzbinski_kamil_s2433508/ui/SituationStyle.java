@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.content.Context;
@@ -24,8 +23,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 
 /**
- * How a situation looks on screen: its icon, colours and short texts.
- * Used by the list, the details screen and (later) the map, so they always match.
+ How a situation looks on screen: its icon, colours and short texts.
+ Used by the list, the details screen and the map, so they always match.
  */
 public final class SituationStyle {
 
@@ -33,7 +32,7 @@ public final class SituationStyle {
     private SituationStyle() {
     }
 
-    /** A different icon for each kind of situation (Font Awesome Free, CC BY 4.0). */
+    /** A different icon for each kind of situation. */
     @DrawableRes
     public static int iconFor(SituationKind kind) {
         if (kind == null) {
@@ -110,8 +109,8 @@ public final class SituationStyle {
     }
 
     /**
-     * Colour for the delays reported in the feed (impact/delays/delaysType):
-     * negligible = green, delays = amber, longDelays = red, veryLongDelays = dark red.
+     Colour for the delays reported in the feed (impact/delays/delaysType):
+     negligible = green, delays = amber, longDelays = red, veryLongDelays = dark red.
      */
     @ColorInt
     public static int delayColour(Context context, String delaysType) {
@@ -126,7 +125,7 @@ public final class SituationStyle {
         } else if (type.isEmpty()) {
             res = R.color.duration_unknown;
         } else {
-            res = R.color.delay_some;   // delays, delaysOfUncertainDuration, ...
+            res = R.color.delay_some;   // delays, delaysOfUncertainDuration,
         }
         return ContextCompat.getColor(context, res);
     }
@@ -147,9 +146,7 @@ public final class SituationStyle {
     }
 
     /**
-     * Short status from the start and end times, for example
-     * "Planned · starts in 3 days", "Active · ends in 5 days", "Active since 10 Aug 2026, 11:37"
-     * or "Ended 31 Aug 2026, 18:00".
+     Short status from the start and end times
      */
     public static String timingText(Situation s, OffsetDateTime now) {
         Validity v = s.getValidity();

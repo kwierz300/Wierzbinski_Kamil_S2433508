@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.util.ArrayList;
@@ -10,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Everything the app knows at one moment: the state of both feeds.
- * A new object is created after each refresh (it is never changed).
+ Everything the app knows at one moment: the state of both feeds.
+ A new object is created after each refresh (it is never changed).
  */
 public final class TrafficData {
 
@@ -39,7 +38,7 @@ public final class TrafficData {
         return category == SituationCategory.INCIDENT ? incidents : roadworks;
     }
 
-    /** When the app last tried to get new data (milliseconds since 1970). */
+    /** When the app last tried to get new data. */
     public long getCheckedAtMillis() {
         return checkedAtMillis;
     }
@@ -51,7 +50,7 @@ public final class TrafficData {
         return Collections.unmodifiableList(all);
     }
 
-    /** Finds a situation by its key (see {@link Situation#getKey()}), or null. */
+    /** Finds a situation by its key, or null. */
     public Situation findByKey(String key) {
         if (key == null) {
             return null;

@@ -1,16 +1,15 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
 /**
- * When a situation is valid ("validity" in the feed).
- * Unplanned events usually only have a start time; roadworks have start and end.
+ When a situation is valid ("validity" in the feed).
+ Unplanned events usually only have a start time; roadworks have start and end.
  */
 public class Validity {
 
@@ -25,7 +24,7 @@ public class Validity {
     /** Whether the situation has started yet, is happening now, or is already over. */
     public enum Timing { PLANNED, ACTIVE, ENDED }
 
-    private String status;              // e.g. definedByValidityTimeSpec
+    private String status;
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
 

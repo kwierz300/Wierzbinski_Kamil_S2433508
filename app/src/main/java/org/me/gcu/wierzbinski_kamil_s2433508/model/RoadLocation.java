@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.util.ArrayList;
@@ -10,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The location of a situation ("groupOfLocations" in the feed).
- * A linear location has two points (from and to) that define a stretch of road.
- * Other location types may have only one point.
+ The location of a situation ("groupOfLocations" in the feed).
+ A linear location has two points (from and to) that define a stretch of road.
+ Other location types may have only one point.
  */
 public class RoadLocation {
 

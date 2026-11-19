@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.viewmodel;
 
 import android.app.Application;
@@ -31,14 +30,14 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 /**
- * ViewModel shared by the activity and all fragments (the "ViewModel" part of MVVM).
- * It holds the data and also the state of the screens (which screen, which tab,
- * which situation is selected). It survives screen rotation, so after turning the
- * phone the user sees exactly the same things as before.
+ ViewModel shared by the activity and all fragments.
+ It holds the data and also the state of the screens (which screen, which tab,
+ which situation is selected). It survives screen rotation, so after turning the
+ phone the user sees exactly the same things as before.
  */
 public class TrafficViewModel extends AndroidViewModel {
 
-    /** The main screens of the app (one per navigation item). */
+    /** The main screens of the app. */
     public enum Screen { LIST, SEARCH, MAP }
 
     /** The two kinds of search. */
@@ -100,7 +99,7 @@ public class TrafficViewModel extends AndroidViewModel {
         }
     }
 
-    // ------------------------------------------------------------------ data
+    //  data
 
     public LiveData<TrafficData> getData() {
         return repository.getData();
@@ -135,7 +134,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return repository.getConfig().useSampleData();
     }
 
-    // ------------------------------------------------------------------ screen state
+    //  screen state
 
     public LiveData<Screen> getScreen() {
         return screen;
@@ -184,7 +183,7 @@ public class TrafficViewModel extends AndroidViewModel {
     /** Selects a situation (null clears the selection). Also leaves full screen mode. */
     public void select(Situation situation) {
         if (situation != null) {
-            setDetailsCollapsed(false);   // a new choice: make sure its details can be seen
+            setDetailsCollapsed(false);
         }
         String key = situation == null ? null : situation.getKey();
         if (!Objects.equals(key, selectedKey.getValue())) {
@@ -197,7 +196,7 @@ public class TrafficViewModel extends AndroidViewModel {
         select(null);
     }
 
-    // ------------------------------------------------------------------ roadworks filters
+    //  roadworks filters
 
     /** Length band shown in the roadworks list (null = all). */
     public LiveData<Validity.DurationBand> getDurationFilter() {
@@ -222,7 +221,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return result;
     }
 
-    // ------------------------------------------------------------------ search
+    //  search
 
     public LiveData<SearchMode> getSearchMode() {
         return searchMode;
@@ -315,7 +314,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return result;
     }
 
-    /** Road names in the current data, for the suggestions list (A roads, then B, then M, by number). */
+    /** Road names in the current data, for the suggestions list. */
     public List<String> getRoadNames() {
         TrafficData data = repository.getData().getValue();
         TreeSet<String> names = new TreeSet<>(TrafficViewModel::compareRoads);
@@ -329,7 +328,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return new ArrayList<>(names);
     }
 
-    /** Orders roads by letter and then by number (A1, A9, A90 ...). */
+    /** Orders roads by letter and then by number (A1, A9, A90...). */
     private static int compareRoads(String a, String b) {
         int byLetter = Character.compare(a.charAt(0), b.charAt(0));
         if (byLetter != 0) {
@@ -354,7 +353,7 @@ public class TrafficViewModel extends AndroidViewModel {
         return TextBreakdown.normaliseRoad(road);
     }
 
-    // ------------------------------------------------------------------ map
+    //  map
 
     public LiveData<MapFilter> getMapFilter() {
         return mapFilter;
@@ -363,7 +362,7 @@ public class TrafficViewModel extends AndroidViewModel {
     /** Changes what the map shows; the camera will fit the new set. */
     public void setMapFilter(MapFilter filter) {
         if (filter != mapFilter.getValue()) {
-            savedCamera = null;   // new set of situations: fit the camera to them
+            savedCamera = null;
             mapFilter.setValue(filter);
         }
     }

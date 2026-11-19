@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.time.OffsetDateTime;
@@ -11,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The current state of one feed (incidents or roadworks): the parsed situations,
- * where they came from, when the feed was published and the last error, if any.
- * Objects of this class never change after they are created, so they can be
- * passed safely from the background thread to the UI thread.
+ The current state of one feed (incidents or roadworks): the parsed situations,
+ where they came from, when the feed was published and the last error, if any.
+ Objects of this class never change after they are created, so they can be
+ passed safely from the background thread to the UI thread.
  */
 public final class FeedState {
 
@@ -69,7 +68,7 @@ public final class FeedState {
         return publicationTime;
     }
 
-    /** When this data was downloaded (milliseconds since 1970), 0 if unknown. */
+    /** When this data was downloaded, 0 if unknown. */
     public long getSavedAtMillis() {
         return savedAtMillis;
     }

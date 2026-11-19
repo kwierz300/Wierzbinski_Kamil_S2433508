@@ -1,13 +1,12 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 /**
- * The point used for the search by distance: the phone's approximate location,
- * or a fixed default point when the location is not available.
+ The point used for the search by distance: the phone's approximate location,
+ or a fixed default point when the location is not available.
  */
 public final class SearchOrigin {
 
@@ -41,7 +40,7 @@ public final class SearchOrigin {
         return label;
     }
 
-    /** True when the point is the phone's own (coarse) location. */
+    /** True when the point is the phone's own  location. */
     public boolean isFromDevice() {
         return fromDevice;
     }

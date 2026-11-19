@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.util.Collections;
@@ -10,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * One point of a situation location ("from", "to", or a single point).
- * Holds the coordinates and all the names given for the point in the feed
- * (road number, junction name, link name, ...), keyed by descriptor type.
+ One point of a situation location ("from", "to", or a single point).
+ Holds the coordinates and all the names given for the point in the feed
+ (road number, junction name, link name, ...), keyed by descriptor type.
  */
 public class LocationPoint {
 
@@ -97,7 +96,7 @@ public class LocationPoint {
         return road;
     }
 
-    /** The most useful human readable place name for this point. */
+    /** The most useful readable place name for this point. */
     public String getPlaceName() {
         String[] preferred = {"intersectionName", "nonLinkedPointName", "junctionName", "tpegIlcName2"};
         for (String key : preferred) {
@@ -109,7 +108,7 @@ public class LocationPoint {
         return getRoadNumber();
     }
 
-    /** Great circle (haversine) distance in kilometres from this point to the given coordinates. */
+    /** Great circle  distance in kilometres from this point to the given coordinates. */
     public double distanceKmTo(double lat, double lon) {
         if (!hasCoordinates()) {
             return Double.MAX_VALUE;

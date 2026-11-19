@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.content.res.ColorStateList;
@@ -34,9 +33,9 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 
 /**
- * Shows everything the feed says about the selected situation:
- * description, when (validity), where (road, direction, from/to points),
- * impact on traffic and other information. Only values that exist are shown.
+ Shows everything the feed says about the selected situation:
+ description, when (validity), where (road, direction, from/to points),
+ impact on traffic and other information. Only values that exist are shown.
  */
 public class SituationDetailFragment extends Fragment {
 
@@ -227,7 +226,7 @@ public class SituationDetailFragment extends Fragment {
         sections.addView(header);
     }
 
-    /** Like {@link #addRow} but the value is shown in the given colour (colour-coded delays). */
+    /** Value is shown in the given colour (colour-coded delays). */
     private void addColouredRow(String label, String value, int colour) {
         if (value == null || value.isEmpty()) {
             return;

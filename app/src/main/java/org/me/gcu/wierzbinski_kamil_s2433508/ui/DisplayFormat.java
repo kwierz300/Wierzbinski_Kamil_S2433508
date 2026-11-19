@@ -2,7 +2,7 @@
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.model.FeedState;
@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * Turns data values into short texts for the screen (UK date format, local time).
+ Turns data values into short texts for the screen (UK date format, local time).
  */
 public final class DisplayFormat {
 
@@ -36,7 +36,7 @@ public final class DisplayFormat {
         return time.atZoneSameInstant(ZoneId.systemDefault()).format(DATE_TIME);
     }
 
-    /** Same as {@link #dateTime(OffsetDateTime)} for a time in milliseconds. */
+    /** Same as  for a time in milliseconds. */
     public static String dateTime(long millis) {
         if (millis <= 0) {
             return "-";
@@ -44,7 +44,7 @@ public final class DisplayFormat {
         return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).format(DATE_TIME);
     }
 
-    /** "14:05:32" for a time in milliseconds. */
+    /** For a time in milliseconds. */
     public static String time(long millis) {
         if (millis <= 0) {
             return "-";
@@ -52,7 +52,7 @@ public final class DisplayFormat {
         return Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).format(TIME);
     }
 
-    /** Average length of a month in days (365.25 / 12). */
+    /** Average length of a month in days. */
     private static final double DAYS_PER_MONTH = 30.4375;
 
     /** "3 days", "2 months 5 days", "1 year 4 months", "5 hours". Null-safe. */
@@ -67,7 +67,6 @@ public final class DisplayFormat {
         }
         if (days >= 365) {
             // Whole months; a few days short of a month counts as the full month,
-            // so 1094 days is "3 years", not "2 years 12 months"
             long totalMonths = (long) (days / DAYS_PER_MONTH + 0.1);
             long years = totalMonths / 12;
             long months = totalMonths % 12;
@@ -94,7 +93,7 @@ public final class DisplayFormat {
         return String.format(Locale.UK, "%.1f km", km);
     }
 
-    /** Latitude/longitude with 5 decimals (about 1 metre). */
+    /** Latitude/longitude with 5 decimals. */
     public static String coordinates(double lat, double lon) {
         return String.format(Locale.UK, "%.5f, %.5f", lat, lon);
     }

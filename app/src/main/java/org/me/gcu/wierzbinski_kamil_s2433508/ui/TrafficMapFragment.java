@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.content.Context;
@@ -55,11 +54,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Google map with the situations: one marker per situation (icon of its kind on a
- * circle in the category colour) and, for the selected "from-to" situation, a line between its ends
- * (roadworks lines use the duration colour). The chips choose what is shown:
- * all, incidents, roadworks, or the results of the last search. Tapping a marker
- * opens the details of that situation.
+ Google map with the situations: one marker per situation (icon of its kind on a
+ circle in the category colour) and, for the selected "from-to" situation, a line between its ends
+ (roadworks lines use the duration colour). The chips choose what is shown:
+ all, incidents, roadworks, or the results of the last search. Tapping a marker
+ opens the details of that situation.
  */
 public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -74,7 +73,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
     private final Map<String, BitmapDescriptor> iconCache = new HashMap<>();
     /** One marker for every situation in the data; the filter only shows or hides them. */
     private final Map<String, Marker> markersByKey = new HashMap<>();
-    /** Keys of the situations in the current filter (the visible markers). */
+    /** Keys of the situations in the current filter. */
     private final Set<String> visibleKeys = new HashSet<>();
     /** The data the markers were made from, to know when they must be made again. */
     private TrafficData markerData;
@@ -125,7 +124,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             selectByKey(key);
             return false;   // false: also show the info window and centre the marker
         });
-        // Remember where the user has moved the map (kept over updates and rotation)
+        // Remember where the user has moved the map
         map.setOnCameraIdleListener(() -> {
             if (map != null) {
                 viewModel.setSavedCamera(map.getCameraPosition());
@@ -160,7 +159,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroyView();
     }
 
-    // ------------------------------------------------------------------ filter
+    //  filter
 
     /** Map filter for a chip. */
     private static MapFilter filterFor(int chipId) {
@@ -215,12 +214,12 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ------------------------------------------------------------------ drawing
+    //  drawing
 
     /**
-     * Draws the situations for the current filter. The camera is fitted to them when the
-     * filter has just changed (the ViewModel then forgets the saved camera); otherwise the
-     * user's own view is kept, so automatic updates do not move the map.
+     Draws the situations for the current filter. The camera is fitted to them when the
+     filter has just changed (the ViewModel then forgets the saved camera); otherwise the
+     user's own view is kept, so automatic updates do not move the map.
      */
     private void redraw(boolean filterChanged) {
         if (map == null) {
@@ -260,7 +259,7 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             return;   // the focus will move the camera
         }
         if (viewModel.getSavedCamera() != null) {
-            // Same set of situations as before (new data, or after rotation): keep the user's view
+            // Same set of situations as before: keep the user's view
             map.moveCamera(CameraUpdateFactory.newCameraPosition(viewModel.getSavedCamera()));
         } else if (points > 0) {
             fitTo(bounds.build());
@@ -302,9 +301,9 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Draws the "from - to" stretch of the selected situation as a line (roadworks in the
-     * colour of their length). Only the selected one is drawn: the feed gives just the two
-     * end points, so many straight lines across the whole map would be hard to read.
+     Draws the "from - to" stretch of the selected situation as a line (roadworks in the
+     colour of their length). Only the selected one is drawn: the feed gives just the two
+     end points, so many straight lines across the whole map would be hard to read.
      */
     private void drawSelectedLine() {
         if (map == null) {
@@ -340,7 +339,6 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
             map.moveCamera(CameraUpdateFactory.zoomTo(Math.min(map.getCameraPosition().zoom, 14f)));
         } else {
-            // The map has no size yet: wait until it is laid out
             map.setOnMapLoadedCallback(() -> {
                 if (map != null) {
                     map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
@@ -357,7 +355,6 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
         Marker marker = markersByKey.get(key);
         if (marker == null || !marker.isVisible()) {
-            // Not in the current filter: show everything so it can be found
             viewModel.setMapFilter(MapFilter.ALL);
             redraw(false);
             marker = markersByKey.get(key);
@@ -377,9 +374,9 @@ public class TrafficMapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ------------------------------------------------------------------ marker icons
+    //  marker icons
 
-    /** Round marker in the category colour with the white icon of the situation kind (cached). */
+    /** Round marker in the category colour with the white icon of the situation kind. */
     private BitmapDescriptor iconFor(Situation s) {
         SituationKind kind = s.getKind();
         String cacheKey = s.getCategory() + "/" + kind;

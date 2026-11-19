@@ -1,13 +1,11 @@
-/*  Mobile Platform Development - coursework 1st diet 26/27
+/*  Mobile Platform Development - coursework
     Traffic Scotland incidents and roadworks app.
+
+Name                 Kamil Wierzbinski
+Student ID           S2433508
+Programme of Study   BSc (Hons) Computing
+
 */
-
-//
-// Name                 Kamil Wierzbinski
-// Student ID           S2433508
-// Programme of Study   BSc (Hons) Computing
-//
-
 package org.me.gcu.wierzbinski_kamil_s2433508;
 
 import android.os.Bundle;
@@ -44,12 +42,11 @@ import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
 import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel.Screen;
 
 /**
- * The single Activity of the app (View layer of MVVM). It hosts the fragments,
- * the toolbar and the navigation, and shows the status banner.
- *
- * Portrait: one pane - the list/search/map screen OR the details (bottom navigation).
- * Landscape: navigation rail, the list/search/map screen and the details side by side.
- * All screen state lives in the shared ViewModel, so rotating the phone keeps it.
+ The single Activity of the app. It hosts the fragments,
+ the toolbar and the navigation, and shows the status banner.
+ Portrait: one pane - the list/search/map screen OR the details (bottom navigation).
+ Landscape: navigation rail, the list/search/map screen and the details side by side.
+ All screen state lives in the shared ViewModel, so rotating the phone keeps it.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -66,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearProgressIndicator progress;
     private NavigationBarView navigation;
     private OnBackPressedCallback backCallback;
-    private boolean selectingNavItem;   // true while the code (not the user) changes the navigation
+    private boolean selectingNavItem;
 
     /** Sets up the layout, toolbar, navigation, Back button and the LiveData observers. */
     @Override
@@ -110,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
             viewModel.setScreen(screenFor(item.getItemId()));
             if (!twoPane) {
-                viewModel.clearSelection();   // portrait: leave the details screen
+                viewModel.clearSelection();
             }
             return true;
         });
@@ -159,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    // ------------------------------------------------------------------ menu (toolbar)
+    //  menu
 
     /** Adds the toolbar buttons (full screen, refresh, about). */
     @Override
@@ -214,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    // ------------------------------------------------------------------ screens and panes
+    //  screens and panes
 
     /** Screen that belongs to a navigation item. */
     private static Screen screenFor(int menuId) {

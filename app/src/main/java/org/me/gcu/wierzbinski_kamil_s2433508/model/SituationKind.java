@@ -1,14 +1,13 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 /**
- * A more detailed type of situation. It is worked out from the record type
- * (xsi:type), the sub-type element and the words in the public comment.
- * Each kind has its own icon in the user interface.
+ A more detailed type of situation. It is worked out from the record type
+ (xsi:type), the sub-type element and the words in the public comment.
+ Each kind has its own icon in the user interface.
  */
 public enum SituationKind {
     // Unplanned events (incidents)

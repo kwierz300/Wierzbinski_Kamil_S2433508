@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.ui;
 
 import android.content.res.ColorStateList;
@@ -34,10 +33,10 @@ import org.me.gcu.wierzbinski_kamil_s2433508.viewmodel.TrafficViewModel;
 import java.util.List;
 
 /**
- * Screen with the list of all current situations, in two tabs:
- * incidents (unplanned events) and roadworks. Roadworks can be filtered by length
- * (the coloured dots are also the legend of the colour coding). A line shows when the data was updated and when the feed
- * was published. Tapping an item selects it; {@link SituationDetailFragment} shows it.
+ Screen with the list of all current situations, in two tabs:
+ incidents (unplanned events) and roadworks. Roadworks can be filtered by length
+ (the coloured dots are also the legend of the colour coding). A line shows when the data was updated and when the feed
+ was published. Tapping an item selects it
  */
 public class SituationListFragment extends Fragment {
 
@@ -115,7 +114,7 @@ public class SituationListFragment extends Fragment {
         dot(view.findViewById(R.id.chipMedium), Validity.DurationBand.MEDIUM);
         dot(view.findViewById(R.id.chipLong), Validity.DurationBand.LONG);
 
-        // Show the current filter value (kept in the ViewModel, so they survive rotation)
+        // Show the current filter value
         durationChips.check(chipForBand(viewModel.getDurationFilter().getValue()));
 
         durationChips.setOnCheckedStateChangeListener((group, ids) ->
