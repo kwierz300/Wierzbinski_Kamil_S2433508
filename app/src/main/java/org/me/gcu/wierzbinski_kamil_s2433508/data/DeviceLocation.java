@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import android.Manifest;
@@ -22,13 +21,13 @@ import androidx.core.location.LocationManagerCompat;
 import java.util.List;
 
 /**
- * Gets the phone's approximate ("coarse") location with the standard Android
- * LocationManager (no extra libraries). Uses the last known location if there is
- * one, otherwise waits for one new location for up to 15 seconds.
+ Gets the phone's approximate location with the standard Android
+ LocationManager. Uses the last known location if there is
+ one, otherwise waits for one new location for up to 15 seconds.
  */
 public class DeviceLocation {
 
-    /** Result of a location request (always called on the main thread). */
+    /** Result of a location request -> always called on the main thread. */
     public interface Callback {
         void onLocation(Location location);
 
@@ -58,7 +57,7 @@ public class DeviceLocation {
         return manager != null && LocationManagerCompat.isLocationEnabled(manager);
     }
 
-    /** Gets the location (last known one, or waits for a new one) and passes it to the callback. */
+    /** Gets the location -> last known one, or waits for a new one, and passes it to the callback. */
     public void request(Callback callback) {
         if (!hasPermission()) {
             callback.onNoLocation("Location permission not given");
@@ -96,9 +95,8 @@ public class DeviceLocation {
     }
 
     /**
-     * Picks a working location source. Phones differ: many newer ones (Android 12+) use
-     * the "fused" source, others "network"; "gps" is the last choice (on Android 12+
-     * it also works with approximate location and gives a rounded position).
+     Picks a working location source. Phones differ: many newer ones use
+     the fused source, others "network"; "gps"
      */
     private String chooseProvider() {
         List<String> enabled = manager.getProviders(true);
@@ -128,7 +126,7 @@ public class DeviceLocation {
                 }
             }
 
-            // The three methods below are needed on Android 8-10, where they are not optional
+            // The three methods below are needed on Android 8 to 10, where they are not optional
             @Override
             @SuppressWarnings("deprecation")
             public void onStatusChanged(String provider, int status, android.os.Bundle extras) {

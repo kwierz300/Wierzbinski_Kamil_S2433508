@@ -1,23 +1,22 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.BuildConfig;
 import org.me.gcu.wierzbinski_kamil_s2433508.model.SituationCategory;
 
 /**
- * App settings. The client ID and key are NOT written in the source code:
- * they are kept in local.properties (which is not uploaded to GitHub) and copied
- * into the generated BuildConfig class when the app is built (see app/build.gradle.kts).
+ App settings. The client ID and key are NOT written in the source code:
+ they are kept in local.properties (which is not uploaded to GitHub) and copied
+ into the generated BuildConfig class when the app is built (app/build.gradle.kts).
  */
 public final class AppConfig {
 
     public static final String UNPLANNED_EVENTS_URL =
             "https://datex2.trafficscotland.org/rest/2.3/publications/UnplannedEvents/Content.xml";
-    /** "Current Roadworks" publication (the brief uses only Unplanned Events and Current Roadworks). */
+    /** "Current Roadworks" publication -> the brief uses only Unplanned Events and Current Roadworks. */
     public static final String ROADWORKS_URL =
             "https://datex2.trafficscotland.org/rest/2.3/publications/CurrentRoadworks/Content.xml";
 
@@ -29,7 +28,7 @@ public final class AppConfig {
     private final boolean useSampleData;
     private final int refreshMinutes;
 
-    /** Creates the settings. Empty keys are allowed (the app then shows a message instead of data). */
+    /** Creates the settings. Empty keys are allowed -> the app then shows a message instead of data. */
     public AppConfig(String clientId, String clientKey, boolean useSampleData, int refreshMinutes) {
         this.clientId = clientId == null ? "" : clientId.trim();
         this.clientKey = clientKey == null ? "" : clientKey.trim();
@@ -61,7 +60,7 @@ public final class AppConfig {
         return useSampleData;
     }
 
-    /** Minutes between automatic updates (60 by default, shorter for the demo). */
+    /** Minutes between automatic updates -> 60 by default, shorter for the video. */
     public int getRefreshMinutes() {
         return refreshMinutes;
     }

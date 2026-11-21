@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508;
 
 import static org.junit.Assert.assertEquals;
@@ -13,7 +12,7 @@ import org.me.gcu.wierzbinski_kamil_s2433508.ui.DisplayFormat;
 import java.time.Duration;
 
 /**
- * Local unit tests for the texts used for lengths of time (no Android needed).
+ Local unit tests for the texts used for lengths of time.
  */
 public class DisplayFormatTest {
 

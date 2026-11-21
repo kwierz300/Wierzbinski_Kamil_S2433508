@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import java.io.BufferedReader;
@@ -14,10 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * Downloads one Traffic Scotland feed into a String.
- * Based on the starter code, but with time-outs, a StringBuilder instead of
- * joining Strings in a loop, a check of the HTTP status code and clear errors.
- * Must be called on a background thread (never on the UI thread).
+ Downloads one Traffic Scotland feed into a String.
+ Based on the starter code, but with time-outs, a StringBuilder instead of
+ joining Strings in a loop, a check of the HTTP status code and clear errors.
+ Must be called on a background thread.
  */
 public class FeedDownloader {
 

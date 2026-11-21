@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Impact;
@@ -18,16 +17,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Breaks the text values of a parsed situation into smaller parts, using
- * standard String methods and regular expressions:
- * - road name (from the location data, or from the comment as a fallback),
- * - the parts of a roadworks comment ("A9 Lothmore SB - TTL"),
- * - a readable summary of the works (abbreviations expanded),
- * - the detailed kind of situation (used to choose an icon).
+ Breaks the text values of a parsed situation into smaller parts, using
+ standard String methods and regular expressions:
+ - road name (from the location data, or from the comment as a fallback),
+ - the parts of a roadworks comment ("A9 Lothmore SB - TTL"),
+ - a readable summary of the works (abbreviations expanded),
+ - the detailed kind of situation (used to choose an icon).
  */
 public final class TextBreakdown {
 
-    /** Matches UK road numbers such as A9, M74, A74(M), A823(M), B957. */
+    /** Matches  road numbers such as A9, M74, A74(M), A823(M), B957. */
     private static final Pattern ROAD_PATTERN =
             Pattern.compile("\\b([ABM]\\d{1,4})(\\(M\\)|M)?(?![\\w])", Pattern.CASE_INSENSITIVE);
 
@@ -53,7 +52,7 @@ public final class TextBreakdown {
         }
     }
 
-    // ------------------------------------------------------------------ road names
+    //  road names
 
     /** Road number from the location data; if missing, the first road number in the comment. */
     static String findRoadName(Situation s) {
@@ -99,8 +98,8 @@ public final class TextBreakdown {
     }
 
     /**
-     * Normalised road name used for searching: upper case, letters and digits only.
-     * "A74(M)", "a74m" and "A74 (M)" all become "A74M".
+     Normalised road name used for searching: upper case, letters and digits only.
+     "A74(M)", "a74m" and "A74 (M)" all become "A74M".
      */
     public static String normaliseRoad(String road) {
         if (road == null) {
@@ -110,7 +109,7 @@ public final class TextBreakdown {
         return key.isEmpty() ? null : key;
     }
 
-    // ------------------------------------------------------------------ comment text
+    //  comment text
 
     /** Splits a comment like "A1 - SB - Old Craighall to Lamberton - Mobile Lane closure" into parts. */
     static List<String> splitDescription(String description) {
@@ -177,7 +176,7 @@ public final class TextBreakdown {
         return text.substring(0, 1).toUpperCase(Locale.UK) + text.substring(1);
     }
 
-    // ------------------------------------------------------------------ classification
+    //  classification
 
     /** Kind of roadworks, worked out from the words in the comment. */
     static SituationKind classifyRoadworks(String description) {

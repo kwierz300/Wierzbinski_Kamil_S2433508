@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import android.content.Context;
@@ -31,12 +30,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The single source of traffic data for the app (the "Model" side of MVVM).
- *
- * Threads: all network, file and parsing work runs on a background
- * ExecutorService. Results reach the UI only through LiveData.postValue(),
- * so no code here touches views and runOnUiThread is not needed.
- * A ScheduledExecutorService repeats the update at a fixed interval.
+ The single source of traffic data for the app -> the Model side of MVVM.
+ Threads: all network, file and parsing work runs on a background
+ ExecutorService. Results reach the UI only through LiveData.postValue(),
+ so no code  touches views and runOnUiThread is not needed.
+ A ScheduledExecutorService repeats the update at a fixed interval.
  */
 public class TrafficRepository {
 
@@ -60,7 +58,7 @@ public class TrafficRepository {
     private final MutableLiveData<TrafficData> data = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
 
-    /** Creates the helpers. Private, because the app uses one repository only (singleton). */
+    /** Creates the helpers. Private, because the app uses one repository only. */
     private TrafficRepository(Context context) {
         appContext = context.getApplicationContext();
         config = AppConfig.fromBuild();
@@ -80,7 +78,7 @@ public class TrafficRepository {
         return instance;
     }
 
-    // ------------------------------------------------------------------ public API
+    //  public API
 
     public LiveData<TrafficData> getData() {
         return data;
@@ -102,8 +100,8 @@ public class TrafficRepository {
     }
 
     /**
-     * Called once when the app starts: shows the saved data straight away (if any),
-     * then downloads fresh data. Calling it again does nothing.
+     Called once when the app starts: shows the saved data straight away (if any),
+     then downloads fresh data. Calling it again does nothing.
      */
     public void start() {
         if (!started.compareAndSet(false, true)) {
@@ -136,8 +134,8 @@ public class TrafficRepository {
     }
 
     /**
-     * Turns the automatic update on (while the app is on screen) or off.
-     * The first automatic update waits for the rest of the interval since the last one.
+     Turns the automatic update on (while the app is on screen) or off.
+     The first automatic update waits for the rest of the interval since the last one.
      */
     public synchronized void setAutoUpdate(boolean enabled) {
         if (autoUpdate != null) {
@@ -160,7 +158,7 @@ public class TrafficRepository {
                 + (firstDelayMs / 1000) + " s");
     }
 
-    // ------------------------------------------------------------------ background work
+    //  background work
 
     /** Called when the connection comes back: update straight away. */
     private void onReconnected() {
@@ -197,7 +195,7 @@ public class TrafficRepository {
             TrafficXmlParser parser = new TrafficXmlParser();
             List<Situation> list = parser.parse(xml, category);
             if (list.isEmpty() && !xml.contains("payloadPublication")) {
-                // Not a DATEX II document (for example an error page sent for a wrong key): keep the old data.
+                // Not a DATEX II document for example an error page sent for a wrong key: keep the old data.
                 // A real feed with no situations at the moment is fine and is shown as empty.
                 throw new FeedException(FeedException.Reason.NOT_TRAFFIC_DATA, "no DATEX II publication in response");
             }
@@ -213,7 +211,7 @@ public class TrafficRepository {
         }
     }
 
-    /** The saved copy of a feed, marked with the error that made us use it. */
+    /** The saved copy of a feed, marked with the error that made use it. */
     private FeedState fromCache(SituationCategory category, String errorMessage) {
         String xml = cache.load(category);
         if (xml == null) {
@@ -230,7 +228,7 @@ public class TrafficRepository {
         }
     }
 
-    /** Example XML files packed in debug builds only (src/debug/assets). */
+    /** Example XML files packed in debug builds only src/debug/assets. */
     private FeedState fromSample(SituationCategory category) {
         try {
             String xml = readAsset(config.sampleFileFor(category));

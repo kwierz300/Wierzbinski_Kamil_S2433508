@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import org.me.gcu.wierzbinski_kamil_s2433508.model.Impact;
@@ -22,13 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parses the Traffic Scotland DATEX II XML (already downloaded into a String)
- * with the XmlPullParser and builds a list of {@link Situation} objects.
- *
- * The same element name (for example "value") is used in many places in the
- * feed, so the parser keeps a stack of open element names (the "path") and
- * decides what a text value means by looking at its parent elements.
- * Unknown elements are ignored, so new data in the feed does not crash the app.
+ Parses the Traffic Scotland DATEX II XML -> already downloaded into a String
+ with the XmlPullParser and builds a list of Situation objects.
+
+ The same element name for example "value" is used in many places in the
+ feed, so the parser keeps a stack of open element names and
+ decides what a text value means by looking at its parent elements.
+ Unknown elements are ignored, so new data in the feed does not crash the app.
  */
 public class TrafficXmlParser {
 
@@ -48,11 +47,11 @@ public class TrafficXmlParser {
     private String headerInformationStatus;
 
     /**
-     * Parses one feed.
-     *
-     * @param xml      the downloaded XML text
-     * @param category which feed the text came from
-     * @return list of situations, never null (empty if the text has no data)
+     Parses one feed.
+
+     @param xml the downloaded XML text
+     @param category which feed the text came from
+     @return list of situations, never null, empty if the text has no data
      */
     public synchronized List<Situation> parse(String xml, SituationCategory category)
             throws XmlPullParserException, IOException {
@@ -89,14 +88,14 @@ public class TrafficXmlParser {
     }
 
     /**
-     * The publicationTime of the feed read by the last call to {@link #parse},
-     * or null if the feed did not have one.
+     The publicationTime of the feed read by the last call to parse,
+     or null if the feed did not have one.
      */
     public synchronized OffsetDateTime getLastPublicationTime() {
         return publicationTime;
     }
 
-    /** Removes anything before the first tag (as the starter code did) and handles empty input. */
+    /** Removes anything before the first tag, as the starter code did, and handles empty input. */
     static String cleanUp(String xml) {
         if (xml == null) {
             return null;
@@ -125,7 +124,7 @@ public class TrafficXmlParser {
         headerInformationStatus = null;
     }
 
-    // ------------------------------------------------------------------ start tags
+    //  start tags
 
     /** Reacts to an opening tag: starts a new record or point and reads attributes (id, version, xsi:type). */
     private void handleStartTag(XmlPullParser xpp, SituationCategory category) {
@@ -170,7 +169,7 @@ public class TrafficXmlParser {
         }
     }
 
-    /** Reads the xsi:type attribute (for example "MaintenanceWorks"). */
+    /** Reads the xsi:type attribute for example "MaintenanceWorks". */
     private static String getXsiType(XmlPullParser xpp) {
         String type = xpp.getAttributeValue(XSI_NAMESPACE, "type");
         if (type == null) {
@@ -184,7 +183,7 @@ public class TrafficXmlParser {
         return type;
     }
 
-    // ------------------------------------------------------------------ end tags
+    //  end tags
 
     /** Reacts to a closing tag: finishes records and points, or stores the text value. */
     private void handleEndTag(String name, String value, List<Situation> result) {
@@ -235,12 +234,12 @@ public class TrafficXmlParser {
 
     /** Stores one text value in the right place, based on the element name and its parents. */
     private void handleValue(String name, String value) {
-        // --- location data
+        // location data
         if (inside("groupOfLocations")) {
             handleLocationValue(name, value);
             return;
         }
-        // --- comment text and source name both use <value>, so check the parent
+        // comment text and source name both use <value>, so check the parent
         if ("value".equals(name)) {
             if (inside("generalPublicComment")) {
                 current.appendDescription(value);
@@ -249,7 +248,7 @@ public class TrafficXmlParser {
             }
             return;
         }
-        // --- validity
+        // validity
         if (inside("validity")) {
             Validity validity = current.getValidity();
             if ("validityStatus".equals(name)) {
@@ -261,12 +260,12 @@ public class TrafficXmlParser {
             }
             return;
         }
-        // --- impact
+        // impact
         if (inside("impact")) {
             handleImpactValue(name, value);
             return;
         }
-        // --- source
+        // source
         if (inside("source")) {
             if ("sourceType".equals(name)) {
                 current.setSourceType(value);
@@ -275,7 +274,7 @@ public class TrafficXmlParser {
             }
             return;
         }
-        // --- simple elements directly inside <situationRecord>
+        // simple elements directly inside <situationRecord>
         if ("situationRecord".equals(parentName())) {
             switch (name) {
                 case "situationRecordCreationTime":
@@ -302,7 +301,7 @@ public class TrafficXmlParser {
                 default:
                     if (name.endsWith("Type") && current.getSubType() == null) {
                         // roadOrCarriagewayOrLaneManagementType, abnormalTrafficType,
-                        // roadMaintenanceType, accidentType, ... (also unknown future ones)
+                        // roadMaintenanceType, accidentType, also unknown future ones
                         current.setSubType(name, value);
                     } else {
                         current.putOtherDetail(name, value);
@@ -370,7 +369,7 @@ public class TrafficXmlParser {
         }
     }
 
-    // ------------------------------------------------------------------ helpers
+    //  helpers
 
     /** True if the current element is inside an element with this name. */
     private boolean inside(String elementName) {

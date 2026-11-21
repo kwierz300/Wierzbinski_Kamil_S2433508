@@ -1,12 +1,11 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 /**
- * A problem while getting a feed, with a reason the app can explain to the user.
+ A problem while getting a feed, with a reason the app can explain to the user.
  */
 public class FeedException extends Exception {
 

@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508;
 
 import static org.junit.Assert.assertEquals;
@@ -31,10 +30,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
- * Tests the PullParser on the example files supplied with the coursework.
- * Runs on the phone/emulator because XmlPullParser is part of Android.
- * The example files are in src/debug/assets (packed in debug builds only).
- * The expected values were copied by hand from the example XML files.
+ Tests the PullParser on the example files supplied with the coursework.
+ Runs on the phone/emulator because XmlPullParser is part of Android.
+ The example files are in src/debug/assets packed in debug builds only.
+ The expected values were copied by hand from the example XML files.
  */
 @RunWith(AndroidJUnit4.class)
 public class TrafficXmlParserTest {
@@ -53,7 +52,7 @@ public class TrafficXmlParserTest {
         }
     }
 
-    /** The 4 incidents in the example file are read with the right values (checked by hand against the XML). */
+    /** The 4 incidents in the example file are read with the right values -> checked by hand against the XML. */
     @Test
     public void unplannedEventsAreParsed() throws Exception {
         TrafficXmlParser parser = new TrafficXmlParser();

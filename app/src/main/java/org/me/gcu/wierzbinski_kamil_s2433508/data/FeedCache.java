@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import android.content.Context;
@@ -20,10 +19,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
- * Keeps the last downloaded XML of each feed in the app's private storage,
- * so the app can show the most recent data when there is no connection.
- * The raw XML is saved (not the parsed objects), so it is parsed in exactly
- * the same way as fresh data.
+ Keeps the last downloaded XML of each feed in the app's private storage,
+ so the app can show the most recent data when there is no connection.
+ The raw XML is saved (not the parsed objects), so it is parsed in exactly
+ the same way as fresh data.
  */
 public class FeedCache {
 
@@ -79,7 +78,7 @@ public class FeedCache {
         }
     }
 
-    /** When the saved XML was written (milliseconds since 1970), 0 if there is none. */
+    /** When the saved XML was written, 0 if there is none. */
     public synchronized long savedAt(SituationCategory category) {
         File file = fileFor(category);
         return file.exists() ? file.lastModified() : 0;

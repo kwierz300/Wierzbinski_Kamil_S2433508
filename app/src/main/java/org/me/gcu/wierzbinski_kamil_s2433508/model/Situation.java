@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.model;
 
 import java.time.OffsetDateTime;
@@ -15,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * One traffic situation (an unplanned event or a roadworks record).
- * Built by the XML parser from one &lt;situationRecord&gt; element.
+ One traffic situation (an unplanned event or a roadworks record).
+ Built by the XML parser from one &lt;situationRecord&gt; element.
  */
 public class Situation {
 
@@ -48,12 +47,12 @@ public class Situation {
     private final Map<String, String> otherDetails = new LinkedHashMap<>();
 
     // Values worked out from the text by TextBreakdown
-    private String roadName;             // display form, e.g. "A74(M)"
-    private String roadKey;              // normalised form for searching, e.g. "A74M"
+    private String roadName;             // display form, e.g. A74(M)
+    private String roadKey;              // normalized form for searching, e.g. A74M
     private final Set<String> roadKeys = new LinkedHashSet<>(); // all roads in location + comment
     private SituationKind kind;
     private List<String> descriptionParts = new ArrayList<>();
-    private String worksSummary;         // e.g. "Temporary traffic lights"
+    private String worksSummary;         // e.g. Temporary traffic lights
 
     /** Creates an empty situation of the given category; the parser fills it in. */
     public Situation(SituationCategory category) {
@@ -122,7 +121,7 @@ public class Situation {
         this.confidentiality = confidentiality;
     }
 
-    /** informationStatus from headerInformation (e.g. real). */
+    /** informationStatus from headerInformation. */
     public String getInformationStatus() {
         return informationStatus;
     }
@@ -164,7 +163,7 @@ public class Situation {
         return subTypeElement;
     }
 
-    /** generalPublicComment text (all comments joined). */
+    /** generalPublicComment text. */
     public String getDescription() {
         return description;
     }
@@ -257,7 +256,7 @@ public class Situation {
         otherDetails.put(name, value);
     }
 
-    /** Simple values the app does not know (read-only). */
+    /** Simple values the app does not know. */
     public Map<String, String> getOtherDetails() {
         return Collections.unmodifiableMap(otherDetails);
     }

@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508.data;
 
 import android.content.Context;
@@ -15,8 +14,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 /**
- * Watches the phone's internet connection and publishes it as LiveData.
- * Calls a listener when the connection comes back, so the data can be refreshed.
+ Watches the phones internet connection and publishes it as LiveData.
+ Calls a listener when the connection comes back, so the data can be refreshed.
  */
 public class NetworkMonitor {
 

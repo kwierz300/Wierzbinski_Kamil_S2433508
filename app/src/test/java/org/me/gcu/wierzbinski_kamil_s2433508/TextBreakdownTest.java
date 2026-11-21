@@ -1,8 +1,7 @@
-//
 // Name                 Kamil Wierzbinski
 // Student ID           S2433508
 // Programme of Study   BSc (Hons) Computing
-//
+
 package org.me.gcu.wierzbinski_kamil_s2433508;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +20,7 @@ import org.me.gcu.wierzbinski_kamil_s2433508.model.Validity;
 import java.time.OffsetDateTime;
 
 /**
- * Local unit tests for the text breakdown and model logic (no Android needed).
+ Local unit tests for the text breakdown and model logic.
  */
 public class TextBreakdownTest {
 
@@ -103,7 +102,7 @@ public class TextBreakdownTest {
         assertEquals(Validity.Timing.ACTIVE, v.getTiming(start.plusDays(100)));
     }
 
-    /** The distance is measured to the nearest point of a from-to location. */
+    /** The distance is measured to the nearest point of a from to location. */
     @Test
     public void distanceUsesNearestPoint() {
         Situation s = roadworks("M8 test");
