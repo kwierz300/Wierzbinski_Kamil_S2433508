@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- LANDSCAPE layout: navigation rail on the left, list/search/map in the middle,
-     details on the right (can be hidden). Different arrangement from portrait.
+     details on the right and can be hidden. Different arrangement from portrait.
      To save height: the data credit is the toolbar subtitle and the status banner is one thin line. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

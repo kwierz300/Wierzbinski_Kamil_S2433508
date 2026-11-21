@@ -27,7 +27,7 @@ DATEX II feeds and is read with the **XmlPullParser**.
 | Details | Tap a card to see everything in the feed: description, start/end time and length, road, direction, "from" and "to" points with coordinates, lanes, delays, works type, source, status and reference. |
 | Colour-coded roadworks | Green: up to 1 month. Amber: 1–12 months. Red: over 12 months. Shown as a strip, a badge and on the map line of the selected roadworks, with a legend above the list. |
 | Search by road | Type a road (suggestions of all roads in the data). `M8`, `m8`, `A74(M)` and `a74m` all work. Roads named only in the comment are found too. |
-| Search by distance | Slider from 5 to 200 km from the phone's approximate (coarse) location, or from a default point (Glasgow city centre) if location is not allowed. Results are sorted nearest first and show the distance. |
+| Search by distance | Slider from 5 to 200 km from the phone's approximate location, or from a default point (Glasgow city centre) if location is not allowed. Results are sorted nearest first and show the distance. |
 | Icons | 12 different icons for kinds of situations (road closed, lane restriction, queuing traffic, accident, obstruction, weather, roadworks closure, lane closure, traffic lights, diversion, ...). |
 | Map | Google map with a marker for each situation; the "from–to" stretch of the selected one is drawn as a line. Filters: All, Incidents, Roadworks, Search results (many selected situations at once). "Show on map" on the details screen zooms to one situation. |
 | Portrait and landscape | Two different `activity_main.xml` layouts. Portrait: bottom navigation, one pane. Landscape: navigation rail, list/search/map and details side by side. Everything on screen is kept when the phone is rotated. |
@@ -51,8 +51,6 @@ flowchart LR
     end
     subgraph Model["Model (data + model)"]
         R[TrafficRepository<br/>ExecutorService +<br/>ScheduledExecutorService]
-        DL[FeedDownloader]
-        P[TrafficXmlParser<br/>XmlPullParser]
         T[TextBreakdown]
         C[FeedCache]
         N[NetworkMonitor]
@@ -64,7 +62,7 @@ flowchart LR
     R --> N
 ```
 
-| Package | Contents |
+| Package | Contents |![img.png](img.png)
 | --- | --- |
 | `model` | Data classes: `Situation`, `Validity`, `Impact`, `RoadLocation`, `LocationPoint`, `FeedState`, `TrafficData`, `SearchOrigin` |
 | `data` | `TrafficRepository`, `FeedDownloader`, `TrafficXmlParser`, `TextBreakdown`, `FeedCache`, `NetworkMonitor`, `DeviceLocation`, `AppConfig` |
